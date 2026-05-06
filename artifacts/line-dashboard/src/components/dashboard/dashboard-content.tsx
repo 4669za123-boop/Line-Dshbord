@@ -137,41 +137,54 @@ export function DashboardContent({
           </DialogContent>
         </Dialog>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <div className="bg-card border border-border rounded-xl p-4">
-            <p className="text-sm text-muted-foreground">บัญชีทั้งหมด</p>
-            <p className="text-2xl font-bold text-foreground mt-1">
-              {websiteRows.length}
-            </p>
-          </div>
-          <div className="bg-card border border-border rounded-xl p-4">
-            <p className="text-sm text-muted-foreground">ออนไลน์</p>
-            <p className="text-2xl font-bold text-primary mt-1">
-              {
-                websiteRows.filter(
-                  (s) => s.mainStatus === "normal" && s.depositStatus === "normal",
-                ).length
-              }
-            </p>
-          </div>
-          <div className="bg-card border border-border rounded-xl p-4">
-            <p className="text-sm text-muted-foreground">โดนระงับ</p>
-            <p className="text-2xl font-bold text-destructive mt-1">
-              {
-                websiteRows.filter(
-                  (s) =>
-                    s.mainStatus === "suspended" || s.depositStatus === "suspended",
-                ).length
-              }
-            </p>
-          </div>
-          <div className="bg-card border border-border rounded-xl p-4">
-            <p className="text-sm text-muted-foreground">เว็บไซต์</p>
-            <p className="text-2xl font-bold text-foreground mt-1">
-              {websites.length}
-            </p>
-          </div>
-        </div>
+        {(() => {
+          const totalAccounts = websiteRows.reduce(
+            (sum, s) => sum + (s.mainLineId ? 1 : 0) + (s.depositLineId ? 1 : 0),
+            0,
+          )
+          const onlineCount = websiteRows.reduce(
+            (sum, s) =>
+              sum +
+              (s.mainLineId && s.mainStatus === "normal" ? 1 : 0) +
+              (s.depositLineId && s.depositStatus === "normal" ? 1 : 0),
+            0,
+          )
+          const suspendedCount = websiteRows.reduce(
+            (sum, s) =>
+              sum +
+              (s.mainLineId && s.mainStatus === "suspended" ? 1 : 0) +
+              (s.depositLineId && s.depositStatus === "suspended" ? 1 : 0),
+            0,
+          )
+          return (
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+              <div className="bg-card border border-border rounded-xl p-4">
+                <p className="text-sm text-muted-foreground">บัญชีทั้งหมด</p>
+                <p className="text-2xl font-bold text-foreground mt-1">
+                  {totalAccounts}
+                </p>
+              </div>
+              <div className="bg-card border border-border rounded-xl p-4">
+                <p className="text-sm text-muted-foreground">ออนไลน์</p>
+                <p className="text-2xl font-bold text-primary mt-1">
+                  {onlineCount}
+                </p>
+              </div>
+              <div className="bg-card border border-border rounded-xl p-4">
+                <p className="text-sm text-muted-foreground">โดนระงับ</p>
+                <p className="text-2xl font-bold text-destructive mt-1">
+                  {suspendedCount}
+                </p>
+              </div>
+              <div className="bg-card border border-border rounded-xl p-4">
+                <p className="text-sm text-muted-foreground">เว็บไซต์</p>
+                <p className="text-2xl font-bold text-foreground mt-1">
+                  {websites.length}
+                </p>
+              </div>
+            </div>
+          )
+        })()}
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {websiteRows.map((summary) => (

@@ -111,7 +111,7 @@ export function DashboardContent({
                   URL เว็บไซต์ <span className="text-muted-foreground font-normal">(ไม่บังคับ)</span>
                 </label>
                 <Input
-                  type="url"
+                  type="text"
                   value={newWebsiteUrl}
                   onChange={(e) => setNewWebsiteUrl(e.target.value)}
                   placeholder="เช่น https://example.com"

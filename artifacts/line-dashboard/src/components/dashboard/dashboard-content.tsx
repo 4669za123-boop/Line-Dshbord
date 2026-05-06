@@ -43,8 +43,9 @@ export function DashboardContent({
   const submitNewWebsite = (e: React.FormEvent) => {
     e.preventDefault()
     const trimmed = newWebsiteName.trim()
-    if (!trimmed) return
-    onAddWebsite(trimmed, newWebsiteUrl.trim())
+    const trimmedUrl = newWebsiteUrl.trim()
+    if (!trimmed || !trimmedUrl) return
+    onAddWebsite(trimmed, trimmedUrl)
     setNewWebsiteName("")
     setNewWebsiteUrl("")
     setWebsiteDialogOpen(false)
@@ -108,7 +109,7 @@ export function DashboardContent({
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-foreground">
-                  URL เว็บไซต์ <span className="text-muted-foreground font-normal">(ไม่บังคับ)</span>
+                  URL เว็บไซต์
                 </label>
                 <Input
                   type="text"
@@ -126,7 +127,8 @@ export function DashboardContent({
                 </DialogClose>
                 <Button
                   type="submit"
-                  className="rounded-xl bg-primary text-primary-foreground shadow-[0_0_20px_-4px_rgba(0,185,0,0.45)] hover:bg-primary/90"
+                  disabled={!newWebsiteName.trim() || !newWebsiteUrl.trim()}
+                  className="rounded-xl bg-primary text-primary-foreground shadow-[0_0_20px_-4px_rgba(0,185,0,0.45)] hover:bg-primary/90 disabled:opacity-50"
                 >
                   ตกลง
                 </Button>

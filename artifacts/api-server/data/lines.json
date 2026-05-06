@@ -1,12 +1,27 @@
 [
   {
-    "id": "719geggt",
+    "id": "linea_main",
     "type": "หลัก",
-    "site": "Jun88"
+    "site": "เว็บก"
   },
   {
-    "id": "254ocaij",
+    "id": "linea_deposit",
     "type": "ฝากถอน",
+    "site": "เว็บก"
+  },
+  {
+    "id": "lineb_main",
+    "type": "หลัก",
+    "site": "เว็บข"
+  },
+  {
+    "id": "lineb_deposit",
+    "type": "ฝากถอน",
+    "site": "เว็บข"
+  },
+  {
+    "id": "719geggt",
+    "type": "หลัก",
     "site": "Jun88"
   },
   {
@@ -15,18 +30,8 @@
     "site": "BT678"
   },
   {
-    "id": "944pjpwn",
-    "type": "ฝากถอน",
-    "site": "BT678"
-  },
-  {
     "id": "984xxgwv",
     "type": "หลัก",
-    "site": "JL69"
-  },
-  {
-    "id": "759zfwkt",
-    "type": "ฝากถอน",
     "site": "JL69"
   },
   {
@@ -35,18 +40,8 @@
     "site": "F168"
   },
   {
-    "id": "795elsrx",
-    "type": "ฝากถอน",
-    "site": "F168"
-  },
-  {
     "id": "545ypuvj",
     "type": "หลัก",
-    "site": "K188"
-  },
-  {
-    "id": "391xrgqe",
-    "type": "ฝากถอน",
     "site": "K188"
   },
   {
@@ -55,18 +50,8 @@
     "site": "MK8"
   },
   {
-    "id": "886jslfp",
-    "type": "ฝากถอน",
-    "site": "MK8"
-  },
-  {
     "id": "077ocjrq",
     "type": "หลัก",
-    "site": "NM9"
-  },
-  {
-    "id": "563nagww",
-    "type": "ฝากถอน",
     "site": "NM9"
   },
   {
@@ -75,24 +60,59 @@
     "site": "PG688"
   },
   {
-    "id": "572paiqq",
-    "type": "ฝากถอน",
-    "site": "PG688"
-  },
-  {
     "id": "745jccjn",
     "type": "หลัก",
-    "site": "TH26"
-  },
-  {
-    "id": "203bznmz",
-    "type": "ฝากถอน",
     "site": "TH26"
   },
   {
     "id": "604fkgus",
     "type": "หลัก",
     "site": "Vv72"
+  },
+  {
+    "id": "254ocaij",
+    "type": "ฝากถอน",
+    "site": "Jun88"
+  },
+  {
+    "id": "944pjpwn",
+    "type": "ฝากถอน",
+    "site": "BT678"
+  },
+  {
+    "id": "759zfwkt",
+    "type": "ฝากถอน",
+    "site": "JL69"
+  },
+  {
+    "id": "795elsrx",
+    "type": "ฝากถอน",
+    "site": "F168"
+  },
+  {
+    "id": "391xrgqe",
+    "type": "ฝากถอน",
+    "site": "K188"
+  },
+  {
+    "id": "886jslfp",
+    "type": "ฝากถอน",
+    "site": "MK8"
+  },
+  {
+    "id": "563nagww",
+    "type": "ฝากถอน",
+    "site": "NM9"
+  },
+  {
+    "id": "572paiqq",
+    "type": "ฝากถอน",
+    "site": "PG688"
+  },
+  {
+    "id": "203bznmz",
+    "type": "ฝากถอน",
+    "site": "TH26"
   },
   {
     "id": "166oipqd",

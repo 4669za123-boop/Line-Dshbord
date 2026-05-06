@@ -7,8 +7,9 @@ import { exec } from "child_process";
 const router = Router();
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const dataDir = path.join(__dirname, "..", "..", "data");
+const dataDir = path.join(__dirname, "..", "data");
 const filePath = path.join(dataDir, "lines.json");
+const websitesFilePath = path.join(dataDir, "websites.json");
 
 let lastBotRunAt = 0;
 const BOT_COOLDOWN_MS = 60_000;
@@ -31,6 +32,33 @@ function readData(): { id: string; type: string; site: string }[] {
   }
 }
 
+function readWebsiteOrder(): string[] {
+  try {
+    if (!fs.existsSync(websitesFilePath)) return [];
+    const file = fs.readFileSync(websitesFilePath, "utf-8");
+    const sites = JSON.parse(file) as { id: string; name: string; url: string }[];
+    return sites.map((s) => s.name);
+  } catch {
+    return [];
+  }
+}
+
+function sortByDashboardOrder(
+  data: { id: string; type: string; site: string }[],
+  siteOrder: string[],
+): { id: string; type: string; site: string }[] {
+  return [...data].sort((a, b) => {
+    const ai = siteOrder.indexOf(a.site);
+    const bi = siteOrder.indexOf(b.site);
+    const siteA = ai === -1 ? Infinity : ai;
+    const siteB = bi === -1 ? Infinity : bi;
+    if (siteA !== siteB) return siteA - siteB;
+    // ภายในเว็บเดียวกัน: หลัก ก่อน ฝากถอน
+    const typeOrder = (t: string) => (t === "หลัก" ? 0 : 1);
+    return typeOrder(a.type) - typeOrder(b.type);
+  });
+}
+
 router.post("/add-line", (req, res) => {
   const { url, type, site } = req.body as { url: string; type: string; site: string };
 
@@ -38,17 +66,21 @@ router.post("/add-line", (req, res) => {
 
   const newId = extractId(url);
 
+  // normalise ids
   data = data.map((item) => {
-    const raw = item.url || item.id || "";
-    return {
-      id: extractId(raw as string),
-      type: item.type,
-      site: item.site,
-    };
+    const raw = (item as unknown as Record<string, string>).url || item.id || "";
+    return { id: extractId(raw), type: item.type, site: item.site };
   });
 
+  // remove old entry with same id, then add new one
   data = data.filter((item) => item.id !== newId);
   data.push({ id: newId, type, site });
+
+  // re-sort to match dashboard website order
+  const siteOrder = readWebsiteOrder();
+  if (siteOrder.length > 0) {
+    data = sortByDashboardOrder(data, siteOrder);
+  }
 
   if (!fs.existsSync(dataDir)) {
     fs.mkdirSync(dataDir, { recursive: true });

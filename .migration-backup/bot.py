@@ -8,23 +8,34 @@ from selenium.webdriver.support import expected_conditions as EC
 
 WEBHOOK_URL = "https://discord.com/api/webhooks/1500401729387364524/zFTtXlU1J5L6bObpjsT9cQsNdFA-jkNQYlYfYzEP--SOk0OU1Q6R5RVDbwZfXsTPsfiJ"
 
-GROUP_URLS = [
-    "https://manager.line.biz/groups/284033/setting",
-    "https://manager.line.biz/groups/274572/setting",
-    "https://manager.line.biz/groups/274574/setting",
-    "https://manager.line.biz/groups/273467/setting",
-    "https://manager.line.biz/groups/281962/setting",
-    "https://manager.line.biz/groups/282784/setting",
-    "https://manager.line.biz/groups/291757/setting",
-    "https://manager.line.biz/groups/291413/setting",
-    "https://manager.line.biz/groups/293859/setting",
-    "https://manager.line.biz/groups/293858/setting"
-]
-
+WEBSITES_FILE = "data/websites.json"
 DATA_FILE = "data/lines.json"
 
 
-# 🔥 โหลด + ล้าง + เอาลำดับเว็บ
+# 🔥 โหลดรายการเว็บจาก dashboard (เรียงตามที่เพิ่มไว้)
+def load_websites():
+    try:
+        with open(WEBSITES_FILE, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        websites = []
+        for item in data:
+            url = item.get("url", "").strip()
+            name = item.get("name", "").strip()
+            if url and name:
+                websites.append({"name": name, "url": url})
+
+        print(f"✅ WEBSITES: {len(websites)} รายการ")
+        for w in websites:
+            print(f"   - {w['name']} → {w['url']}")
+
+        return websites
+    except Exception as e:
+        print("❌ load websites error:", e)
+        return []
+
+
+# 🔥 โหลด + ล้าง + จัดลำดับ LINE data จาก lines.json
 def load_and_clean_data():
     try:
         with open(DATA_FILE, "r", encoding="utf-8") as f:
@@ -38,7 +49,6 @@ def load_and_clean_data():
             return x.replace("@", "").lower()
 
         cleaned = {}
-        site_order = []
 
         for item in raw:
             raw_id = item.get("id") or item.get("url")
@@ -57,38 +67,12 @@ def load_and_clean_data():
                 "site": site
             }
 
-            # 🔥 เก็บลำดับเว็บตาม dashboard
-            if site and site not in site_order:
-                site_order.append(site)
-
-        # =========================================
-        # 🔥 เรียง + จัดลำดับข้อมูลใหม่
-        # =========================================
-
-        result = []
-
-        for site in site_order:
-            site_items = [i for i in cleaned.values() if i["site"] == site]
-
-            # ✔ หลักขึ้นก่อน ฝากถอนทีหลัง
-            site_items.sort(key=lambda x: 0 if x["type"] == "หลัก" else 1)
-
-            result.extend(site_items)
-
-        # 🔥 เขียนทับ DATA ใหม่ (ลบตัวซ้ำ)
-        with open(DATA_FILE, "w", encoding="utf-8") as f:
-            json.dump(result, f, indent=2, ensure_ascii=False)
-
-        # 🔥 แปลงเป็น map
-        data_map = {item["id"]: item for item in result}
-
-        print(f"✅ CLEAN DATA: {len(result)} รายการ")
-
-        return data_map, site_order
+        print(f"✅ CLEAN DATA: {len(cleaned)} รายการ")
+        return cleaned
 
     except Exception as e:
         print("❌ load data error:", e)
-        return {}, []
+        return {}
 
 
 def extract_id_from_url(url):
@@ -173,12 +157,24 @@ def main():
     driver = connect()
     wait = WebDriverWait(driver, 20)
 
-    data_map, site_order = load_and_clean_data()
+    # 🔥 โหลดเว็บจาก dashboard (เรียงตามลำดับใน dashboard)
+    websites = load_websites()
+    if not websites:
+        print("❌ ไม่พบข้อมูลเว็บไซต์ใน data/websites.json")
+        driver.quit()
+        return
+
+    # 🔥 โหลด LINE data จาก lines.json
+    data_map = load_and_clean_data()
+
     summary = {}
 
-    for url in GROUP_URLS:
+    for website in websites:
+        site_name = website["name"]
+        group_url = website["url"]
+
         try:
-            driver.get(url)
+            driver.get(group_url)
             wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
             time.sleep(2)
 
@@ -213,7 +209,7 @@ def main():
 
                     unread = get_unread(driver)
 
-                    print(f"📊 {line_id} → {unread}")
+                    print(f"📊 {line_id} ({site} / {line_type}) → {unread} แชท")
 
                     if line_type == "หลัก":
                         summary[site]["main"] += unread
@@ -225,12 +221,14 @@ def main():
                     continue
 
         except Exception as e:
-            print("group error:", e)
+            print(f"group error ({site_name}):", e)
 
-    # 🔥 สร้างข้อความ (เรียงตาม Dashboard)
+    # 🔥 สร้างข้อความเรียงตามลำดับ dashboard
     text = "📊 LINE OA STATUS\n\n"
 
-    for site in site_order:
+    for website in websites:
+        site = website["name"]
+
         if site not in summary:
             continue
 

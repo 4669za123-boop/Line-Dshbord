@@ -6,36 +6,9 @@ import { NotificationSettingsPage } from "@/components/dashboard/notification-se
 import type { Website, AddLineFormPayload } from "@/components/dashboard/types";
 import type { LineAccount } from "@/components/dashboard/line-card";
 
-const WEBSITES_STORAGE_KEY = "line-mgmt-websites";
 const ACCOUNTS_STORAGE_KEY = "line-mgmt-accounts";
 
-function loadWebsitesFromStorage(): Website[] {
-  try {
-    const raw =
-      typeof window !== "undefined"
-        ? window.localStorage.getItem(WEBSITES_STORAGE_KEY)
-        : null;
-    if (!raw) return [];
-    const parsed = JSON.parse(raw) as unknown;
-    if (!Array.isArray(parsed)) return [];
-    return parsed
-      .filter(
-        (w): w is Website =>
-          w !== null &&
-          typeof w === "object" &&
-          typeof (w as Website).id === "string" &&
-          typeof (w as Website).name === "string",
-      )
-      .map((w) => ({ id: w.id, name: w.name.trim() }))
-      .filter((w) => w.name.length > 0);
-  } catch {
-    return [];
-  }
-}
-
-function isLineChannelStatus(
-  x: unknown,
-): x is LineAccount["mainStatus"] {
+function isLineChannelStatus(x: unknown): x is LineAccount["mainStatus"] {
   return x === "normal" || x === "suspended" || x === "inactive";
 }
 
@@ -45,10 +18,9 @@ function isLineRole(x: unknown): x is LineAccount["lineRole"] {
 
 function loadAccountsFromStorage(): LineAccount[] {
   try {
-    const raw =
-      typeof window !== "undefined"
-        ? window.localStorage.getItem(ACCOUNTS_STORAGE_KEY)
-        : null;
+    const raw = typeof window !== "undefined"
+      ? window.localStorage.getItem(ACCOUNTS_STORAGE_KEY)
+      : null;
     if (!raw) return [];
     const parsed = JSON.parse(raw) as unknown;
     if (!Array.isArray(parsed)) return [];
@@ -70,15 +42,11 @@ function loadAccountsFromStorage(): LineAccount[] {
         typeof id !== "string" ||
         typeof name !== "string" ||
         typeof websiteId !== "string"
-      ) {
-        continue;
-      }
+      ) continue;
 
       if (typeof websiteName !== "string") websiteName = "";
 
-      if (!isLineChannelStatus(mainStatus) || !isLineChannelStatus(depositStatus)) {
-        continue;
-      }
+      if (!isLineChannelStatus(mainStatus) || !isLineChannelStatus(depositStatus)) continue;
 
       out.push({
         id,
@@ -103,31 +71,42 @@ export default function App() {
   const [persistReady, setPersistReady] = useState(false);
 
   useEffect(() => {
-    setWebsites(loadWebsitesFromStorage());
+    fetch("/api/websites")
+      .then((r) => r.json())
+      .then((data: Website[]) => setWebsites(data))
+      .catch(() => setWebsites([]));
+
     setAccounts(loadAccountsFromStorage());
     setPersistReady(true);
   }, []);
 
   useEffect(() => {
     if (!persistReady) return;
-    window.localStorage.setItem(WEBSITES_STORAGE_KEY, JSON.stringify(websites));
-  }, [websites, persistReady]);
-
-  useEffect(() => {
-    if (!persistReady) return;
     window.localStorage.setItem(ACCOUNTS_STORAGE_KEY, JSON.stringify(accounts));
   }, [accounts, persistReady]);
 
-  const handleAddWebsite = (name: string, url: string) => {
+  const handleAddWebsite = async (name: string, url: string) => {
     const trimmed = name.trim();
-    if (!trimmed) return;
-    setWebsites((prev) => [
-      ...prev,
-      { id: crypto.randomUUID(), name: trimmed, url: url || undefined },
-    ]);
+    if (!trimmed || !url.trim()) return;
+    try {
+      const res = await fetch("/api/websites", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: trimmed, url: url.trim() }),
+      });
+      const site: Website = await res.json();
+      setWebsites((prev) => [...prev, site]);
+    } catch (err) {
+      console.log("ADD WEBSITE ERROR:", err);
+    }
   };
 
-  const handleRemoveWebsite = (id: string) => {
+  const handleRemoveWebsite = async (id: string) => {
+    try {
+      await fetch(`/api/websites/${id}`, { method: "DELETE" });
+    } catch (err) {
+      console.log("REMOVE WEBSITE ERROR:", err);
+    }
     setWebsites((prev) => prev.filter((w) => w.id !== id));
     setAccounts((prev) => prev.filter((a) => a.websiteId !== id));
   };
@@ -142,9 +121,7 @@ export default function App() {
     try {
       await fetch("/api/add-line", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           url: trimmed,
           type: p.role === "main" ? "หลัก" : "ฝากถอน",

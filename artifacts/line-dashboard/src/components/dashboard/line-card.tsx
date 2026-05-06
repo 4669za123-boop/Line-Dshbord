@@ -142,19 +142,20 @@ export function LineCard({ summary, onRemove }: LineCardProps) {
     <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]">
       <div className="grid grid-cols-[1fr_auto] gap-y-3 items-center">
         <div className="min-w-0 pr-4">
-          <h3 className="text-lg font-bold text-foreground truncate">
-            {summary.websiteName}
-          </h3>
-          {summary.websiteUrl && (
+          {summary.websiteUrl ? (
             <a
               href={summary.websiteUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-0.5 block truncate text-[11px] text-primary/70 hover:text-primary transition-colors"
+              className="text-lg font-bold text-foreground truncate block hover:text-primary transition-colors"
               title={summary.websiteUrl}
             >
-              {summary.websiteUrl}
+              {summary.websiteName}
             </a>
+          ) : (
+            <h3 className="text-lg font-bold text-foreground truncate">
+              {summary.websiteName}
+            </h3>
           )}
         </div>
         <Button

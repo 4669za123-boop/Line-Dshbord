@@ -29,8 +29,10 @@ A Thai-language LINE account management dashboard for tracking LINE accounts acr
 ## Architecture decisions
 
 - App is dark-mode-only (Thai gambling/management tool context)
-- All state is localStorage-based on the frontend (websites + LINE accounts)
+- **Websites** are server-persisted: `GET/POST/DELETE /api/websites` → `data/websites.json`
+- **LINE accounts** remain localStorage-based (`line-mgmt-accounts` key)
 - API `/api/add-line` writes to `data/lines.json` on the server
+- Website name in LineCard is a clickable link (opens the website URL in a new tab)
 - `"use client"` Next.js directives removed during migration (Vite is always client-rendered)
 - Bot automation (`bot.py`, `selenium.js`, `worker.js`) is in `.migration-backup/` — out of scope for migration
 

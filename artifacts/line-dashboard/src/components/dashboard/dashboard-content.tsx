@@ -21,7 +21,7 @@ import type { Website } from "./types"
 export type DashboardContentProps = {
   websites: Website[]
   accounts: LineAccount[]
-  onAddWebsite: (name: string) => void
+  onAddWebsite: (name: string, url: string) => void
   onRemoveWebsite: (id: string) => void
 }
 
@@ -33,6 +33,7 @@ export function DashboardContent({
 }: DashboardContentProps) {
   const [websiteDialogOpen, setWebsiteDialogOpen] = useState(false)
   const [newWebsiteName, setNewWebsiteName] = useState("")
+  const [newWebsiteUrl, setNewWebsiteUrl] = useState("")
 
   const websiteRows = useMemo(
     () => mergeWebsitesWithLineStatus(websites, accounts),
@@ -43,8 +44,9 @@ export function DashboardContent({
     e.preventDefault()
     const trimmed = newWebsiteName.trim()
     if (!trimmed) return
-    onAddWebsite(trimmed)
+    onAddWebsite(trimmed, newWebsiteUrl.trim())
     setNewWebsiteName("")
+    setNewWebsiteUrl("")
     setWebsiteDialogOpen(false)
   }
 
@@ -101,6 +103,18 @@ export function DashboardContent({
                   value={newWebsiteName}
                   onChange={(e) => setNewWebsiteName(e.target.value)}
                   placeholder="เช่น เว็บหลัก, แบรนด์ A, แคมเปญสมาชิก"
+                  className="h-11 border-border bg-input text-foreground placeholder:text-muted-foreground"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-foreground">
+                  URL เว็บไซต์ <span className="text-muted-foreground font-normal">(ไม่บังคับ)</span>
+                </label>
+                <Input
+                  type="url"
+                  value={newWebsiteUrl}
+                  onChange={(e) => setNewWebsiteUrl(e.target.value)}
+                  placeholder="เช่น https://example.com"
                   className="h-11 border-border bg-input text-foreground placeholder:text-muted-foreground"
                 />
               </div>

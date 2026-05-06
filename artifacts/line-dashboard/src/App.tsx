@@ -118,12 +118,12 @@ export default function App() {
     window.localStorage.setItem(ACCOUNTS_STORAGE_KEY, JSON.stringify(accounts));
   }, [accounts, persistReady]);
 
-  const handleAddWebsite = (name: string) => {
+  const handleAddWebsite = (name: string, url: string) => {
     const trimmed = name.trim();
     if (!trimmed) return;
     setWebsites((prev) => [
       ...prev,
-      { id: crypto.randomUUID(), name: trimmed },
+      { id: crypto.randomUUID(), name: trimmed, url: url || undefined },
     ]);
   };
 

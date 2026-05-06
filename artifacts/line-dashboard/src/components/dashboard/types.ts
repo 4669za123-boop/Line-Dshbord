@@ -1,6 +1,7 @@
 export type Website = {
   id: string
   name: string
+  url?: string
 }
 
 export type AddLineFormPayload = {

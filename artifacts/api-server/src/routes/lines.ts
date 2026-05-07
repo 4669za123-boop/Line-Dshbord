@@ -97,6 +97,13 @@ router.post("/add-time", (req, res) => {
 });
 
 router.post("/run-bot", (req, res) => {
+  const secret = process.env["BOT_SECRET"];
+  const provided = req.headers["x-bot-secret"] as string | undefined;
+  if (!secret || !provided || provided !== secret) {
+    res.status(401).json({ ok: false, error: "Unauthorized" });
+    return;
+  }
+
   const now = Date.now();
   if (now - lastBotRunAt < BOT_COOLDOWN_MS) {
     const retryAfter = Math.ceil((BOT_COOLDOWN_MS - (now - lastBotRunAt)) / 1000);

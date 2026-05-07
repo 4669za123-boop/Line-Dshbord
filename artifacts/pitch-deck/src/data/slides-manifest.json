@@ -1,1 +1,66 @@
-[]
+[
+  {
+    "id": "a1b2c3d4-0001-4000-8000-000000000001",
+    "position": 1,
+    "filepath": "src/pages/slides/Slide1Title.tsx",
+    "title": "LINE Management Dashboard",
+    "description": "Hero title slide — bilingual Thai/English, dark tech aesthetic",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a1b2c3d4-0002-4000-8000-000000000002",
+    "position": 2,
+    "filepath": "src/pages/slides/Slide2Problem.tsx",
+    "title": "ปัญหา · The Problem",
+    "description": "Three-column problem cards — no central view, no live status, no scheduled alerts",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a1b2c3d4-0003-4000-8000-000000000003",
+    "position": 3,
+    "filepath": "src/pages/slides/Slide3Solution.tsx",
+    "title": "วิธีแก้ปัญหา · The Solution",
+    "description": "Two-column layout — headline left, feature rows right",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a1b2c3d4-0004-4000-8000-000000000004",
+    "position": 4,
+    "filepath": "src/pages/slides/Slide4StatusMonitoring.tsx",
+    "title": "ติดตามสถานะ · Status Monitoring",
+    "description": "Big-stat slide — total, online, suspended account counts",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a1b2c3d4-0005-4000-8000-000000000005",
+    "position": 5,
+    "filepath": "src/pages/slides/Slide5AddAccounts.tsx",
+    "title": "เพิ่มบัญชีไลน์ · Add LINE Accounts",
+    "description": "Three-step process — ID/URL, site, role",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a1b2c3d4-0006-4000-8000-000000000006",
+    "position": 6,
+    "filepath": "src/pages/slides/Slide6Notifications.tsx",
+    "title": "ตั้งเวลาแจ้งเตือน · Notification Schedule",
+    "description": "Split layout — headline left, feature list right",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a1b2c3d4-0007-4000-8000-000000000007",
+    "position": 7,
+    "filepath": "src/pages/slides/Slide7TechStack.tsx",
+    "title": "เทคโนโลยี · Tech Stack",
+    "description": "Four-column tech grid — Frontend, Backend, Data, Deploy",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a1b2c3d4-0008-4000-8000-000000000008",
+    "position": 8,
+    "filepath": "src/pages/slides/Slide8ReadyToUse.tsx",
+    "title": "พร้อมใช้งาน · Ready to Use",
+    "description": "Closing slide — centered lockup on hero background",
+    "speakerNotes": ""
+  }
+]

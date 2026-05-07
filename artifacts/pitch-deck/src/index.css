@@ -6,20 +6,21 @@
   --color-bg: var(--slide-bg);
   --color-text: var(--slide-text);
   --color-muted: var(--slide-muted);
+  --color-card: var(--slide-card);
   --font-display: var(--font-display-family);
   --font-body: var(--font-body-family);
 }
 
 :root {
-  /* Replace these with brand colors */
-  --slide-primary: #4f46e5;
-  --slide-accent: #06b6d4;
-  --slide-bg: #f8fafc;
-  --slide-text: #0f172a;
-  --slide-muted: #64748b;
-  --font-display-family: "Inter", system-ui, sans-serif;
-  --font-body-family: "Inter", system-ui, sans-serif;
-  color-scheme: light;
+  --slide-primary: #00b900;
+  --slide-accent: #00d900;
+  --slide-bg: #0d0d0d;
+  --slide-text: #f0f0f0;
+  --slide-muted: #888888;
+  --slide-card: #181818;
+  --font-display-family: "Space Grotesk", sans-serif;
+  --font-body-family: "Noto Sans Thai", "Space Grotesk", sans-serif;
+  color-scheme: dark;
 }
 
 html,

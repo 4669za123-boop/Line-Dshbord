@@ -21,9 +21,25 @@ interface ColumnProps {
 function PickerColumn({ values, selected, onChange }: ColumnProps) {
   const idx = values.indexOf(selected)
   const current = idx < 0 ? 0 : idx
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  const [offset, setOffset] = useState(0)
+  const [animating, setAnimating] = useState(false)
+
+  const animateTo = (delta: number) => {
+    setAnimating(false)
+    setOffset(delta * ITEM_H)
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setAnimating(true)
+        setOffset(0)
+      })
+    })
+  }
 
   const go = (delta: number) => {
-    const next = (current + delta + values.length) % values.length
+    const next = ((current + delta) % values.length + values.length) % values.length
+    animateTo(delta)
     onChange(values[next])
   }
 
@@ -37,26 +53,37 @@ function PickerColumn({ values, selected, onChange }: ColumnProps) {
   }
 
   const dragStartY = useRef<number | null>(null)
-  const dragStartIdx = useRef(0)
+  const dragLastIdx = useRef(0)
 
   const onMouseDown = (e: React.MouseEvent) => {
     dragStartY.current = e.clientY
-    dragStartIdx.current = current
+    dragLastIdx.current = current
     e.preventDefault()
   }
   const onMouseMove = (e: React.MouseEvent) => {
     if (dragStartY.current === null) return
     const diff = dragStartY.current - e.clientY
     const delta = Math.round(diff / ITEM_H)
-    const next = ((dragStartIdx.current + delta) % values.length + values.length) % values.length
-    if (values[next] !== selected) onChange(values[next])
+    const next = ((dragLastIdx.current + delta) % values.length + values.length) % values.length
+    if (values[next] !== selected) {
+      const dir = diff > 0 ? 1 : -1
+      animateTo(dir)
+      onChange(values[next])
+    }
   }
   const onMouseUp = () => { dragStartY.current = null }
 
-  const onWheel = (e: React.WheelEvent) => {
-    e.stopPropagation()
-    go(e.deltaY > 0 ? 1 : -1)
-  }
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    const handler = (e: WheelEvent) => {
+      e.preventDefault()
+      e.stopPropagation()
+      go(e.deltaY > 0 ? 1 : -1)
+    }
+    el.addEventListener("wheel", handler, { passive: false })
+    return () => el.removeEventListener("wheel", handler)
+  })
 
   const visible = Array.from({ length: VISIBLE }, (_, i) => {
     const vi = ((current - MID + i) % values.length + values.length) % values.length
@@ -78,9 +105,9 @@ function PickerColumn({ values, selected, onChange }: ColumnProps) {
       </button>
 
       <div
-        className="relative w-full cursor-grab active:cursor-grabbing"
+        ref={containerRef}
+        className="relative w-full overflow-hidden cursor-grab active:cursor-grabbing"
         style={{ height: VISIBLE * ITEM_H }}
-        onWheel={onWheel}
         onMouseDown={onMouseDown}
         onMouseMove={onMouseMove}
         onMouseUp={onMouseUp}
@@ -90,7 +117,6 @@ function PickerColumn({ values, selected, onChange }: ColumnProps) {
           className="pointer-events-none absolute left-1 right-1 rounded-lg bg-primary/15 border border-primary/40 z-10"
           style={{ top: MID * ITEM_H, height: ITEM_H }}
         />
-
         <div
           className="pointer-events-none absolute inset-x-0 top-0 z-20"
           style={{ height: MID * ITEM_H, background: "linear-gradient(to bottom, hsl(var(--card)) 30%, transparent)" }}
@@ -100,22 +126,32 @@ function PickerColumn({ values, selected, onChange }: ColumnProps) {
           style={{ height: MID * ITEM_H, background: "linear-gradient(to top, hsl(var(--card)) 30%, transparent)" }}
         />
 
-        {visible.map((v, i) => (
-          <div
-            key={i}
-            onClick={() => onChange(v)}
-            style={{ height: ITEM_H, top: i * ITEM_H }}
-            className={`absolute inset-x-0 flex items-center justify-center font-mono tabular-nums transition-all duration-150 select-none ${
-              i === MID
-                ? "text-primary font-bold text-lg"
-                : Math.abs(i - MID) === 1
-                ? "text-foreground/60 text-base"
-                : "text-muted-foreground/40 text-sm"
-            }`}
-          >
-            {v}
-          </div>
-        ))}
+        <div
+          style={{
+            transform: `translateY(${offset}px)`,
+            transition: animating ? `transform 180ms cubic-bezier(0.25, 0.46, 0.45, 0.94)` : "none",
+          }}
+        >
+          {visible.map((v, i) => (
+            <div
+              key={i}
+              onClick={() => {
+                const delta = i - MID
+                if (delta !== 0) { animateTo(delta); onChange(v) }
+              }}
+              style={{ height: ITEM_H }}
+              className={`flex items-center justify-center font-mono tabular-nums select-none ${
+                i === MID
+                  ? "text-primary font-bold text-lg cursor-default"
+                  : Math.abs(i - MID) === 1
+                  ? "text-foreground/60 text-base cursor-pointer hover:text-foreground/80"
+                  : "text-muted-foreground/35 text-sm cursor-pointer hover:text-muted-foreground/60"
+              }`}
+            >
+              {v}
+            </div>
+          ))}
+        </div>
       </div>
 
       <button
@@ -148,14 +184,8 @@ export function ScrollTimePicker({ value, onChange }: ScrollTimePickerProps) {
     setMinute(m ?? "00")
   }, [value])
 
-  const handleHour = (h: string) => {
-    setHour(h)
-    onChange(`${h}:${minute}`)
-  }
-  const handleMinute = (m: string) => {
-    setMinute(m)
-    onChange(`${hour}:${m}`)
-  }
+  const handleHour = (h: string) => { setHour(h); onChange(`${h}:${minute}`) }
+  const handleMinute = (m: string) => { setMinute(m); onChange(`${hour}:${m}`) }
 
   return (
     <div className="flex items-stretch gap-2 bg-card border border-border rounded-xl px-3 py-1 w-full">

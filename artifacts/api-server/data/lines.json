@@ -98,25 +98,5 @@
     "id": "944pjpwn",
     "type": "ฝากถอน",
     "site": "BT678"
-  },
-  {
-    "id": "linea_main",
-    "type": "หลัก",
-    "site": "เว็บก"
-  },
-  {
-    "id": "lineb_main",
-    "type": "หลัก",
-    "site": "เว็บข"
-  },
-  {
-    "id": "linea_deposit",
-    "type": "ฝากถอน",
-    "site": "เว็บก"
-  },
-  {
-    "id": "lineb_deposit",
-    "type": "ฝากถอน",
-    "site": "เว็บข"
   }
 ]

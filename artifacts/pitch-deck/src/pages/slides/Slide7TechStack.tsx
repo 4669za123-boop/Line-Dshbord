@@ -173,13 +173,13 @@ export default function Slide7TechStack() {
               className="font-display"
               style={{ fontSize: "2.2vw", fontWeight: 700, color: "#f0f0f0", marginBottom: "1vh" }}
             >
-              JSON Server
+              Express API
             </p>
             <p
               className="font-body"
               style={{ fontSize: "2vw", fontWeight: 400, color: "#888888", marginBottom: "0.8vh" }}
             >
-              Server-persisted
+              JSON files (server)
             </p>
             <p
               className="font-body"

@@ -1,9 +1,9 @@
 
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Plus, Trash2 } from "lucide-react"
 import { NOTIFICATION_TIMEZONE } from "@/lib/notification-schedule"
+import { ScrollTimePicker } from "@/components/ui/scroll-time-picker"
 
 function useBangkokDateTimeLabel() {
   const [label, setLabel] = useState("")
@@ -135,33 +135,32 @@ export function NotificationSettingsPage() {
                     </Button>
                   </div>
 
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     {times.map((time, index) => (
                       <div
-                        key={`${index}-${time}`}
-                        className="flex items-center gap-3 bg-card border border-border rounded-xl p-3"
+                        key={`${index}`}
+                        className="rounded-xl border border-border bg-card p-3 space-y-2"
                       >
-                        <div className="flex flex-1 items-center gap-3 min-w-0">
-                          <span className="text-sm text-muted-foreground shrink-0 w-16">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-muted-foreground">
                             รอบที่ {index + 1}
                           </span>
-                          <Input
-                            type="time"
-                            value={time}
-                            onChange={(e) => handleTimeChange(index, e.target.value)}
-                            className="bg-input border-border text-foreground flex-1 min-w-0 font-mono tabular-nums"
-                          />
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => removeTime(index)}
+                            disabled={times.length <= 1}
+                            className="h-8 px-3 text-destructive hover:text-destructive hover:bg-destructive/10"
+                          >
+                            <Trash2 className="h-4 w-4 mr-1.5" />
+                            <span className="text-sm">ลบ</span>
+                          </Button>
                         </div>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => removeTime(index)}
-                          disabled={times.length <= 1}
-                          className="h-8 w-8 shrink-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                        <ScrollTimePicker
+                          value={time}
+                          onChange={(v) => handleTimeChange(index, v)}
+                        />
                       </div>
                     ))}
                   </div>

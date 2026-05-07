@@ -14,6 +14,17 @@ const websitesFilePath = path.join(dataDir, "websites.json");
 let lastBotRunAt = 0;
 const BOT_COOLDOWN_MS = 60_000;
 
+export function runBotDirect() {
+  const now = Date.now();
+  if (now - lastBotRunAt < BOT_COOLDOWN_MS) return;
+  lastBotRunAt = now;
+  exec("python bot.py", (err, stdout, stderr) => {
+    if (err) console.error("[bot]", err.message);
+    if (stdout) console.log("[bot]", stdout.trim());
+    if (stderr) console.warn("[bot]", stderr.trim());
+  });
+}
+
 function extractId(input: string): string {
   if (!input) return "";
   if (input.includes("/account/")) {
@@ -113,15 +124,7 @@ router.post("/run-bot", (req, res) => {
 
   lastBotRunAt = now;
   req.log.info("Running bot.py");
-
-  exec("python bot.py", (err, stdout, stderr) => {
-    if (err) req.log.error({ err }, "Bot error");
-    if (stdout) req.log.info(stdout);
-    if (stderr) req.log.warn(stderr);
-    const success = !err;
-    req.log.info({ success }, "Bot run complete");
-  });
-
+  runBotDirect();
   res.json({ ok: true, message: "Bot started" });
 });
 

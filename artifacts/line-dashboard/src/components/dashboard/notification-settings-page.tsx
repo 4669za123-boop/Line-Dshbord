@@ -1,13 +1,12 @@
 
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Plus, Trash2 } from "lucide-react"
+import { Plus, Trash2, Pencil, Check, X } from "lucide-react"
 import { NOTIFICATION_TIMEZONE } from "@/lib/notification-schedule"
 import { ScrollTimePicker } from "@/components/ui/scroll-time-picker"
 
 function useBangkokDateTimeLabel() {
   const [label, setLabel] = useState("")
-
   useEffect(() => {
     const update = () => {
       setLabel(
@@ -23,7 +22,6 @@ function useBangkokDateTimeLabel() {
     const id = setInterval(update, 1000)
     return () => clearInterval(id)
   }, [])
-
   return label
 }
 
@@ -31,6 +29,8 @@ export function NotificationSettingsPage() {
   const [times, setTimes] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
   const [savedFlash, setSavedFlash] = useState(false)
+  const [editingIndex, setEditingIndex] = useState<number | null>(null)
+  const [editingValue, setEditingValue] = useState("09:00")
 
   const bangkokNow = useBangkokDateTimeLabel()
 
@@ -42,43 +42,60 @@ export function NotificationSettingsPage() {
       .finally(() => setLoading(false))
   }, [])
 
-  const handleTimeChange = (index: number, value: string) => {
+  const saveTimes = async (newTimes: string[]) => {
+    try {
+      const res = await fetch("/api/schedules", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ times: newTimes }),
+      })
+      const data: { times: string[] } = await res.json()
+      setTimes(data.times)
+    } catch {
+      setTimes(newTimes)
+    }
+  }
+
+  const startEdit = (index: number) => {
+    setEditingValue(times[index])
+    setEditingIndex(index)
+  }
+
+  const confirmEdit = async () => {
+    if (editingIndex === null) return
     const newTimes = [...times]
-    newTimes[index] = value
-    setTimes(newTimes)
+    newTimes[editingIndex] = editingValue
+    setEditingIndex(null)
+    await saveTimes(newTimes)
+    setSavedFlash(true)
+  }
+
+  const cancelEdit = () => {
+    if (editingIndex !== null && editingIndex >= times.length) {
+      setTimes(times.slice(0, -1))
+    }
+    setEditingIndex(null)
   }
 
   const addTime = () => {
-    if (times.length < 10) {
-      setTimes([...times, "12:00"])
-    }
+    if (times.length >= 10 || editingIndex !== null) return
+    const newTime = "12:00"
+    const newTimes = [...times, newTime]
+    setTimes(newTimes)
+    setEditingValue(newTime)
+    setEditingIndex(newTimes.length - 1)
   }
 
   const removeTime = async (index: number) => {
     if (times.length <= 1) return
+    if (editingIndex !== null) return
     const target = times[index]
     const updated = times.filter((_, i) => i !== index)
     setTimes(updated)
     try {
       await fetch(`/api/schedules/${encodeURIComponent(target)}`, { method: "DELETE" })
     } catch {
-      // silent — state already updated optimistically
-    }
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    try {
-      const res = await fetch("/api/schedules", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ times }),
-      })
-      const data: { times: string[] } = await res.json()
-      setTimes(data.times)
-      setSavedFlash(true)
-    } catch {
-      setSavedFlash(true)
+      // silent
     }
   }
 
@@ -116,35 +133,75 @@ export function NotificationSettingsPage() {
             {loading ? (
               <p className="text-center text-sm text-muted-foreground">กำลังโหลด...</p>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <label className="text-sm font-medium text-foreground">
-                      เวลาแจ้งเตือน (เวลาไทย)
-                    </label>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      onClick={addTime}
-                      disabled={times.length >= 10}
-                      className="text-primary hover:text-primary hover:bg-primary/10"
-                    >
-                      <Plus className="h-4 w-4 mr-1" />
-                      เพิ่มเวลา
-                    </Button>
-                  </div>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-medium text-foreground">
+                    เวลาแจ้งเตือน (เวลาไทย)
+                  </label>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={addTime}
+                    disabled={times.length >= 10 || editingIndex !== null}
+                    className="text-primary hover:text-primary hover:bg-primary/10"
+                  >
+                    <Plus className="h-4 w-4 mr-1" />
+                    เพิ่มเวลา
+                  </Button>
+                </div>
 
-                  <div className="space-y-4">
-                    {times.map((time, index) => (
-                      <div
-                        key={`${index}`}
-                        className="rounded-xl border border-border bg-card p-3 space-y-2"
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm text-muted-foreground">
+                <div className="space-y-3">
+                  {times.map((time, index) => (
+                    <div
+                      key={index}
+                      className="rounded-xl border border-border bg-card overflow-hidden"
+                    >
+                      {editingIndex === index ? (
+                        <div className="p-3 space-y-3">
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm text-muted-foreground">
+                              รอบที่ {index + 1}
+                            </span>
+                            <div className="flex items-center gap-2">
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                onClick={cancelEdit}
+                                className="h-8 px-2 text-muted-foreground hover:text-foreground"
+                              >
+                                <X className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                type="button"
+                                size="sm"
+                                onClick={confirmEdit}
+                                className="h-8 px-3 bg-primary text-primary-foreground hover:bg-primary/90"
+                              >
+                                <Check className="h-4 w-4 mr-1" />
+                                บันทึก
+                              </Button>
+                            </div>
+                          </div>
+                          <ScrollTimePicker
+                            value={editingValue}
+                            onChange={setEditingValue}
+                          />
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-3 p-3">
+                          <span className="text-sm text-muted-foreground shrink-0 w-16">
                             รอบที่ {index + 1}
                           </span>
+                          <button
+                            type="button"
+                            onClick={() => startEdit(index)}
+                            className="flex flex-1 items-center gap-2 font-mono tabular-nums text-foreground text-base hover:text-primary transition-colors text-left"
+                          >
+                            <span>{time}</span>
+                            <Pencil className="h-3.5 w-3.5 text-muted-foreground" />
+                          </button>
                           <Button
                             type="button"
                             variant="ghost"
@@ -157,29 +214,17 @@ export function NotificationSettingsPage() {
                             <span className="text-sm">ลบ</span>
                           </Button>
                         </div>
-                        <ScrollTimePicker
-                          value={time}
-                          onChange={(v) => handleTimeChange(index, v)}
-                        />
-                      </div>
-                    ))}
-                  </div>
+                      )}
+                    </div>
+                  ))}
                 </div>
 
-                <div className="space-y-2">
-                  <Button
-                    type="submit"
-                    className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
-                  >
-                    บันทึก
-                  </Button>
-                  {savedFlash && (
-                    <p className="text-center text-xs text-primary" role="status">
-                      ✅ บันทึกแล้ว (เซิร์ฟเวอร์ · เวลาไทย)
-                    </p>
-                  )}
-                </div>
-              </form>
+                {savedFlash && (
+                  <p className="text-center text-xs text-primary" role="status">
+                    ✅ บันทึกแล้ว (เซิร์ฟเวอร์ · เวลาไทย)
+                  </p>
+                )}
+              </div>
             )}
 
             <p className="text-xs text-muted-foreground text-center leading-relaxed">

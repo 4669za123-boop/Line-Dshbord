@@ -203,8 +203,9 @@ def main():
                         }
 
                     if check_banned(driver):
-                        summary[site]["banned"].append(line_id)
-                        print(f"🚨 {line_id} → ไลน์บิน")
+                        label = "ไลน์หลัก" if line_type == "หลัก" else "ไลน์ฝากถอน"
+                        summary[site]["banned"].append({"id": line_id, "type": label})
+                        print(f"🚨 {line_id} ({site} / {label}) → ไลน์บิน")
                         continue
 
                     unread = get_unread(driver)
@@ -241,7 +242,7 @@ def main():
         if val["banned"]:
             text += "🚨 ไลน์บิน:\n"
             for b in val["banned"]:
-                text += f"- {b}\n"
+                text += f"- {b['type']}: {b['id']}\n"
 
         text += "--------------------\n\n"
 

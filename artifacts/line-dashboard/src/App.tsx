@@ -93,18 +93,29 @@ export default function App() {
     window.localStorage.setItem(ACCOUNTS_STORAGE_KEY, JSON.stringify(accounts));
   }, [accounts, persistReady]);
 
-  function applyStatuses(statuses: Record<string, string>) {
+  function applyStatuses(statuses: Record<string, { status: string; type?: string } | string>) {
     setAccounts((prev) =>
       prev.map((acc) => {
         const lineId = extractLineId(acc.name);
-        const fetched = statuses[lineId];
-        if (!fetched || !isLineChannelStatus(fetched)) return acc;
+        const entry = statuses[lineId];
+        if (!entry) return acc;
 
-        if (acc.lineRole === "main") {
-          return { ...acc, mainStatus: fetched };
-        } else {
-          return { ...acc, depositStatus: fetched };
+        const rawStatus = typeof entry === "string" ? entry : entry.status;
+        const lineType  = typeof entry === "object" ? (entry.type ?? "") : "";
+
+        if (!isLineChannelStatus(rawStatus)) return acc;
+
+        // เทียบ type จาก lines.json กับ lineRole ใน localStorage
+        const isMain    = lineType === "หลัก"      || (lineType === "" && acc.lineRole === "main");
+        const isDeposit = lineType === "ฝากถอน"    || (lineType === "" && acc.lineRole === "deposit");
+
+        if (isMain && acc.lineRole === "main") {
+          return { ...acc, mainStatus: rawStatus };
         }
+        if (isDeposit && acc.lineRole === "deposit") {
+          return { ...acc, depositStatus: rawStatus };
+        }
+        return acc;
       })
     );
   }

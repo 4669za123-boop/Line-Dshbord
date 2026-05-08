@@ -8,7 +8,13 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const dataDir = path.join(__dirname, "..", "data");
 const filePath = path.join(dataDir, "statuses.json");
 
-function readStatuses(): Record<string, string> {
+export type StatusEntry = {
+  status: "normal" | "suspended" | "inactive";
+  type: string;
+  site: string;
+};
+
+function readStatuses(): Record<string, StatusEntry> {
   try {
     if (!fs.existsSync(filePath)) return {};
     return JSON.parse(fs.readFileSync(filePath, "utf-8"));
@@ -17,7 +23,7 @@ function readStatuses(): Record<string, string> {
   }
 }
 
-function writeStatuses(data: Record<string, string>) {
+function writeStatuses(data: Record<string, StatusEntry>) {
   if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
   fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
 }
@@ -27,7 +33,7 @@ router.get("/line-status", (_req, res) => {
 });
 
 router.post("/line-status", (req, res) => {
-  const { statuses } = req.body as { statuses: Record<string, string> };
+  const { statuses } = req.body as { statuses: Record<string, StatusEntry> };
   if (!statuses || typeof statuses !== "object") {
     res.status(400).json({ error: "invalid payload" });
     return;

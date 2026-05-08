@@ -7,7 +7,8 @@ import { logger } from "./logger.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const schedulesPath = path.join(__dirname, "..", "data", "schedules.json");
-const rootDir = path.join(__dirname, "..", "..");
+// dist/index.mjs อยู่ใน dist/ → ขึ้นไปหนึ่งระดับก็ถึง root ของ api-server
+const rootDir = path.join(__dirname, "..");
 
 const TIMEZONE = "Asia/Bangkok";
 

@@ -1,6 +1,6 @@
 """
 checker.py — ตรวจสถานะ LINE OA (ออนไลน์ / โดนระงับ)
-ทำงานเหมือน bot.py: เปิด Chrome → เข้า URL เว็บ → ไล่ทีละ account
+เข้า URL เว็บ → ไล่ account links → เทียบกับ lines.json → ส่งสถานะ + type กลับ
 """
 import time
 import json
@@ -33,6 +33,7 @@ def load_websites():
 
 
 def load_data_map():
+    """โหลด lines.json แล้วทำ dict { line_id: { type, site } } เหมือน bot.py"""
     try:
         with open(DATA_FILE, "r", encoding="utf-8") as f:
             raw = json.load(f)
@@ -49,7 +50,10 @@ def load_data_map():
             raw_id = item.get("id") or item.get("url")
             line_id = extract(raw_id)
             if line_id:
-                cleaned[line_id] = item
+                cleaned[line_id] = {
+                    "type": item.get("type", ""),
+                    "site": item.get("site", ""),
+                }
         print(f"✅ DATA MAP: {len(cleaned)} รายการ")
         return cleaned
     except Exception as e:
@@ -110,12 +114,14 @@ def main():
 
     driver = connect()
     wait = WebDriverWait(driver, 20)
+
+    # statuses: { line_id: { status, type, site } }
     statuses = {}
 
     for website in websites:
         site_name = website["name"]
         group_url = website["url"]
-        print(f"🌐 เข้าเว็บ: {site_name}")
+        print(f"🌐 เข้าเว็บ: {site_name} → {group_url}")
 
         try:
             driver.get(group_url)
@@ -123,29 +129,45 @@ def main():
             time.sleep(2)
 
             accounts = get_accounts(driver)
-            print(f"   พบ {len(accounts)} account")
+            print(f"   พบ {len(accounts)} account links")
 
             for acc_url in accounts:
+                line_id = extract_id_from_url(acc_url)
+
+                # ข้ามถ้าไม่อยู่ใน lines.json
+                if line_id not in data_map:
+                    continue
+
+                info = data_map[line_id]
+                line_type = info["type"]   # "หลัก" หรือ "ฝากถอน"
+                site = info["site"]
+
                 try:
                     driver.get(acc_url)
                     wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
                     time.sleep(2)
 
-                    line_id = extract_id_from_url(acc_url)
-
-                    if data_map and line_id not in data_map:
-                        continue
-
                     if check_banned(driver):
-                        statuses[line_id] = "suspended"
-                        print(f"   🚨 {line_id} → โดนระงับ")
+                        status = "suspended"
+                        label = "ไลน์หลัก" if line_type == "หลัก" else "ไลน์ฝากถอน"
+                        print(f"   🚨 {line_id} ({site} / {label}) → โดนระงับ")
                     else:
-                        statuses[line_id] = "normal"
-                        print(f"   ✅ {line_id} → ออนไลน์")
+                        status = "normal"
+                        print(f"   ✅ {line_id} ({site} / {line_type}) → ออนไลน์")
+
+                    statuses[line_id] = {
+                        "status": status,
+                        "type": line_type,
+                        "site": site,
+                    }
 
                 except Exception as e:
-                    print(f"   ❌ acc error ({line_id}):", e)
-                    statuses[line_id] = "inactive"
+                    print(f"   ❌ {line_id} error:", e)
+                    statuses[line_id] = {
+                        "status": "inactive",
+                        "type": line_type,
+                        "site": site,
+                    }
                     continue
 
         except Exception as e:

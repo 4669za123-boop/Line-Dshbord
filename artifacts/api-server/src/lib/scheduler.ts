@@ -10,7 +10,6 @@ const schedulesPath = path.join(__dirname, "..", "data", "schedules.json");
 const rootDir = path.join(__dirname, "..");
 
 const TIMEZONE = "Asia/Bangkok";
-const CHECKER_INTERVAL_MINUTES = 5;
 
 function getBangkokHHMM(): string {
   return new Intl.DateTimeFormat("en-GB", {
@@ -33,11 +32,10 @@ function readScheduledTimes(): string[] {
 
 let lastFiredMinute = "";
 let checkerRunning = false;
-let checkerTickCount = 0;
 
 function runCheckerDirect() {
   if (checkerRunning) {
-    logger.info("⏭️  Checker already running, skipping");
+    logger.info("⏭️  Checker already running, skipping this tick");
     return;
   }
   checkerRunning = true;
@@ -47,21 +45,17 @@ function runCheckerDirect() {
   proc.stderr?.on("data", (d) => process.stderr.write(d));
   proc.on("exit", (code) => {
     checkerRunning = false;
-    logger.info({ code }, "🔍 Checker: finished");
+    logger.info({ code }, "🔍 Checker: finished — จะรันรอบถัดไปใน 1 นาที");
   });
 }
 
 function tick() {
   const now = getBangkokHHMM();
 
-  // รัน checker ทุก CHECKER_INTERVAL_MINUTES นาที (ไม่ใช่ทุกนาที)
-  checkerTickCount++;
-  if (checkerTickCount >= CHECKER_INTERVAL_MINUTES) {
-    checkerTickCount = 0;
-    runCheckerDirect();
-  }
+  // รัน checker ทุก 1 นาที (ถ้ารอบก่อนยังไม่เสร็จจะข้ามไป)
+  runCheckerDirect();
 
-  // รัน bot (Discord) ตามเวลาที่ตั้งไว้
+  // รัน bot (Discord summary) ตามเวลาที่ตั้งไว้
   if (now === lastFiredMinute) return;
   const times = readScheduledTimes();
   if (times.includes(now)) {
@@ -73,7 +67,7 @@ function tick() {
 
 export function startScheduler() {
   logger.info(
-    `🗓️  Scheduler started — checker ทุก ${CHECKER_INTERVAL_MINUTES} นาที, bot ตาม schedule (Asia/Bangkok)`
+    "🗓️  Scheduler started — checker รันทุก 1 นาที (real-time), bot ตาม schedule (Asia/Bangkok)"
   );
   setInterval(tick, 60_000);
   tick();

@@ -35,6 +35,9 @@ DISPLAY=:${DISPLAY_NUM} google-chrome \
   --user-data-dir="${PROFILE_DIR}" \
   --no-first-run \
   --no-default-browser-check \
+  --no-sandbox \
+  --disable-dev-shm-usage \
+  --disable-gpu \
   https://manager.line.biz/ &
 CHROME_PID=$!
 

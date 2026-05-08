@@ -34,10 +34,12 @@ export function NotificationSettingsPage() {
 
   const bangkokNow = useBangkokDateTimeLabel()
 
+  const sortTimes = (arr: string[]) => [...arr].sort((a, b) => a.localeCompare(b))
+
   useEffect(() => {
     fetch("/api/schedules")
       .then((r) => r.json())
-      .then((data: { times: string[] }) => setTimes(data.times))
+      .then((data: { times: string[] }) => setTimes(sortTimes(data.times)))
       .catch(() => setTimes(["09:00", "14:00", "20:00"]))
       .finally(() => setLoading(false))
   }, [])
@@ -50,9 +52,9 @@ export function NotificationSettingsPage() {
         body: JSON.stringify({ times: newTimes }),
       })
       const data: { times: string[] } = await res.json()
-      setTimes(data.times)
+      setTimes(sortTimes(data.times))
     } catch {
-      setTimes(newTimes)
+      setTimes(sortTimes(newTimes))
     }
   }
 

@@ -22,7 +22,7 @@ apt-get install -y nodejs
 echo "📦 ติดตั้ง pnpm..."
 npm install -g pnpm
 
-# --- 4. ติดตั้ง PM2 (ทำให้ app รันตลอด ปิด terminal ได้) ---
+# --- 4. ติดตั้ง PM2 ---
 echo "📦 ติดตั้ง PM2..."
 npm install -g pm2
 
@@ -42,33 +42,83 @@ echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" \
 apt-get update -y
 apt-get install -y google-chrome-stable
 
-# --- 8. ติดตั้ง Xvfb (virtual display สำหรับล็อกอิน LINE ครั้งแรก) ---
-echo "📦 ติดตั้ง Xvfb..."
+# --- 8. ติดตั้ง Xvfb + VNC (สำหรับล็อกอิน LINE ครั้งแรก) ---
+echo "📦 ติดตั้ง Xvfb + VNC..."
 apt-get install -y xvfb x11vnc
 
-# --- 9. Clone โปรเจกต์จาก GitHub ---
+# --- 9. ติดตั้ง Nginx ---
+echo "📦 ติดตั้ง Nginx..."
+apt-get install -y nginx
+
+# --- 10. Clone โปรเจกต์จาก GitHub ---
 echo "📥 Clone โปรเจกต์..."
 if [ ! -d "/app" ]; then
   git clone https://github.com/4669za123-boop/Line-Dshbord /app
 else
-  echo "   โฟลเดอร์ /app มีอยู่แล้ว ข้าม clone"
+  echo "   โฟลเดอร์ /app มีอยู่แล้ว — pull โค้ดล่าสุด"
+  cd /app && git pull
 fi
 
-# --- 10. ติดตั้ง Node dependencies + build ---
-echo "🔨 Build โปรเจกต์..."
+# --- 11. ติดตั้ง Node dependencies ---
+echo "🔨 ติดตั้ง dependencies..."
 cd /app
 pnpm install
-cd artifacts/api-server && pnpm run build
+
+# --- 12. Build API Server ---
+echo "🔨 Build API Server..."
+cd /app/artifacts/api-server && pnpm run build
+
+# --- 13. Build Frontend Dashboard ---
+echo "🔨 Build Frontend Dashboard..."
 cd /app
+pnpm --filter @workspace/line-dashboard run build
 
-# --- 11. สร้างโฟลเดอร์ data ถ้ายังไม่มี ---
-mkdir -p artifacts/api-server/data
+# --- 14. สร้างโฟลเดอร์ data ถ้ายังไม่มี ---
+mkdir -p /app/artifacts/api-server/data
+# สร้างไฟล์เริ่มต้นถ้ายังไม่มี
+[ -f "/app/artifacts/api-server/data/lines.json" ]    || echo "[]" > /app/artifacts/api-server/data/lines.json
+[ -f "/app/artifacts/api-server/data/websites.json" ] || echo "[]" > /app/artifacts/api-server/data/websites.json
+[ -f "/app/artifacts/api-server/data/schedules.json" ] || echo '["09:00","14:00","20:00"]' > /app/artifacts/api-server/data/schedules.json
 
-# --- 12. ตั้งค่า PM2 ให้รัน API server ---
+# --- 15. ตั้งค่า Nginx ---
+echo "⚙️  ตั้งค่า Nginx..."
+cat > /etc/nginx/sites-available/line-dashboard << 'EOF'
+server {
+    listen 80;
+    server_name _;
+
+    # Serve frontend (React build)
+    root /app/artifacts/line-dashboard/dist;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Proxy API requests to Node.js backend
+    location /api/ {
+        proxy_pass http://localhost:8080/api/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+EOF
+
+ln -sf /etc/nginx/sites-available/line-dashboard /etc/nginx/sites-enabled/line-dashboard
+rm -f /etc/nginx/sites-enabled/default
+nginx -t && systemctl restart nginx
+systemctl enable nginx
+
+# --- 16. ตั้งค่า PM2 ให้รัน API server ---
 echo "⚙️  ตั้งค่า PM2..."
-pm2 start "node /app/artifacts/api-server/dist/index.mjs" \
+pm2 delete line-dashboard-api 2>/dev/null || true
+PORT=8080 pm2 start "node /app/artifacts/api-server/dist/index.mjs" \
   --name "line-dashboard-api" \
-  --cwd "/app/artifacts/api-server"
+  --cwd "/app/artifacts/api-server" \
+  --env PORT=8080
 
 pm2 startup
 pm2 save
@@ -76,9 +126,12 @@ pm2 save
 echo ""
 echo "✅ ติดตั้งเสร็จแล้ว!"
 echo ""
-echo "📋 ขั้นตอนต่อไป:"
-echo "   1. ล็อกอิน LINE ครั้งแรก → รัน: bash login-line.sh"
-echo "   2. ดู API server: pm2 logs line-dashboard-api"
-echo "   3. เช็ค status: pm2 status"
+echo "📋 ขั้นตอนต่อไป (ทำครั้งเดียว):"
+echo "   1. ล็อกอิน LINE OA ครั้งแรก → รัน: bash /app/login-line.sh"
+echo "      (ดูวิธีเชื่อม VNC ด้านล่าง)"
+echo "   2. หลังล็อกอินเสร็จ → restart bot: pm2 restart line-dashboard-api"
 echo ""
-echo "🌐 API รันที่: http://$(hostname -I | awk '{print $1}'):8080"
+echo "🌐 Dashboard: http://$(hostname -I | awk '{print $1}')"
+echo "🔌 API:       http://$(hostname -I | awk '{print $1}')/api/health"
+echo "📊 PM2:       pm2 status"
+echo "📝 Logs:      pm2 logs line-dashboard-api"

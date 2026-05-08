@@ -4,8 +4,11 @@ checker.py — ตรวจสถานะ LINE OA (ออนไลน์ / โ�
 """
 import time
 import json
+import os
+import platform
 import requests
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -33,7 +36,6 @@ def load_websites():
 
 
 def load_data_map():
-    """โหลด lines.json แล้วทำ dict { line_id: { type, site } } เหมือน bot.py"""
     try:
         with open(DATA_FILE, "r", encoding="utf-8") as f:
             raw = json.load(f)
@@ -63,9 +65,32 @@ def load_data_map():
 
 def connect():
     options = webdriver.ChromeOptions()
-    options.add_argument("--start-maximized")
-    options.add_argument(r"--user-data-dir=C:\selenium_profile")
-    return webdriver.Chrome(options=options)
+    options.add_argument("--headless")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--window-size=1920,1080")
+    options.add_argument("--disable-blink-features=AutomationControlled")
+
+    if platform.system() == "Linux":
+        for binary in [
+            "/usr/bin/chromium",
+            "/usr/bin/chromium-browser",
+            "/usr/bin/google-chrome",
+            "/usr/bin/google-chrome-stable",
+        ]:
+            if os.path.exists(binary):
+                options.binary_location = binary
+                print(f"✅ ใช้ Chrome: {binary}")
+                break
+
+    try:
+        from webdriver_manager.chrome import ChromeDriverManager
+        service = Service(ChromeDriverManager().install())
+        return webdriver.Chrome(service=service, options=options)
+    except Exception as e:
+        print(f"⚠️  webdriver_manager ไม่ได้: {e} — ลอง default")
+        return webdriver.Chrome(options=options)
 
 
 def get_accounts(driver):
@@ -115,7 +140,6 @@ def main():
     driver = connect()
     wait = WebDriverWait(driver, 20)
 
-    # statuses: { line_id: { status, type, site } }
     statuses = {}
 
     for website in websites:
@@ -133,13 +157,11 @@ def main():
 
             for acc_url in accounts:
                 line_id = extract_id_from_url(acc_url)
-
-                # ข้ามถ้าไม่อยู่ใน lines.json
                 if line_id not in data_map:
                     continue
 
                 info = data_map[line_id]
-                line_type = info["type"]   # "หลัก" หรือ "ฝากถอน"
+                line_type = info["type"]
                 site = info["site"]
 
                 try:

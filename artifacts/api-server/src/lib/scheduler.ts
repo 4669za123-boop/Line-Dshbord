@@ -7,10 +7,10 @@ import { logger } from "./logger.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const schedulesPath = path.join(__dirname, "..", "data", "schedules.json");
-// dist/index.mjs อยู่ใน dist/ → ขึ้นไปหนึ่งระดับก็ถึง root ของ api-server
 const rootDir = path.join(__dirname, "..");
 
 const TIMEZONE = "Asia/Bangkok";
+const CHECKER_INTERVAL_MINUTES = 5;
 
 function getBangkokHHMM(): string {
   return new Intl.DateTimeFormat("en-GB", {
@@ -33,6 +33,7 @@ function readScheduledTimes(): string[] {
 
 let lastFiredMinute = "";
 let checkerRunning = false;
+let checkerTickCount = 0;
 
 function runCheckerDirect() {
   if (checkerRunning) {
@@ -53,8 +54,14 @@ function runCheckerDirect() {
 function tick() {
   const now = getBangkokHHMM();
 
-  runCheckerDirect();
+  // รัน checker ทุก CHECKER_INTERVAL_MINUTES นาที (ไม่ใช่ทุกนาที)
+  checkerTickCount++;
+  if (checkerTickCount >= CHECKER_INTERVAL_MINUTES) {
+    checkerTickCount = 0;
+    runCheckerDirect();
+  }
 
+  // รัน bot (Discord) ตามเวลาที่ตั้งไว้
   if (now === lastFiredMinute) return;
   const times = readScheduledTimes();
   if (times.includes(now)) {
@@ -65,7 +72,9 @@ function tick() {
 }
 
 export function startScheduler() {
-  logger.info("🗓️  Scheduler started (checking every minute, Asia/Bangkok)");
+  logger.info(
+    `🗓️  Scheduler started — checker ทุก ${CHECKER_INTERVAL_MINUTES} นาที, bot ตาม schedule (Asia/Bangkok)`
+  );
   setInterval(tick, 60_000);
   tick();
 }

@@ -1,8 +1,11 @@
 import time
 import requests
 import json
+import os
+import platform
 from datetime import datetime, timezone, timedelta
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -10,11 +13,9 @@ from selenium.webdriver.support import expected_conditions as EC
 BANGKOK_TZ = timezone(timedelta(hours=7))
 
 def get_shift_label():
-    """ส่งคืน (ชื่อกะ, เวลาไทย HH:MM)"""
     now = datetime.now(BANGKOK_TZ)
     hour = now.hour
     time_str = now.strftime("%H:%M")
-    # กะเช้า 08:00–19:59 / กะดึก 20:00–07:59
     shift = "กะเช้า" if 8 <= hour < 20 else "กะดึก"
     return shift, time_str
 
@@ -24,30 +25,25 @@ WEBSITES_FILE = "data/websites.json"
 DATA_FILE = "data/lines.json"
 
 
-# 🔥 โหลดรายการเว็บจาก dashboard (เรียงตามที่เพิ่มไว้)
 def load_websites():
     try:
         with open(WEBSITES_FILE, "r", encoding="utf-8") as f:
             data = json.load(f)
-
         websites = []
         for item in data:
             url = item.get("url", "").strip()
             name = item.get("name", "").strip()
             if url and name:
                 websites.append({"name": name, "url": url})
-
         print(f"✅ WEBSITES: {len(websites)} รายการ")
         for w in websites:
             print(f"   - {w['name']} → {w['url']}")
-
         return websites
     except Exception as e:
         print("❌ load websites error:", e)
         return []
 
 
-# 🔥 โหลด + ล้าง + จัดลำดับ LINE data จาก lines.json
 def load_and_clean_data():
     try:
         with open(DATA_FILE, "r", encoding="utf-8") as f:
@@ -61,27 +57,17 @@ def load_and_clean_data():
             return x.replace("@", "").lower()
 
         cleaned = {}
-
         for item in raw:
             raw_id = item.get("id") or item.get("url")
             line_id = extract(raw_id)
-
             if not line_id:
                 continue
-
             site = item.get("site", "")
             line_type = item.get("type", "")
-
-            # 🔥 ตัวล่าสุดทับของเก่า
-            cleaned[line_id] = {
-                "id": line_id,
-                "type": line_type,
-                "site": site
-            }
+            cleaned[line_id] = {"id": line_id, "type": line_type, "site": site}
 
         print(f"✅ CLEAN DATA: {len(cleaned)} รายการ")
         return cleaned
-
     except Exception as e:
         print("❌ load data error:", e)
         return {}
@@ -96,24 +82,44 @@ def extract_id_from_url(url):
 
 def connect():
     options = webdriver.ChromeOptions()
-    options.add_argument("--start-maximized")
-    options.add_argument(r"--user-data-dir=C:\selenium_profile")
-    return webdriver.Chrome(options=options)
+    options.add_argument("--headless")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--window-size=1920,1080")
+    options.add_argument("--disable-blink-features=AutomationControlled")
+
+    if platform.system() == "Linux":
+        for binary in [
+            "/usr/bin/chromium",
+            "/usr/bin/chromium-browser",
+            "/usr/bin/google-chrome",
+            "/usr/bin/google-chrome-stable",
+        ]:
+            if os.path.exists(binary):
+                options.binary_location = binary
+                print(f"✅ ใช้ Chrome: {binary}")
+                break
+
+    try:
+        from webdriver_manager.chrome import ChromeDriverManager
+        service = Service(ChromeDriverManager().install())
+        return webdriver.Chrome(service=service, options=options)
+    except Exception as e:
+        print(f"⚠️  webdriver_manager ไม่ได้: {e} — ลอง default")
+        return webdriver.Chrome(options=options)
 
 
 def get_accounts(driver):
     accounts = set()
-
     for _ in range(6):
         driver.execute_script("window.scrollBy(0, 800);")
         time.sleep(1)
-
         links = driver.find_elements(By.XPATH, "//a[contains(@href,'/account/')]")
         for l in links:
             href = l.get_attribute("href")
             if href:
                 accounts.add(href.split("?")[0])
-
     return list(accounts)
 
 
@@ -132,25 +138,19 @@ def get_unread(driver):
         for _ in range(8):
             driver.execute_script("window.scrollBy(0, 800);")
             time.sleep(0.5)
-
         text = driver.find_element(By.TAG_NAME, "body").text
         lines = text.split("\n")
-
         for i, line in enumerate(lines):
             if "แชทล่าสุด" in line or "Recent chats" in line:
                 for j in range(i + 1, i + 6):
                     if j >= len(lines):
                         break
-
                     val = lines[j].strip()
-
                     if val.isdigit():
                         return int(val)
-
-                    num = ''.join([c for c in val if c.isdigit()])
+                    num = "".join([c for c in val if c.isdigit()])
                     if num:
                         return int(num)
-
         return 0
     except:
         return 0
@@ -169,27 +169,22 @@ def main():
     driver = connect()
     wait = WebDriverWait(driver, 20)
 
-    # 🔥 โหลดเว็บจาก dashboard (เรียงตามลำดับใน dashboard)
     websites = load_websites()
     if not websites:
         print("❌ ไม่พบข้อมูลเว็บไซต์ใน data/websites.json")
         driver.quit()
         return
 
-    # 🔥 โหลด LINE data จาก lines.json
     data_map = load_and_clean_data()
-
     summary = {}
 
     for website in websites:
         site_name = website["name"]
         group_url = website["url"]
-
         try:
             driver.get(group_url)
             wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
             time.sleep(2)
-
             accounts = get_accounts(driver)
 
             for acc_url in accounts:
@@ -199,7 +194,6 @@ def main():
                     time.sleep(2)
 
                     line_id = extract_id_from_url(acc_url)
-
                     if line_id not in data_map:
                         continue
 
@@ -208,11 +202,7 @@ def main():
                     line_type = info["type"]
 
                     if site not in summary:
-                        summary[site] = {
-                            "main": 0,
-                            "deposit": 0,
-                            "banned": []
-                        }
+                        summary[site] = {"main": 0, "deposit": 0, "banned": []}
 
                     if check_banned(driver):
                         label = "ไลน์หลัก" if line_type == "หลัก" else "ไลน์ฝากถอน"
@@ -221,7 +211,6 @@ def main():
                         continue
 
                     unread = get_unread(driver)
-
                     print(f"📊 {line_id} ({site} / {line_type}) → {unread} แชท")
 
                     if line_type == "หลัก":
@@ -236,35 +225,27 @@ def main():
         except Exception as e:
             print(f"group error ({site_name}):", e)
 
-    # 🔥 สร้างข้อความเรียงตามลำดับ dashboard
     shift, run_time = get_shift_label()
     text = f"📊 ตรวจสอบจำนวนแชท{shift}\nเวลา {run_time} น.\n\n"
 
     for website in websites:
         site = website["name"]
-
         if site not in summary:
             continue
-
         val = summary[site]
-
         text += f"{site}\n"
         text += f"ไลน์หลัก {val['main']} แชท\n"
         text += f"ฝากถอน {val['deposit']} แชท\n"
-
         if val["banned"]:
             text += "🚨 ไลน์บิน:\n"
             for b in val["banned"]:
                 text += f"- {b['type']}: {b['id']}\n"
-
         text += "--------------------\n\n"
 
     send(text)
-
     driver.quit()
     print("✅ DONE")
 
 
 if __name__ == "__main__":
     main()
-    

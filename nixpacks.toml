@@ -1,0 +1,20 @@
+[phases.setup]
+aptPkgs = [
+  "chromium",
+  "chromium-driver",
+  "python3",
+  "python3-pip",
+  "nodejs",
+  "npm"
+]
+
+[phases.install]
+cmds = [
+  "npm install -g pnpm",
+  "pnpm install",
+  "pip3 install selenium webdriver-manager requests",
+  "cd artifacts/api-server && pnpm run build"
+]
+
+[start]
+cmd = "cd artifacts/api-server && node dist/index.mjs"

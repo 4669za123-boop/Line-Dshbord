@@ -1,7 +1,6 @@
 """
 checker.py — ตรวจสถานะ LINE OA (ออนไลน์ / โดนระงับ)
-- เช็คทุกรอบ → เทียบกับสถานะก่อนหน้า
-- ถ้าพบว่าเพิ่งบิน (normal → suspended) → แจ้ง Discord ทันที
+รันต่อเนื่องทุก 1 นาที → อัปเดตสถานะบน Dashboard แบบเรียลไทม์
 """
 import time
 import json
@@ -17,11 +16,6 @@ from selenium.webdriver.support import expected_conditions as EC
 WEBSITES_FILE = "data/websites.json"
 DATA_FILE = "data/lines.json"
 API_URL = os.environ.get("API_URL", "http://localhost:8080/api/line-status")
-DISCORD_WEBHOOK_URL = os.environ.get(
-    "DISCORD_WEBHOOK_URL",
-    "https://discord.com/api/webhooks/1500401729387364524/zFTtXlU1J5L6bObpjsT9cQsNdFA-jkNQYlYfYzEP--SOk0OU1Q6R5RVDbwZfXsTPsfiJ"
-)
-
 CHROME_PROFILE_DIR = os.environ.get("CHROME_PROFILE_DIR", "/root/.line-chrome-profile")
 
 
@@ -67,15 +61,6 @@ def load_data_map():
         return cleaned
     except Exception as e:
         print("❌ load data error:", e)
-        return {}
-
-
-def get_previous_statuses() -> dict:
-    """ดึงสถานะรอบก่อนหน้าจาก API"""
-    try:
-        res = requests.get(API_URL, timeout=5)
-        return res.json()
-    except:
         return {}
 
 
@@ -149,23 +134,6 @@ def check_banned(driver):
     return False
 
 
-def send_discord_alert(alerts: list):
-    """ส่งแจ้งเตือน Discord ทันทีเมื่อไลน์บิน"""
-    if not alerts or not DISCORD_WEBHOOK_URL:
-        return
-    text = "🚨 **แจ้งเตือนด่วน! ไลน์บิน**\n\n"
-    for a in alerts:
-        label = "ไลน์หลัก" if a["type"] == "หลัก" else "ไลน์ฝากถอน"
-        text += f"❌ **{a['site']}** — {label}\n"
-        text += f"   LINE ID: `{a['id']}`\n\n"
-    text += "⚠️ กรุณาตรวจสอบและเปลี่ยนไลน์ด่วน!"
-    try:
-        requests.post(DISCORD_WEBHOOK_URL, json={"content": text}, timeout=10)
-        print(f"🚨 ส่ง Discord alert {len(alerts)} รายการ")
-    except Exception as e:
-        print("❌ discord alert error:", e)
-
-
 def main():
     print("🔍 CHECKER START")
 
@@ -175,15 +143,9 @@ def main():
         return
 
     data_map = load_data_map()
-
-    # ดึงสถานะรอบก่อนหน้า เพื่อเปรียบเทียบ
-    previous = get_previous_statuses()
-
     driver = connect()
     wait = WebDriverWait(driver, 20)
-
     statuses = {}
-    newly_banned = []  # รายการที่เพิ่งบินรอบนี้
 
     for website in websites:
         site_name = website["name"]
@@ -216,23 +178,6 @@ def main():
                         status = "suspended"
                         label = "ไลน์หลัก" if line_type == "หลัก" else "ไลน์ฝากถอน"
                         print(f"   🚨 {line_id} ({site} / {label}) → โดนระงับ")
-
-                        # เช็คว่าเพิ่งบินรอบนี้หรือบินมาแล้ว
-                        prev_status = previous.get(line_id, {})
-                        was_normal = (
-                            not prev_status or
-                            prev_status.get("status") == "normal" or
-                            prev_status.get("status") == "inactive"
-                        )
-                        if was_normal:
-                            newly_banned.append({
-                                "id": line_id,
-                                "type": line_type,
-                                "site": site,
-                            })
-                            print(f"   ⚡ ใหม่! เพิ่งบินรอบนี้ → จะแจ้ง Discord")
-                        else:
-                            print(f"   ℹ️  บินมาแล้วตั้งแต่รอบก่อน ไม่ส่งซ้ำ")
                     else:
                         status = "normal"
                         print(f"   ✅ {line_id} ({site} / {line_type}) → ออนไลน์")
@@ -258,18 +203,11 @@ def main():
 
     driver.quit()
 
-    # ส่งสถานะไปเก็บที่ API
     try:
         res = requests.post(API_URL, json={"statuses": statuses}, timeout=10)
-        print(f"✅ ส่งสถานะ {len(statuses)} บัญชี → {res.status_code}")
+        print(f"✅ อัปเดตสถานะ {len(statuses)} บัญชี → Dashboard ({res.status_code})")
     except Exception as e:
         print("❌ POST /api/line-status ล้มเหลว:", e)
-
-    # ส่ง Discord alert ทันทีถ้ามีไลน์บินใหม่
-    if newly_banned:
-        send_discord_alert(newly_banned)
-    else:
-        print("✅ ไม่มีไลน์บินใหม่รอบนี้")
 
     print("✅ CHECKER DONE")
 

@@ -1,10 +1,22 @@
 import time
 import requests
 import json
+from datetime import datetime, timezone, timedelta
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+
+BANGKOK_TZ = timezone(timedelta(hours=7))
+
+def get_shift_label():
+    """ส่งคืน (ชื่อกะ, เวลาไทย HH:MM)"""
+    now = datetime.now(BANGKOK_TZ)
+    hour = now.hour
+    time_str = now.strftime("%H:%M")
+    # กะเช้า 08:00–19:59 / กะดึก 20:00–07:59
+    shift = "กะเช้า" if 8 <= hour < 20 else "กะดึก"
+    return shift, time_str
 
 WEBHOOK_URL = "https://discord.com/api/webhooks/1500401729387364524/zFTtXlU1J5L6bObpjsT9cQsNdFA-jkNQYlYfYzEP--SOk0OU1Q6R5RVDbwZfXsTPsfiJ"
 
@@ -225,7 +237,8 @@ def main():
             print(f"group error ({site_name}):", e)
 
     # 🔥 สร้างข้อความเรียงตามลำดับ dashboard
-    text = "📊 LINE OA STATUS\n\n"
+    shift, run_time = get_shift_label()
+    text = f"📊 ตรวจสอบจำนวนแชท{shift}\nเวลา {run_time} น.\n\n"
 
     for website in websites:
         site = website["name"]

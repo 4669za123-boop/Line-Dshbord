@@ -71,7 +71,7 @@ cd /app/artifacts/api-server && pnpm run build
 # --- 13. Build Frontend Dashboard ---
 echo "🔨 Build Frontend Dashboard..."
 cd /app
-pnpm --filter @workspace/line-dashboard run build
+NODE_ENV=production BASE_PATH=/ pnpm --filter @workspace/line-dashboard run build
 
 # --- 14. สร้างโฟลเดอร์ data ถ้ายังไม่มี ---
 mkdir -p /app/artifacts/api-server/data

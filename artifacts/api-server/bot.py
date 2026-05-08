@@ -12,17 +12,24 @@ from selenium.webdriver.support import expected_conditions as EC
 
 BANGKOK_TZ = timezone(timedelta(hours=7))
 
+WEBHOOK_URL = os.environ.get(
+    "DISCORD_WEBHOOK_URL",
+    "https://discord.com/api/webhooks/1500401729387364524/zFTtXlU1J5L6bObpjsT9cQsNdFA-jkNQYlYfYzEP--SOk0OU1Q6R5RVDbwZfXsTPsfiJ"
+)
+
+WEBSITES_FILE = "data/websites.json"
+DATA_FILE = "data/lines.json"
+
+# Chrome profile สำหรับ VPS (ล็อกอิน LINE ผ่าน login-line.sh แล้ว)
+CHROME_PROFILE_DIR = os.environ.get("CHROME_PROFILE_DIR", "/root/.line-chrome-profile")
+
+
 def get_shift_label():
     now = datetime.now(BANGKOK_TZ)
     hour = now.hour
     time_str = now.strftime("%H:%M")
     shift = "กะเช้า" if 8 <= hour < 20 else "กะดึก"
     return shift, time_str
-
-WEBHOOK_URL = "https://discord.com/api/webhooks/1500401729387364524/zFTtXlU1J5L6bObpjsT9cQsNdFA-jkNQYlYfYzEP--SOk0OU1Q6R5RVDbwZfXsTPsfiJ"
-
-WEBSITES_FILE = "data/websites.json"
-DATA_FILE = "data/lines.json"
 
 
 def load_websites():
@@ -36,8 +43,6 @@ def load_websites():
             if url and name:
                 websites.append({"name": name, "url": url})
         print(f"✅ WEBSITES: {len(websites)} รายการ")
-        for w in websites:
-            print(f"   - {w['name']} → {w['url']}")
         return websites
     except Exception as e:
         print("❌ load websites error:", e)
@@ -62,10 +67,11 @@ def load_and_clean_data():
             line_id = extract(raw_id)
             if not line_id:
                 continue
-            site = item.get("site", "")
-            line_type = item.get("type", "")
-            cleaned[line_id] = {"id": line_id, "type": line_type, "site": site}
-
+            cleaned[line_id] = {
+                "id": line_id,
+                "type": item.get("type", ""),
+                "site": item.get("site", "")
+            }
         print(f"✅ CLEAN DATA: {len(cleaned)} รายการ")
         return cleaned
     except Exception as e:
@@ -89,12 +95,20 @@ def connect():
     options.add_argument("--window-size=1920,1080")
     options.add_argument("--disable-blink-features=AutomationControlled")
 
+    # ใช้ Chrome profile ที่ล็อกอิน LINE แล้ว (VPS)
+    if os.path.exists(CHROME_PROFILE_DIR):
+        options.add_argument(f"--user-data-dir={CHROME_PROFILE_DIR}")
+        print(f"✅ ใช้ Chrome profile: {CHROME_PROFILE_DIR}")
+    else:
+        print(f"⚠️  ไม่พบ Chrome profile ที่ {CHROME_PROFILE_DIR} — อาจต้องล็อกอินก่อน")
+
+    # ระบุ Chrome binary บน Linux
     if platform.system() == "Linux":
         for binary in [
-            "/usr/bin/chromium",
-            "/usr/bin/chromium-browser",
             "/usr/bin/google-chrome",
             "/usr/bin/google-chrome-stable",
+            "/usr/bin/chromium",
+            "/usr/bin/chromium-browser",
         ]:
             if os.path.exists(binary):
                 options.binary_location = binary
@@ -159,6 +173,7 @@ def get_unread(driver):
 def send(text):
     try:
         requests.post(WEBHOOK_URL, json={"content": text})
+        print("✅ ส่ง Discord สำเร็จ")
     except:
         print("❌ discord error")
 
@@ -171,7 +186,7 @@ def main():
 
     websites = load_websites()
     if not websites:
-        print("❌ ไม่พบข้อมูลเว็บไซต์ใน data/websites.json")
+        print("❌ ไม่พบข้อมูลเว็บไซต์")
         driver.quit()
         return
 

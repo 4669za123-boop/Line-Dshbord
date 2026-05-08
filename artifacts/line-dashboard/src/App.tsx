@@ -133,7 +133,7 @@ export default function App() {
     };
 
     poll();
-    const id = setInterval(poll, 60_000);
+    const id = setInterval(poll, 10_000);
     return () => {
       cancelled = true;
       clearInterval(id);

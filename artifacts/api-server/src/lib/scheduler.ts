@@ -1,11 +1,13 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { exec } from "child_process";
 import { runBotDirect } from "../routes/lines.js";
 import { logger } from "./logger.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const schedulesPath = path.join(__dirname, "..", "data", "schedules.json");
+const rootDir = path.join(__dirname, "..", "..");
 
 const TIMEZONE = "Asia/Bangkok";
 
@@ -29,11 +31,30 @@ function readScheduledTimes(): string[] {
 }
 
 let lastFiredMinute = "";
+let checkerRunning = false;
+
+function runCheckerDirect() {
+  if (checkerRunning) {
+    logger.info("⏭️  Checker already running, skipping");
+    return;
+  }
+  checkerRunning = true;
+  logger.info("🔍 Checker: starting status scan");
+  const proc = exec("python3 checker.py", { cwd: rootDir });
+  proc.stdout?.on("data", (d) => process.stdout.write(d));
+  proc.stderr?.on("data", (d) => process.stderr.write(d));
+  proc.on("exit", (code) => {
+    checkerRunning = false;
+    logger.info({ code }, "🔍 Checker: finished");
+  });
+}
 
 function tick() {
   const now = getBangkokHHMM();
-  if (now === lastFiredMinute) return;
 
+  runCheckerDirect();
+
+  if (now === lastFiredMinute) return;
   const times = readScheduledTimes();
   if (times.includes(now)) {
     lastFiredMinute = now;

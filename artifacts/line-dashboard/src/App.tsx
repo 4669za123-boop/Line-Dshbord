@@ -16,6 +16,14 @@ function isLineRole(x: unknown): x is LineAccount["lineRole"] {
   return x === "main" || x === "deposit";
 }
 
+function extractLineId(input: string): string {
+  if (!input) return "";
+  if (input.includes("/account/")) {
+    return input.split("/account/")[1].replace("@", "").toLowerCase();
+  }
+  return input.replace("@", "").toLowerCase();
+}
+
 function loadAccountsFromStorage(): LineAccount[] {
   try {
     const raw = typeof window !== "undefined"
@@ -84,6 +92,42 @@ export default function App() {
     if (!persistReady) return;
     window.localStorage.setItem(ACCOUNTS_STORAGE_KEY, JSON.stringify(accounts));
   }, [accounts, persistReady]);
+
+  function applyStatuses(statuses: Record<string, string>) {
+    setAccounts((prev) =>
+      prev.map((acc) => {
+        const lineId = extractLineId(acc.name);
+        const fetched = statuses[lineId];
+        if (!fetched || !isLineChannelStatus(fetched)) return acc;
+
+        if (acc.lineRole === "main") {
+          return { ...acc, mainStatus: fetched };
+        } else {
+          return { ...acc, depositStatus: fetched };
+        }
+      })
+    );
+  }
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const poll = () => {
+      fetch("/api/line-status")
+        .then((r) => r.json())
+        .then((data: Record<string, string>) => {
+          if (!cancelled) applyStatuses(data);
+        })
+        .catch(() => {});
+    };
+
+    poll();
+    const id = setInterval(poll, 60_000);
+    return () => {
+      cancelled = true;
+      clearInterval(id);
+    };
+  }, []);
 
   const handleAddWebsite = async (name: string, url: string) => {
     const trimmed = name.trim();

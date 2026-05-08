@@ -15,7 +15,10 @@ from selenium.webdriver.support import expected_conditions as EC
 
 WEBSITES_FILE = "data/websites.json"
 DATA_FILE = "data/lines.json"
-API_URL = "http://localhost:8080/api/line-status"
+API_URL = os.environ.get("API_URL", "http://localhost:8080/api/line-status")
+
+# Chrome profile สำหรับ VPS (ล็อกอิน LINE ผ่าน login-line.sh แล้ว)
+CHROME_PROFILE_DIR = os.environ.get("CHROME_PROFILE_DIR", "/root/.line-chrome-profile")
 
 
 def load_websites():
@@ -72,12 +75,20 @@ def connect():
     options.add_argument("--window-size=1920,1080")
     options.add_argument("--disable-blink-features=AutomationControlled")
 
+    # ใช้ Chrome profile ที่ล็อกอิน LINE แล้ว (VPS)
+    if os.path.exists(CHROME_PROFILE_DIR):
+        options.add_argument(f"--user-data-dir={CHROME_PROFILE_DIR}")
+        print(f"✅ ใช้ Chrome profile: {CHROME_PROFILE_DIR}")
+    else:
+        print(f"⚠️  ไม่พบ Chrome profile ที่ {CHROME_PROFILE_DIR} — อาจต้องรัน login-line.sh ก่อน")
+
+    # ระบุ Chrome binary บน Linux
     if platform.system() == "Linux":
         for binary in [
-            "/usr/bin/chromium",
-            "/usr/bin/chromium-browser",
             "/usr/bin/google-chrome",
             "/usr/bin/google-chrome-stable",
+            "/usr/bin/chromium",
+            "/usr/bin/chromium-browser",
         ]:
             if os.path.exists(binary):
                 options.binary_location = binary

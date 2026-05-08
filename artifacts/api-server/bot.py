@@ -19,8 +19,7 @@ WEBHOOK_URL = os.environ.get(
 
 WEBSITES_FILE = "data/websites.json"
 DATA_FILE = "data/lines.json"
-
-# Chrome profile สำหรับ VPS (ล็อกอิน LINE ผ่าน login-line.sh แล้ว)
+API_STATUS_URL = os.environ.get("API_URL", "http://localhost:8080/api/line-status")
 CHROME_PROFILE_DIR = os.environ.get("CHROME_PROFILE_DIR", "/root/.line-chrome-profile")
 
 
@@ -79,6 +78,18 @@ def load_and_clean_data():
         return {}
 
 
+def load_realtime_statuses() -> dict:
+    """ดึงสถานะเรียลไทม์จาก Dashboard API (อัปเดตโดย checker.py)"""
+    try:
+        res = requests.get(API_STATUS_URL, timeout=5)
+        data = res.json()
+        print(f"✅ โหลดสถานะจาก Dashboard: {len(data)} บัญชี")
+        return data
+    except Exception as e:
+        print(f"⚠️  โหลดสถานะจาก API ไม่ได้: {e} — จะเช็คโดยตรงแทน")
+        return {}
+
+
 def extract_id_from_url(url):
     try:
         return url.split("/")[-1].replace("@", "").lower()
@@ -95,14 +106,12 @@ def connect():
     options.add_argument("--window-size=1920,1080")
     options.add_argument("--disable-blink-features=AutomationControlled")
 
-    # ใช้ Chrome profile ที่ล็อกอิน LINE แล้ว (VPS)
     if os.path.exists(CHROME_PROFILE_DIR):
         options.add_argument(f"--user-data-dir={CHROME_PROFILE_DIR}")
         print(f"✅ ใช้ Chrome profile: {CHROME_PROFILE_DIR}")
     else:
-        print(f"⚠️  ไม่พบ Chrome profile ที่ {CHROME_PROFILE_DIR} — อาจต้องล็อกอินก่อน")
+        print(f"⚠️  ไม่พบ Chrome profile ที่ {CHROME_PROFILE_DIR}")
 
-    # ระบุ Chrome binary บน Linux
     if platform.system() == "Linux":
         for binary in [
             "/usr/bin/google-chrome",
@@ -137,16 +146,6 @@ def get_accounts(driver):
     return list(accounts)
 
 
-def check_banned(driver):
-    try:
-        text = driver.find_element(By.TAG_NAME, "body").text
-        if "ถูกระงับ" in text or "suspended" in text.lower():
-            return True
-    except:
-        pass
-    return False
-
-
 def get_unread(driver):
     try:
         for _ in range(8):
@@ -172,7 +171,7 @@ def get_unread(driver):
 
 def send(text):
     try:
-        requests.post(WEBHOOK_URL, json={"content": text})
+        requests.post(WEBHOOK_URL, json={"content": text}, timeout=10)
         print("✅ ส่ง Discord สำเร็จ")
     except:
         print("❌ discord error")
@@ -191,6 +190,10 @@ def main():
         return
 
     data_map = load_and_clean_data()
+
+    # ดึงสถานะเรียลไทม์จาก Dashboard (checker.py อัปเดตอยู่แล้ว)
+    realtime_statuses = load_realtime_statuses()
+
     summary = {}
 
     for website in websites:
@@ -204,10 +207,6 @@ def main():
 
             for acc_url in accounts:
                 try:
-                    driver.get(acc_url)
-                    wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-                    time.sleep(2)
-
                     line_id = extract_id_from_url(acc_url)
                     if line_id not in data_map:
                         continue
@@ -217,21 +216,38 @@ def main():
                     line_type = info["type"]
 
                     if site not in summary:
-                        summary[site] = {"main": 0, "deposit": 0, "banned": []}
+                        summary[site] = {
+                            "main": None,   # None = ยังไม่ได้เซต
+                            "deposit": None,
+                        }
 
-                    if check_banned(driver):
-                        label = "ไลน์หลัก" if line_type == "หลัก" else "ไลน์ฝากถอน"
-                        summary[site]["banned"].append({"id": line_id, "type": label})
-                        print(f"🚨 {line_id} ({site} / {label}) → ไลน์บิน")
-                        continue
+                    # เช็คสถานะจาก Dashboard API (เรียลไทม์)
+                    status_entry = realtime_statuses.get(line_id, {})
+                    is_suspended = (
+                        isinstance(status_entry, dict) and
+                        status_entry.get("status") == "suspended"
+                    )
 
-                    unread = get_unread(driver)
-                    print(f"📊 {line_id} ({site} / {line_type}) → {unread} แชท")
-
-                    if line_type == "หลัก":
-                        summary[site]["main"] += unread
+                    if is_suspended:
+                        # บิน → ไม่ต้องนับแชท
+                        print(f"🚨 {line_id} ({site} / {line_type}) → โดนระงับ (จาก Dashboard)")
+                        if line_type == "หลัก":
+                            summary[site]["main"] = "suspended"
+                        else:
+                            summary[site]["deposit"] = "suspended"
                     else:
-                        summary[site]["deposit"] += unread
+                        # ออนไลน์ → เข้าไปนับแชท
+                        driver.get(acc_url)
+                        wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
+                        time.sleep(2)
+                        unread = get_unread(driver)
+                        print(f"📊 {line_id} ({site} / {line_type}) → {unread} แชท")
+                        if line_type == "หลัก":
+                            if summary[site]["main"] != "suspended":
+                                summary[site]["main"] = (summary[site]["main"] or 0) + unread
+                        else:
+                            if summary[site]["deposit"] != "suspended":
+                                summary[site]["deposit"] = (summary[site]["deposit"] or 0) + unread
 
                 except Exception as e:
                     print("acc error:", e)
@@ -240,6 +256,7 @@ def main():
         except Exception as e:
             print(f"group error ({site_name}):", e)
 
+    # สร้างข้อความส่ง Discord
     shift, run_time = get_shift_label()
     text = f"📊 ตรวจสอบจำนวนแชท{shift}\nเวลา {run_time} น.\n\n"
 
@@ -247,14 +264,29 @@ def main():
         site = website["name"]
         if site not in summary:
             continue
+
         val = summary[site]
+        main_val = val["main"]
+        deposit_val = val["deposit"]
+
         text += f"{site}\n"
-        text += f"ไลน์หลัก {val['main']} แชท\n"
-        text += f"ฝากถอน {val['deposit']} แชท\n"
-        if val["banned"]:
-            text += "🚨 ไลน์บิน:\n"
-            for b in val["banned"]:
-                text += f"- {b['type']}: {b['id']}\n"
+
+        # ไลน์หลัก
+        if main_val == "suspended":
+            text += "ไลน์หลัก โดนระงับ\n"
+        elif main_val is None:
+            text += "ไลน์หลัก —\n"
+        else:
+            text += f"ไลน์หลัก {main_val} แชท\n"
+
+        # ไลน์ฝากถอน
+        if deposit_val == "suspended":
+            text += "ฝากถอน โดนระงับ\n"
+        elif deposit_val is None:
+            text += "ฝากถอน —\n"
+        else:
+            text += f"ฝากถอน {deposit_val} แชท\n"
+
         text += "--------------------\n\n"
 
     send(text)

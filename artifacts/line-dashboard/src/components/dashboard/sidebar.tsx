@@ -6,24 +6,27 @@ import {
   Bell,
   Menu,
   X,
+  Archive,
 } from "lucide-react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 
-export type PageType = "dashboard" | "add-line" | "notification-settings"
+export type PageType = "dashboard" | "add-line" | "notification-settings" | "backup-pool"
 
-const menuItems: { icon: typeof LayoutDashboard; label: string; page: PageType }[] = [
+const menuItems: { icon: typeof LayoutDashboard; label: string; page: PageType; badge?: number }[] = [
   { icon: LayoutDashboard, label: "แดชบอร์ด", page: "dashboard" },
   { icon: MessageSquarePlus, label: "เพิ่ม LINE", page: "add-line" },
+  { icon: Archive, label: "ไลน์สำรอง", page: "backup-pool" },
   { icon: Bell, label: "ตั้งค่าแจ้งเตือน", page: "notification-settings" },
 ]
 
 interface SidebarProps {
   activePage: PageType
   onPageChange: (page: PageType) => void
+  pendingBackupCount?: number
 }
 
-export function Sidebar({ activePage, onPageChange }: SidebarProps) {
+export function Sidebar({ activePage, onPageChange, pendingBackupCount = 0 }: SidebarProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   const handleNavClick = (page: PageType) => {
@@ -73,21 +76,29 @@ export function Sidebar({ activePage, onPageChange }: SidebarProps) {
 
           {/* Navigation */}
           <nav className="flex-1 space-y-2">
-            {menuItems.map((item) => (
-              <button
-                key={item.page}
-                onClick={() => handleNavClick(item.page)}
-                className={cn(
-                  "flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 w-full text-left",
-                  activePage === item.page
-                    ? "bg-sidebar-accent text-primary"
-                    : "text-muted-foreground hover:bg-sidebar-accent hover:text-foreground"
-                )}
-              >
-                <item.icon className="h-5 w-5" />
-                {item.label}
-              </button>
-            ))}
+            {menuItems.map((item) => {
+              const showBadge = item.page === "backup-pool" && pendingBackupCount > 0
+              return (
+                <button
+                  key={item.page}
+                  onClick={() => handleNavClick(item.page)}
+                  className={cn(
+                    "flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 w-full text-left",
+                    activePage === item.page
+                      ? "bg-sidebar-accent text-primary"
+                      : "text-muted-foreground hover:bg-sidebar-accent hover:text-foreground"
+                  )}
+                >
+                  <item.icon className="h-5 w-5" />
+                  <span className="flex-1">{item.label}</span>
+                  {showBadge && (
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-amber-500 text-[10px] font-bold text-black">
+                      {pendingBackupCount}
+                    </span>
+                  )}
+                </button>
+              )
+            })}
           </nav>
 
           {/* User section */}

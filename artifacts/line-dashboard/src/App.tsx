@@ -3,8 +3,11 @@ import { Sidebar, type PageType } from "@/components/dashboard/sidebar";
 import { DashboardContent } from "@/components/dashboard/dashboard-content";
 import { AddLinePage } from "@/components/dashboard/add-line-page";
 import { NotificationSettingsPage } from "@/components/dashboard/notification-settings-page";
+import { BackupPoolPage, type BackupLine, type BackupLineRole } from "@/components/dashboard/backup-pool-page";
 import type { Website, AddLineFormPayload } from "@/components/dashboard/types";
 import type { LineAccount } from "@/components/dashboard/line-card";
+
+const BACKUP_STORAGE_KEY = "line-mgmt-backup-pool";
 
 const ACCOUNTS_STORAGE_KEY = "line-mgmt-accounts";
 
@@ -72,10 +75,27 @@ function loadAccountsFromStorage(): LineAccount[] {
   }
 }
 
+function loadBackupFromStorage(): BackupLine[] {
+  try {
+    const raw = typeof window !== "undefined"
+      ? window.localStorage.getItem(BACKUP_STORAGE_KEY)
+      : null;
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as unknown;
+    if (!Array.isArray(parsed)) return [];
+    return (parsed as BackupLine[]).filter(
+      (b) => b && typeof b.id === "string" && typeof b.lineId === "string"
+    );
+  } catch {
+    return [];
+  }
+}
+
 export default function App() {
   const [activePage, setActivePage] = useState<PageType>("dashboard");
   const [websites, setWebsites] = useState<Website[]>([]);
   const [accounts, setAccounts] = useState<LineAccount[]>([]);
+  const [backupLines, setBackupLines] = useState<BackupLine[]>([]);
   const [persistReady, setPersistReady] = useState(false);
 
   useEffect(() => {
@@ -85,6 +105,7 @@ export default function App() {
       .catch(() => setWebsites([]));
 
     setAccounts(loadAccountsFromStorage());
+    setBackupLines(loadBackupFromStorage());
     setPersistReady(true);
   }, []);
 
@@ -92,6 +113,11 @@ export default function App() {
     if (!persistReady) return;
     window.localStorage.setItem(ACCOUNTS_STORAGE_KEY, JSON.stringify(accounts));
   }, [accounts, persistReady]);
+
+  useEffect(() => {
+    if (!persistReady) return;
+    window.localStorage.setItem(BACKUP_STORAGE_KEY, JSON.stringify(backupLines));
+  }, [backupLines, persistReady]);
 
   function applyStatuses(statuses: Record<string, { status: string; type?: string } | string>) {
     setAccounts((prev) =>
@@ -205,6 +231,38 @@ export default function App() {
     });
   };
 
+  const handleAddBackup = (lineId: string, role: BackupLineRole, websiteId: string | null) => {
+    const matchedSite = websiteId
+      ? websites.find((w) => w.id === websiteId)
+      : websites.find((w) => lineId.toLowerCase().includes(w.name.toLowerCase()));
+
+    const confirmed = !!(matchedSite || websiteId);
+
+    const newBackup: BackupLine = {
+      id: crypto.randomUUID(),
+      lineId,
+      role,
+      websiteId: matchedSite?.id ?? null,
+      websiteName: matchedSite?.name ?? null,
+      confirmed,
+    };
+    setBackupLines((prev) => [...prev, newBackup]);
+  };
+
+  const handleRemoveBackup = (id: string) => {
+    setBackupLines((prev) => prev.filter((b) => b.id !== id));
+  };
+
+  const handleConfirmBackup = (id: string, websiteId: string, websiteName: string) => {
+    setBackupLines((prev) =>
+      prev.map((b) =>
+        b.id === id ? { ...b, websiteId, websiteName, confirmed: true } : b
+      )
+    );
+  };
+
+  const pendingBackupCount = backupLines.filter((b) => !b.confirmed).length;
+
   const dashboard = (
     <DashboardContent
       websites={websites}
@@ -226,6 +284,16 @@ export default function App() {
             onNavigateDashboard={() => setActivePage("dashboard")}
           />
         );
+      case "backup-pool":
+        return (
+          <BackupPoolPage
+            websites={websites}
+            backupLines={backupLines}
+            onAddBackup={handleAddBackup}
+            onRemoveBackup={handleRemoveBackup}
+            onConfirmBackup={handleConfirmBackup}
+          />
+        );
       case "notification-settings":
         return <NotificationSettingsPage />;
       default:
@@ -235,7 +303,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-background dark">
-      <Sidebar activePage={activePage} onPageChange={setActivePage} />
+      <Sidebar activePage={activePage} onPageChange={setActivePage} pendingBackupCount={pendingBackupCount} />
       <div className="transition-opacity duration-300">
         {renderPage()}
       </div>

@@ -85,13 +85,22 @@ function GroupRow({
 }) {
   const groupName = line.note || `กลุ่มสำรอง${line.role === "main" ? "ไลน์หลัก" : "ไลน์ฝากถอน"}`
   return (
-    <div className="flex items-center gap-3 bg-card border border-border rounded-xl px-4 py-3 hover:border-primary/30 transition-colors group">
-      <Users className="h-4 w-4 text-primary shrink-0" />
-      <span className="flex-1 text-sm font-medium text-primary truncate">{groupName}</span>
+    <div className="flex items-center gap-3 bg-card border border-border rounded-2xl px-4 py-3 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)] group">
+      <Users className="h-4 w-4 text-muted-foreground group-hover:text-primary shrink-0 transition-colors duration-300" />
+      <a
+        href={line.lineId}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex-1 text-sm font-medium text-foreground truncate hover:text-primary transition-colors duration-200"
+        title={line.lineId}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {groupName}
+      </a>
       <button
         type="button"
         onClick={() => onRemove(line.id)}
-        className="shrink-0 h-7 w-7 flex items-center justify-center rounded-lg text-destructive hover:bg-destructive/10 transition-colors opacity-60 group-hover:opacity-100"
+        className="shrink-0 h-7 w-7 flex items-center justify-center rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors opacity-0 group-hover:opacity-100"
         title="ลบกลุ่มนี้"
       >
         <Trash2 className="h-3.5 w-3.5" />
@@ -383,7 +392,7 @@ export function BackupPoolPage({
         {/* Section 2: Tab bar */}
         {backupLines.length > 0 && (
           <>
-            <div className="flex rounded-xl border border-border bg-card p-1 gap-1 overflow-x-auto mb-6">
+            <div className="inline-flex rounded-xl border border-border bg-card p-1 gap-1 mb-6">
               {tabs.map((tab) => {
                 const isActive = activeTab === tab.key
                 return (

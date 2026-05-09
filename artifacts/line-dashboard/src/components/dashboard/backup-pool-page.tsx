@@ -73,7 +73,6 @@ export function BackupPoolPage({
   const [addOpen, setAddOpen] = useState(false)
   const [newLineId, setNewLineId] = useState("")
   const [newRole, setNewRole] = useState<BackupLineRole>("main")
-  const [newWebsiteId, setNewWebsiteId] = useState<string>("__pool__")
 
   const [assignOpen, setAssignOpen] = useState(false)
   const [assigningLine, setAssigningLine] = useState<BackupLine | null>(null)
@@ -85,11 +84,9 @@ export function BackupPoolPage({
   const handleAdd = (e: React.FormEvent) => {
     e.preventDefault()
     if (!newLineId.trim()) return
-    const wsId = newWebsiteId === "__pool__" ? null : newWebsiteId
-    onAddBackup(newLineId.trim(), newRole, wsId)
+    onAddBackup(newLineId.trim(), newRole, null)
     setNewLineId("")
     setNewRole("main")
-    setNewWebsiteId("__pool__")
     setAddOpen(false)
   }
 
@@ -134,7 +131,7 @@ export function BackupPoolPage({
             <span className="absolute inset-0 bg-gradient-to-r from-primary via-emerald-400/80 to-primary opacity-80 transition-opacity group-hover:opacity-100" aria-hidden />
             <span className="relative flex w-full items-center justify-center gap-2 rounded-2xl bg-background/95 px-5 py-3 text-sm font-semibold text-foreground shadow-[0_0_24px_-4px_rgba(0,185,0,0.35)] backdrop-blur-sm transition-colors group-hover:bg-background dark:bg-background/90">
               <Plus className="h-4 w-4 text-primary" />
-              เพิ่มไลน์สำรอง
+              เพิ่มกลุ่มไลน์สำรอง
             </span>
           </button>
         </div>
@@ -257,17 +254,17 @@ export function BackupPoolPage({
               <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/15 text-primary shadow-inner ring-1 ring-primary/25 sm:mx-0">
                 <Archive className="h-7 w-7" />
               </div>
-              <DialogTitle className="text-xl">เพิ่มไลน์สำรอง</DialogTitle>
+              <DialogTitle className="text-xl">เพิ่มกลุ่มไลน์สำรอง</DialogTitle>
             </DialogHeader>
           </div>
           <form onSubmit={handleAdd} className="space-y-4 px-6 pb-6 pt-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">LINE ID หรือ URL</label>
+              <label className="text-sm font-medium text-foreground">URL กรุ๊ปไลน์สำรอง</label>
               <Input
                 autoFocus
                 value={newLineId}
                 onChange={(e) => setNewLineId(e.target.value)}
-                placeholder="เช่น abc1234 หรือ https://line.me/..."
+                placeholder="เช่น https://line.me/..."
                 className="h-11 border-border bg-input"
               />
             </div>
@@ -282,21 +279,6 @@ export function BackupPoolPage({
                   <SelectItem value="deposit">ไลน์ฝากถอน</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">กำหนดให้เว็บ (ไม่บังคับ)</label>
-              <Select value={newWebsiteId} onValueChange={setNewWebsiteId}>
-                <SelectTrigger className="h-11 border-border bg-input">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="__pool__">ถังกลาง (ใช้แทนได้ทุกเว็บ)</SelectItem>
-                  {websites.map((w) => (
-                    <SelectItem key={w.id} value={w.id}>{w.name}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <p className="text-xs text-muted-foreground">ถ้าไม่เลือก ระบบจะจับคู่อัตโนมัติด้วยชื่อ หรือใช้เป็นถังกลาง</p>
             </div>
             <DialogFooter className="gap-2 sm:gap-3 pt-2">
               <DialogClose asChild>

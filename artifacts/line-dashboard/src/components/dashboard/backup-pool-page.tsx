@@ -325,6 +325,46 @@ export function BackupPoolPage({
           </button>
         </div>
 
+        {/* Stats */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <div className="bg-card border border-border rounded-xl p-4">
+            <p className="text-xs text-muted-foreground mb-1">สำรองทั้งหมด</p>
+            <p className={cn("text-2xl font-bold", backupLines.length > 0 ? "text-foreground" : "text-muted-foreground")}>
+              {backupLines.length}
+            </p>
+          </div>
+          <div className="bg-card border border-border rounded-xl p-4">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="h-3 w-3 rounded-full bg-blue-400/60" />
+              <p className="text-xs text-muted-foreground">ไลน์หลัก</p>
+            </div>
+            <p className={cn("text-2xl font-bold", mainCount > 0 ? "text-blue-400" : "text-muted-foreground")}>
+              {mainCount}
+            </p>
+          </div>
+          <div className="bg-card border border-border rounded-xl p-4">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="h-3 w-3 rounded-full bg-purple-400/60" />
+              <p className="text-xs text-muted-foreground">ไลน์ฝากถอน</p>
+            </div>
+            <p className={cn("text-2xl font-bold", depositCount > 0 ? "text-purple-400" : "text-muted-foreground")}>
+              {depositCount}
+            </p>
+          </div>
+          <div className={cn(
+            "border rounded-xl p-4 transition-colors",
+            pending.length > 0 ? "bg-amber-500/5 border-amber-500/25" : "bg-card border-border"
+          )}>
+            <div className="flex items-center gap-2 mb-1">
+              <AlertTriangle className={cn("h-3.5 w-3.5", pending.length > 0 ? "text-amber-400" : "text-muted-foreground")} />
+              <p className={cn("text-xs", pending.length > 0 ? "text-amber-400/80" : "text-muted-foreground")}>รอการยืนยัน</p>
+            </div>
+            <p className={cn("text-2xl font-bold", pending.length > 0 ? "text-amber-400" : "text-muted-foreground")}>
+              {pending.length}
+            </p>
+          </div>
+        </div>
+
         {/* Section 1: รายการกลุ่มที่เพิ่มไว้ */}
         {backupLines.length === 0 ? (
           <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border py-14 text-center mb-8">

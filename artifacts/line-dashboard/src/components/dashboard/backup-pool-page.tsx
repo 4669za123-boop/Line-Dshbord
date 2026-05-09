@@ -1,16 +1,12 @@
 import { useState, useMemo } from "react"
 import { cn } from "@/lib/utils"
 import {
-  ShieldCheck,
   Plus,
   Trash2,
   AlertTriangle,
   Archive,
   ArrowRight,
   X,
-  Copy,
-  Check,
-  RotateCcw,
   ExternalLink,
   StickyNote,
 } from "lucide-react"
@@ -33,6 +29,8 @@ import {
 } from "@/components/ui/select"
 import type { Website } from "./types"
 
+type TabType = "main" | "deposit" | "pending"
+
 export type BackupLineRole = "main" | "deposit"
 
 export interface BackupLine {
@@ -52,8 +50,6 @@ interface BackupPoolPageProps {
   onRemoveBackup: (id: string) => void
   onConfirmBackup: (id: string, websiteId: string, websiteName: string) => void
 }
-
-type TabType = "all" | "main" | "deposit" | "pending"
 
 function RoleBadge({ role }: { role: BackupLineRole }) {
   return (
@@ -79,39 +75,12 @@ function ReadyBadge() {
   )
 }
 
-function CopyButton({ text }: { text: string }) {
-  const [copied, setCopied] = useState(false)
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(text)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    } catch { /* silent */ }
-  }
-  return (
-    <Button
-      size="icon"
-      variant="ghost"
-      className={cn(
-        "shrink-0 h-7 w-7 transition-colors",
-        copied ? "text-primary" : "text-muted-foreground hover:text-foreground"
-      )}
-      onClick={handleCopy}
-      title="คัดลอก URL"
-    >
-      {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
-    </Button>
-  )
-}
-
 function ConfirmedCard({
   line,
   onRemove,
-  onReassign,
 }: {
   line: BackupLine
   onRemove: (id: string) => void
-  onReassign: (line: BackupLine) => void
 }) {
   return (
     <div className="bg-card border border-border rounded-2xl p-4 transition-all duration-300 hover:border-primary/40 hover:shadow-[0_0_20px_rgba(0,185,0,0.07)] group">
@@ -150,22 +119,14 @@ function ConfirmedCard({
         </div>
         {/* Actions */}
         <div className="flex items-center gap-1 shrink-0">
-          <CopyButton text={line.lineId} />
           <Button
-            size="icon" variant="ghost"
-            className="h-7 w-7 text-muted-foreground hover:text-amber-400 hover:bg-amber-400/10"
-            title="เปลี่ยนเว็บ"
-            onClick={() => onReassign(line)}
-          >
-            <RotateCcw className="h-3.5 w-3.5" />
-          </Button>
-          <Button
-            size="icon" variant="ghost"
-            className="h-7 w-7 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-            title="ลบ"
+            variant="ghost"
+            size="sm"
+            className="h-8 shrink-0 px-3 text-destructive hover:text-destructive hover:bg-destructive/10"
             onClick={() => onRemove(line.id)}
           >
-            <Trash2 className="h-3.5 w-3.5" />
+            <Trash2 className="h-4 w-4 mr-1.5" />
+            <span className="text-sm">ลบ</span>
           </Button>
         </div>
       </div>
@@ -178,13 +139,11 @@ function RoleSection({
   role,
   items,
   onRemove,
-  onReassign,
 }: {
   title: string
   role: BackupLineRole
   items: BackupLine[]
   onRemove: (id: string) => void
-  onReassign: (line: BackupLine) => void
 }) {
   if (items.length === 0) return null
   return (
@@ -210,7 +169,7 @@ function RoleSection({
       </div>
       <div className="space-y-3">
         {items.map((line) => (
-          <ConfirmedCard key={line.id} line={line} onRemove={onRemove} onReassign={onReassign} />
+          <ConfirmedCard key={line.id} line={line} onRemove={onRemove} />
         ))}
       </div>
     </div>
@@ -224,7 +183,7 @@ export function BackupPoolPage({
   onRemoveBackup,
   onConfirmBackup,
 }: BackupPoolPageProps) {
-  const [activeTab, setActiveTab] = useState<TabType>("all")
+  const [activeTab, setActiveTab] = useState<TabType>("main")
 
   const [addOpen, setAddOpen] = useState(false)
   const [newLineId, setNewLineId] = useState("")
@@ -240,8 +199,7 @@ export function BackupPoolPage({
   const mainCount = useMemo(() => confirmed.filter((b) => b.role === "main").length, [confirmed])
   const depositCount = useMemo(() => confirmed.filter((b) => b.role === "deposit").length, [confirmed])
 
-  const tabs: { key: TabType; label: string; count: number; color?: string }[] = [
-    { key: "all", label: "ทั้งหมด", count: confirmed.length },
+  const tabs: { key: TabType; label: string; count: number; color: string }[] = [
     { key: "main", label: "ไลน์หลัก", count: mainCount, color: "blue" },
     { key: "deposit", label: "ฝากถอน", count: depositCount, color: "purple" },
     { key: "pending", label: "รอการยืนยัน", count: pending.length, color: "amber" },
@@ -274,13 +232,12 @@ export function BackupPoolPage({
     setAssigningLine(null)
   }
 
-  // Content for each tab
   const renderContent = () => {
     if (activeTab === "pending") {
       if (pending.length === 0) {
         return (
           <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border py-16 text-center">
-            <ShieldCheck className="h-10 w-10 text-primary/30 mb-3" />
+            <Archive className="h-10 w-10 text-muted-foreground/40 mb-3" />
             <p className="text-sm text-muted-foreground">ไม่มีรายการที่รอการยืนยัน</p>
             <p className="text-xs text-muted-foreground/60 mt-1">ทุกกลุ่มได้รับการกำหนดเว็บแล้ว</p>
           </div>
@@ -318,11 +275,13 @@ export function BackupPoolPage({
                 <ArrowRight className="h-3.5 w-3.5" />
               </Button>
               <Button
-                size="icon" variant="ghost"
-                className="shrink-0 h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                variant="ghost"
+                size="sm"
+                className="shrink-0 h-8 px-3 text-destructive hover:text-destructive hover:bg-destructive/10"
                 onClick={() => onRemoveBackup(line.id)}
               >
-                <Trash2 className="h-4 w-4" />
+                <Trash2 className="h-4 w-4 mr-1.5" />
+                <span className="text-sm">ลบ</span>
               </Button>
             </div>
           ))}
@@ -330,50 +289,20 @@ export function BackupPoolPage({
       )
     }
 
-    // confirmed tabs: all / main / deposit
-    const items = activeTab === "main"
-      ? confirmed.filter((b) => b.role === "main")
-      : activeTab === "deposit"
-      ? confirmed.filter((b) => b.role === "deposit")
-      : confirmed
-
-    if (confirmed.length === 0) {
+    const items = confirmed.filter((b) => b.role === (activeTab === "main" ? "main" : "deposit"))
+    if (items.length === 0) {
       return (
         <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border py-16 text-center">
           <Archive className="h-10 w-10 text-muted-foreground/40 mb-3" />
-          <p className="text-sm text-muted-foreground">ยังไม่มีกลุ่มไลน์สำรองที่พร้อมใช้</p>
+          <p className="text-sm text-muted-foreground">ยังไม่มีกลุ่มในหมวดนี้</p>
           <p className="text-xs text-muted-foreground/60 mt-1">เพิ่มกลุ่มแล้วกำหนดเว็บให้ครบ</p>
         </div>
       )
     }
-
-    if (activeTab === "all") {
-      const mainItems = items.filter((b) => b.role === "main")
-      const depositItems = items.filter((b) => b.role === "deposit")
-      return (
-        <div className="space-y-6">
-          <RoleSection
-            title="ไลน์หลัก"
-            role="main"
-            items={mainItems}
-            onRemove={onRemoveBackup}
-            onReassign={openAssign}
-          />
-          <RoleSection
-            title="ไลน์ฝากถอน"
-            role="deposit"
-            items={depositItems}
-            onRemove={onRemoveBackup}
-            onReassign={openAssign}
-          />
-        </div>
-      )
-    }
-
     return (
       <div className="space-y-3">
         {items.map((line) => (
-          <ConfirmedCard key={line.id} line={line} onRemove={onRemoveBackup} onReassign={openAssign} />
+          <ConfirmedCard key={line.id} line={line} onRemove={onRemoveBackup} />
         ))}
       </div>
     )
@@ -450,48 +379,41 @@ export function BackupPoolPage({
         </div>
 
         {/* Tabs */}
-        <div className="flex flex-col sm:flex-row gap-3 mb-6">
-          <div className="flex rounded-xl border border-border bg-card p-1 gap-1 overflow-x-auto">
-            {tabs.map((tab) => {
-              const isActive = activeTab === tab.key
-              return (
-                <button
-                  key={tab.key}
-                  type="button"
-                  onClick={() => setActiveTab(tab.key)}
-                  className={cn(
-                    "flex items-center gap-1.5 whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-semibold transition-all",
-                    isActive
-                      ? tab.color === "amber"
-                        ? "bg-amber-500/15 text-amber-400 ring-1 ring-amber-500/25"
-                        : tab.color === "blue"
-                        ? "bg-blue-500/15 text-blue-400 ring-1 ring-blue-500/25"
-                        : tab.color === "purple"
-                        ? "bg-purple-500/15 text-purple-400 ring-1 ring-purple-500/25"
-                        : "bg-primary/15 text-primary ring-1 ring-primary/25"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
-                  )}
-                >
-                  {tab.label}
-                  <span className={cn(
-                    "inline-flex items-center justify-center h-4 min-w-4 px-1 rounded-full text-[10px] font-bold",
-                    isActive
-                      ? tab.color === "amber"
-                        ? "bg-amber-500/20 text-amber-300"
-                        : tab.color === "blue"
-                        ? "bg-blue-500/20 text-blue-300"
-                        : tab.color === "purple"
-                        ? "bg-purple-500/20 text-purple-300"
-                        : "bg-primary/20 text-primary"
-                      : "bg-muted text-muted-foreground"
-                  )}>
-                    {tab.count}
-                  </span>
-                </button>
-              )
-            })}
-          </div>
-
+        <div className="flex rounded-xl border border-border bg-card p-1 gap-1 overflow-x-auto mb-6">
+          {tabs.map((tab) => {
+            const isActive = activeTab === tab.key
+            return (
+              <button
+                key={tab.key}
+                type="button"
+                onClick={() => setActiveTab(tab.key)}
+                className={cn(
+                  "flex items-center gap-1.5 whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-semibold transition-all",
+                  isActive
+                    ? tab.color === "amber"
+                      ? "bg-amber-500/15 text-amber-400 ring-1 ring-amber-500/25"
+                      : tab.color === "blue"
+                      ? "bg-blue-500/15 text-blue-400 ring-1 ring-blue-500/25"
+                      : "bg-purple-500/15 text-purple-400 ring-1 ring-purple-500/25"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+                )}
+              >
+                {tab.label}
+                <span className={cn(
+                  "inline-flex items-center justify-center h-4 min-w-4 px-1 rounded-full text-[10px] font-bold",
+                  isActive
+                    ? tab.color === "amber"
+                      ? "bg-amber-500/20 text-amber-300"
+                      : tab.color === "blue"
+                      ? "bg-blue-500/20 text-blue-300"
+                      : "bg-purple-500/20 text-purple-300"
+                    : "bg-muted text-muted-foreground"
+                )}>
+                  {tab.count}
+                </span>
+              </button>
+            )
+          })}
         </div>
 
         {/* Content */}

@@ -248,7 +248,7 @@ export default function App() {
       role,
       websiteId: null,
       websiteName: null,
-      confirmed: true,
+      confirmed: false,
       note: note?.trim() || undefined,
     };
     setBackupLines((prev) => [...prev, newBackup]);

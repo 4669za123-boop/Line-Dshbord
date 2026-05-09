@@ -14,6 +14,7 @@ import {
   RotateCcw,
   ExternalLink,
   StickyNote,
+  Layers,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -54,19 +55,28 @@ interface BackupPoolPageProps {
   onConfirmBackup: (id: string, websiteId: string, websiteName: string) => void
 }
 
-type RoleFilter = "all" | "main" | "deposit"
+type TabType = "all" | "main" | "deposit" | "pending"
 
 function RoleBadge({ role }: { role: BackupLineRole }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold",
+        "inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-semibold",
         role === "main"
-          ? "bg-blue-500/10 text-blue-400 ring-1 ring-blue-500/20"
-          : "bg-purple-500/10 text-purple-400 ring-1 ring-purple-500/20"
+          ? "bg-blue-500/10 text-blue-400 ring-1 ring-blue-500/25"
+          : "bg-purple-500/10 text-purple-400 ring-1 ring-purple-500/25"
       )}
     >
-      {role === "main" ? "ไลน์หลัก" : "ฝากถอน"}
+      {role === "main" ? "ไลน์หลัก" : "ไลน์ฝากถอน"}
+    </span>
+  )
+}
+
+function ReadyBadge() {
+  return (
+    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-primary/10 text-primary ring-1 ring-primary/20">
+      <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+      พร้อม
     </span>
   )
 }
@@ -78,9 +88,7 @@ function CopyButton({ text }: { text: string }) {
       await navigator.clipboard.writeText(text)
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
-    } catch {
-      // silent
-    }
+    } catch { /* silent */ }
   }
   return (
     <Button
@@ -98,6 +106,119 @@ function CopyButton({ text }: { text: string }) {
   )
 }
 
+function ConfirmedCard({
+  line,
+  onRemove,
+  onReassign,
+}: {
+  line: BackupLine
+  onRemove: (id: string) => void
+  onReassign: (line: BackupLine) => void
+}) {
+  return (
+    <div className="bg-card border border-border rounded-2xl p-4 transition-all duration-300 hover:border-primary/40 hover:shadow-[0_0_20px_rgba(0,185,0,0.07)] group">
+      <div className="flex items-start gap-3">
+        <div className="flex-1 min-w-0 space-y-2">
+          {/* Badges */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <RoleBadge role={line.role} />
+            {line.websiteName && (
+              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-muted/60 text-muted-foreground ring-1 ring-border">
+                {line.websiteName}
+              </span>
+            )}
+            <ReadyBadge />
+          </div>
+          {/* URL */}
+          <div className="flex items-center gap-1.5 min-w-0">
+            <a
+              href={line.lineId}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-foreground truncate hover:text-primary transition-colors font-mono"
+              title={line.lineId}
+            >
+              {line.lineId}
+            </a>
+            <ExternalLink className="h-3 w-3 text-muted-foreground shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
+          </div>
+          {/* Note */}
+          {line.note && (
+            <p className="text-xs text-muted-foreground flex items-center gap-1.5">
+              <StickyNote className="h-3 w-3 shrink-0" />
+              {line.note}
+            </p>
+          )}
+        </div>
+        {/* Actions */}
+        <div className="flex items-center gap-1 shrink-0">
+          <CopyButton text={line.lineId} />
+          <Button
+            size="icon" variant="ghost"
+            className="h-7 w-7 text-muted-foreground hover:text-amber-400 hover:bg-amber-400/10"
+            title="เปลี่ยนเว็บ"
+            onClick={() => onReassign(line)}
+          >
+            <RotateCcw className="h-3.5 w-3.5" />
+          </Button>
+          <Button
+            size="icon" variant="ghost"
+            className="h-7 w-7 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+            title="ลบ"
+            onClick={() => onRemove(line.id)}
+          >
+            <Trash2 className="h-3.5 w-3.5" />
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function RoleSection({
+  title,
+  role,
+  items,
+  onRemove,
+  onReassign,
+}: {
+  title: string
+  role: BackupLineRole
+  items: BackupLine[]
+  onRemove: (id: string) => void
+  onReassign: (line: BackupLine) => void
+}) {
+  if (items.length === 0) return null
+  return (
+    <div>
+      <div className={cn(
+        "flex items-center gap-2 mb-3 pb-2 border-b",
+        role === "main" ? "border-blue-500/20" : "border-purple-500/20"
+      )}>
+        <span className={cn(
+          "flex h-6 w-6 items-center justify-center rounded-lg text-xs font-bold",
+          role === "main"
+            ? "bg-blue-500/10 text-blue-400"
+            : "bg-purple-500/10 text-purple-400"
+        )}>
+          {items.length}
+        </span>
+        <h3 className={cn(
+          "text-sm font-semibold",
+          role === "main" ? "text-blue-400" : "text-purple-400"
+        )}>
+          {title}
+        </h3>
+      </div>
+      <div className="space-y-3">
+        {items.map((line) => (
+          <ConfirmedCard key={line.id} line={line} onRemove={onRemove} onReassign={onReassign} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export function BackupPoolPage({
   websites,
   backupLines,
@@ -105,6 +226,9 @@ export function BackupPoolPage({
   onRemoveBackup,
   onConfirmBackup,
 }: BackupPoolPageProps) {
+  const [activeTab, setActiveTab] = useState<TabType>("all")
+  const [search, setSearch] = useState("")
+
   const [addOpen, setAddOpen] = useState(false)
   const [newLineId, setNewLineId] = useState("")
   const [newRole, setNewRole] = useState<BackupLineRole | "">("")
@@ -114,29 +238,28 @@ export function BackupPoolPage({
   const [assigningLine, setAssigningLine] = useState<BackupLine | null>(null)
   const [assignWebsiteId, setAssignWebsiteId] = useState<string>("")
 
-  const [roleFilter, setRoleFilter] = useState<RoleFilter>("all")
-  const [search, setSearch] = useState("")
+  const pending = useMemo(() => backupLines.filter((b) => !b.confirmed), [backupLines])
+  const confirmed = useMemo(() => backupLines.filter((b) => b.confirmed), [backupLines])
+  const mainCount = useMemo(() => confirmed.filter((b) => b.role === "main").length, [confirmed])
+  const depositCount = useMemo(() => confirmed.filter((b) => b.role === "deposit").length, [confirmed])
 
-  const pending = backupLines.filter((b) => !b.confirmed)
-  const confirmed = backupLines.filter((b) => b.confirmed)
+  const filteredBySearch = (list: BackupLine[]) => {
+    if (!search.trim()) return list
+    const q = search.trim().toLowerCase()
+    return list.filter(
+      (b) =>
+        b.lineId.toLowerCase().includes(q) ||
+        (b.websiteName ?? "").toLowerCase().includes(q) ||
+        (b.note ?? "").toLowerCase().includes(q)
+    )
+  }
 
-  const mainCount = backupLines.filter((b) => b.role === "main").length
-  const depositCount = backupLines.filter((b) => b.role === "deposit").length
-
-  const filteredConfirmed = useMemo(() => {
-    let list = confirmed
-    if (roleFilter !== "all") list = list.filter((b) => b.role === roleFilter)
-    if (search.trim()) {
-      const q = search.trim().toLowerCase()
-      list = list.filter(
-        (b) =>
-          b.lineId.toLowerCase().includes(q) ||
-          (b.websiteName ?? "").toLowerCase().includes(q) ||
-          (b.note ?? "").toLowerCase().includes(q)
-      )
-    }
-    return list
-  }, [confirmed, roleFilter, search])
+  const tabs: { key: TabType; label: string; count: number; color?: string }[] = [
+    { key: "all", label: "ทั้งหมด", count: confirmed.length },
+    { key: "main", label: "ไลน์หลัก", count: mainCount, color: "blue" },
+    { key: "deposit", label: "ฝากถอน", count: depositCount, color: "purple" },
+    { key: "pending", label: "รอการยืนยัน", count: pending.length, color: "amber" },
+  ]
 
   const handleAdd = (e: React.FormEvent) => {
     e.preventDefault()
@@ -146,6 +269,7 @@ export function BackupPoolPage({
     setNewRole("")
     setNewNote("")
     setAddOpen(false)
+    setActiveTab("pending")
   }
 
   const openAssign = (line: BackupLine) => {
@@ -164,6 +288,116 @@ export function BackupPoolPage({
     setAssigningLine(null)
   }
 
+  // Content for each tab
+  const renderContent = () => {
+    if (activeTab === "pending") {
+      const items = filteredBySearch(pending)
+      if (pending.length === 0) {
+        return (
+          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border py-16 text-center">
+            <ShieldCheck className="h-10 w-10 text-primary/30 mb-3" />
+            <p className="text-sm text-muted-foreground">ไม่มีรายการที่รอการยืนยัน</p>
+            <p className="text-xs text-muted-foreground/60 mt-1">ทุกกลุ่มได้รับการกำหนดเว็บแล้ว</p>
+          </div>
+        )
+      }
+      if (items.length === 0) return <EmptySearch onClear={() => setSearch("")} />
+      return (
+        <div className="space-y-2">
+          {items.map((line) => (
+            <div
+              key={line.id}
+              className="flex items-center gap-3 bg-amber-500/5 border border-amber-500/20 rounded-xl px-4 py-3"
+            >
+              <div className="flex-1 min-w-0 space-y-1.5">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <RoleBadge role={line.role} />
+                  <span className="text-xs text-amber-400/80 font-medium">ยังไม่กำหนดเว็บ</span>
+                </div>
+                <p className="text-sm font-mono text-foreground truncate" title={line.lineId}>{line.lineId}</p>
+                {line.note && (
+                  <p className="text-xs text-muted-foreground flex items-center gap-1">
+                    <StickyNote className="h-3 w-3 shrink-0" />
+                    {line.note}
+                  </p>
+                )}
+              </div>
+              <CopyButton text={line.lineId} />
+              <Button
+                size="sm"
+                onClick={() => openAssign(line)}
+                className="shrink-0 rounded-lg bg-amber-500/15 text-amber-400 hover:bg-amber-500/25 border border-amber-500/20 gap-1.5"
+                variant="ghost"
+              >
+                กำหนดเว็บ
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Button>
+              <Button
+                size="icon" variant="ghost"
+                className="shrink-0 h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                onClick={() => onRemoveBackup(line.id)}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+          ))}
+        </div>
+      )
+    }
+
+    // confirmed tabs: all / main / deposit
+    const base = activeTab === "main"
+      ? confirmed.filter((b) => b.role === "main")
+      : activeTab === "deposit"
+      ? confirmed.filter((b) => b.role === "deposit")
+      : confirmed
+
+    const items = filteredBySearch(base)
+
+    if (confirmed.length === 0) {
+      return (
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border py-16 text-center">
+          <Archive className="h-10 w-10 text-muted-foreground/40 mb-3" />
+          <p className="text-sm text-muted-foreground">ยังไม่มีกลุ่มไลน์สำรองที่พร้อมใช้</p>
+          <p className="text-xs text-muted-foreground/60 mt-1">เพิ่มกลุ่มแล้วกำหนดเว็บให้ครบ</p>
+        </div>
+      )
+    }
+
+    if (items.length === 0) return <EmptySearch onClear={() => setSearch("")} />
+
+    if (activeTab === "all") {
+      const mainItems = items.filter((b) => b.role === "main")
+      const depositItems = items.filter((b) => b.role === "deposit")
+      return (
+        <div className="space-y-6">
+          <RoleSection
+            title="ไลน์หลัก"
+            role="main"
+            items={mainItems}
+            onRemove={onRemoveBackup}
+            onReassign={openAssign}
+          />
+          <RoleSection
+            title="ไลน์ฝากถอน"
+            role="deposit"
+            items={depositItems}
+            onRemove={onRemoveBackup}
+            onReassign={openAssign}
+          />
+        </div>
+      )
+    }
+
+    return (
+      <div className="space-y-3">
+        {items.map((line) => (
+          <ConfirmedCard key={line.id} line={line} onRemove={onRemoveBackup} onReassign={openAssign} />
+        ))}
+      </div>
+    )
+  }
+
   return (
     <main className="lg:ml-64 min-h-screen">
       <div className="p-6 lg:p-10 max-w-5xl">
@@ -178,7 +412,7 @@ export function BackupPoolPage({
               ไลน์สำรอง
             </h1>
             <p className="text-muted-foreground mt-1 ml-1">
-              สต็อกกลุ่ม LINE สำรอง — เมื่อไลน์หลักถูก suspend ให้ดึงจากที่นี่มาแทนทันที
+              สต็อกกลุ่ม LINE สำรอง — เมื่อไลน์หลักถูก suspend ดึงจากที่นี่มาแทนทันที
             </p>
           </div>
           <button
@@ -197,226 +431,109 @@ export function BackupPoolPage({
         {/* Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <div className="bg-card border border-border rounded-xl p-4">
-            <p className="text-sm text-muted-foreground">สำรองทั้งหมด</p>
-            <p className={cn("text-2xl font-bold mt-1", backupLines.length > 0 ? "text-foreground" : "text-muted-foreground")}>
+            <div className="flex items-center gap-2 mb-1">
+              <Layers className="h-3.5 w-3.5 text-muted-foreground" />
+              <p className="text-xs text-muted-foreground">สำรองทั้งหมด</p>
+            </div>
+            <p className={cn("text-2xl font-bold", backupLines.length > 0 ? "text-foreground" : "text-muted-foreground")}>
               {backupLines.length}
             </p>
           </div>
           <div className="bg-card border border-border rounded-xl p-4">
-            <p className="text-sm text-muted-foreground">ไลน์หลัก</p>
-            <p className={cn("text-2xl font-bold mt-1", mainCount > 0 ? "text-blue-400" : "text-muted-foreground")}>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="h-3 w-3 rounded-full bg-blue-400/60" />
+              <p className="text-xs text-muted-foreground">ไลน์หลัก</p>
+            </div>
+            <p className={cn("text-2xl font-bold", mainCount > 0 ? "text-blue-400" : "text-muted-foreground")}>
               {mainCount}
             </p>
           </div>
           <div className="bg-card border border-border rounded-xl p-4">
-            <p className="text-sm text-muted-foreground">ไลน์ฝากถอน</p>
-            <p className={cn("text-2xl font-bold mt-1", depositCount > 0 ? "text-purple-400" : "text-muted-foreground")}>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="h-3 w-3 rounded-full bg-purple-400/60" />
+              <p className="text-xs text-muted-foreground">ไลน์ฝากถอน</p>
+            </div>
+            <p className={cn("text-2xl font-bold", depositCount > 0 ? "text-purple-400" : "text-muted-foreground")}>
               {depositCount}
             </p>
           </div>
           <div className="bg-card border border-border rounded-xl p-4">
-            <p className="text-sm text-muted-foreground">รอการยืนยัน</p>
-            <p className={cn("text-2xl font-bold mt-1", pending.length > 0 ? "text-amber-400" : "text-muted-foreground")}>
+            <div className="flex items-center gap-2 mb-1">
+              <AlertTriangle className="h-3.5 w-3.5 text-muted-foreground" />
+              <p className="text-xs text-muted-foreground">รอการยืนยัน</p>
+            </div>
+            <p className={cn("text-2xl font-bold", pending.length > 0 ? "text-amber-400" : "text-muted-foreground")}>
               {pending.length}
             </p>
           </div>
         </div>
 
-        {/* Pending Section */}
-        {pending.length > 0 && (
-          <div className="mb-8">
-            <div className="flex items-center gap-2 mb-3">
-              <AlertTriangle className="h-4 w-4 text-amber-400" />
-              <h2 className="text-base font-semibold text-amber-400">รอการยืนยัน ({pending.length})</h2>
-              <span className="text-xs text-muted-foreground">— ยังไม่กำหนดเว็บ กรุณาระบุด้วย</span>
-            </div>
-            <div className="space-y-2">
-              {pending.map((line) => (
-                <div
-                  key={line.id}
-                  className="flex items-center gap-3 bg-amber-500/5 border border-amber-500/20 rounded-xl px-4 py-3"
+        {/* Tabs */}
+        <div className="flex flex-col sm:flex-row gap-3 mb-6">
+          <div className="flex rounded-xl border border-border bg-card p-1 gap-1 overflow-x-auto">
+            {tabs.map((tab) => {
+              const isActive = activeTab === tab.key
+              return (
+                <button
+                  key={tab.key}
+                  type="button"
+                  onClick={() => setActiveTab(tab.key)}
+                  className={cn(
+                    "flex items-center gap-1.5 whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-semibold transition-all",
+                    isActive
+                      ? tab.color === "amber"
+                        ? "bg-amber-500/15 text-amber-400 ring-1 ring-amber-500/25"
+                        : tab.color === "blue"
+                        ? "bg-blue-500/15 text-blue-400 ring-1 ring-blue-500/25"
+                        : tab.color === "purple"
+                        ? "bg-purple-500/15 text-purple-400 ring-1 ring-purple-500/25"
+                        : "bg-primary/15 text-primary ring-1 ring-primary/25"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+                  )}
                 >
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <RoleBadge role={line.role} />
-                    </div>
-                    <p className="text-sm font-medium text-foreground truncate" title={line.lineId}>{line.lineId}</p>
-                    {line.note && (
-                      <p className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1">
-                        <StickyNote className="h-3 w-3" />{line.note}
-                      </p>
-                    )}
-                  </div>
-                  <CopyButton text={line.lineId} />
-                  <Button
-                    size="sm"
-                    onClick={() => openAssign(line)}
-                    className="shrink-0 rounded-lg bg-amber-500/15 text-amber-400 hover:bg-amber-500/25 border border-amber-500/20 gap-1.5"
-                    variant="ghost"
-                  >
-                    กำหนดเว็บ
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </Button>
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    className="shrink-0 h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
-                    onClick={() => onRemoveBackup(line.id)}
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Confirmed Pool */}
-        <div>
-          <div className="flex items-center gap-2 mb-4">
-            <ShieldCheck className="h-4 w-4 text-primary" />
-            <h2 className="text-base font-semibold text-foreground">
-              สต็อกสำรองพร้อมใช้
-              {confirmed.length > 0 && (
-                <span className="ml-2 text-xs font-normal text-muted-foreground">({confirmed.length} รายการ)</span>
-              )}
-            </h2>
+                  {tab.label}
+                  <span className={cn(
+                    "inline-flex items-center justify-center h-4 min-w-4 px-1 rounded-full text-[10px] font-bold",
+                    isActive
+                      ? tab.color === "amber"
+                        ? "bg-amber-500/20 text-amber-300"
+                        : tab.color === "blue"
+                        ? "bg-blue-500/20 text-blue-300"
+                        : tab.color === "purple"
+                        ? "bg-purple-500/20 text-purple-300"
+                        : "bg-primary/20 text-primary"
+                      : "bg-muted text-muted-foreground"
+                  )}>
+                    {tab.count}
+                  </span>
+                </button>
+              )
+            })}
           </div>
 
-          {/* Filter & Search */}
-          {confirmed.length > 0 && (
-            <div className="flex flex-col sm:flex-row gap-3 mb-4">
-              <div className="flex rounded-xl overflow-hidden border border-border bg-card p-1 gap-1">
-                {(["all", "main", "deposit"] as RoleFilter[]).map((f) => (
-                  <button
-                    key={f}
-                    type="button"
-                    onClick={() => setRoleFilter(f)}
-                    className={cn(
-                      "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all",
-                      roleFilter === f
-                        ? "bg-primary/15 text-primary ring-1 ring-primary/25"
-                        : "text-muted-foreground hover:text-foreground"
-                    )}
-                  >
-                    {f === "all" ? "ทั้งหมด" : f === "main" ? "ไลน์หลัก" : "ฝากถอน"}
-                  </button>
-                ))}
-              </div>
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-                <Input
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  placeholder="ค้นหา URL, เว็บ, หรือหมายเหตุ..."
-                  className="pl-9 h-9 border-border bg-card text-sm"
-                />
-                {search && (
-                  <button
-                    type="button"
-                    onClick={() => setSearch("")}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                  >
-                    <X className="h-3.5 w-3.5" />
-                  </button>
-                )}
-              </div>
-            </div>
-          )}
-
-          {confirmed.length === 0 ? (
-            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border py-16 text-center">
-              <Archive className="h-10 w-10 text-muted-foreground/40 mb-3" />
-              <p className="text-sm text-muted-foreground">ยังไม่มีกลุ่มไลน์สำรอง</p>
-              <p className="text-xs text-muted-foreground/60 mt-1">กดปุ่ม "เพิ่มกลุ่มไลน์สำรอง" เพื่อเริ่มต้น</p>
-            </div>
-          ) : filteredConfirmed.length === 0 ? (
-            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border py-12 text-center">
-              <Search className="h-8 w-8 text-muted-foreground/40 mb-3" />
-              <p className="text-sm text-muted-foreground">ไม่พบรายการที่ค้นหา</p>
+          {/* Search */}
+          <div className="relative flex-1 min-w-40">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+            <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="ค้นหา URL, เว็บ, หมายเหตุ..."
+              className="pl-9 h-9 border-border bg-card text-sm"
+            />
+            {search && (
               <button
                 type="button"
-                onClick={() => { setSearch(""); setRoleFilter("all") }}
-                className="mt-2 text-xs text-primary hover:underline flex items-center gap-1"
+                onClick={() => setSearch("")}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
               >
-                <RotateCcw className="h-3 w-3" /> ล้างตัวกรอง
+                <X className="h-3.5 w-3.5" />
               </button>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {filteredConfirmed.map((line) => (
-                <div
-                  key={line.id}
-                  className="bg-card border border-border rounded-2xl p-4 transition-all duration-300 hover:border-primary/40 hover:shadow-[0_0_24px_rgba(0,185,0,0.08)] group"
-                >
-                  <div className="flex items-start gap-3">
-                    {/* Left: info */}
-                    <div className="flex-1 min-w-0 space-y-2">
-                      {/* Badges row */}
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <RoleBadge role={line.role} />
-                        {line.websiteName && (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-muted/60 text-muted-foreground ring-1 ring-border">
-                            {line.websiteName}
-                          </span>
-                        )}
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-primary/10 text-primary ring-1 ring-primary/20">
-                          <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                          พร้อม
-                        </span>
-                      </div>
-
-                      {/* URL */}
-                      <div className="flex items-center gap-1.5 min-w-0">
-                        <a
-                          href={line.lineId}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-sm text-foreground truncate hover:text-primary transition-colors font-mono"
-                          title={line.lineId}
-                        >
-                          {line.lineId}
-                        </a>
-                        <ExternalLink className="h-3 w-3 text-muted-foreground shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
-                      </div>
-
-                      {/* Note */}
-                      {line.note && (
-                        <p className="text-xs text-muted-foreground flex items-center gap-1.5">
-                          <StickyNote className="h-3 w-3 shrink-0" />
-                          {line.note}
-                        </p>
-                      )}
-                    </div>
-
-                    {/* Right: actions */}
-                    <div className="flex items-center gap-1 shrink-0">
-                      <CopyButton text={line.lineId} />
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        className="h-7 w-7 text-muted-foreground hover:text-amber-400 hover:bg-amber-400/10"
-                        title="เปลี่ยนเว็บ"
-                        onClick={() => openAssign(line)}
-                      >
-                        <RotateCcw className="h-3.5 w-3.5" />
-                      </Button>
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        className="h-7 w-7 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-                        title="ลบ"
-                        onClick={() => onRemoveBackup(line.id)}
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+            )}
+          </div>
         </div>
+
+        {/* Content */}
+        {renderContent()}
       </div>
 
       {/* Add Backup Dialog */}
@@ -429,6 +546,9 @@ export function BackupPoolPage({
                 <Archive className="h-7 w-7" />
               </div>
               <DialogTitle className="text-xl">เพิ่มกลุ่มไลน์สำรอง</DialogTitle>
+              <p className="text-sm text-muted-foreground">
+                หลังเพิ่มแล้ว ระบบจะขอให้คุณกำหนดว่ากลุ่มนี้ใช้กับเว็บไหน
+              </p>
             </DialogHeader>
           </div>
           <form onSubmit={handleAdd} className="space-y-4 px-6 pb-6 pt-4">
@@ -440,28 +560,32 @@ export function BackupPoolPage({
                 autoFocus
                 value={newLineId}
                 onChange={(e) => setNewLineId(e.target.value)}
-                placeholder="เช่น https://manager.line.biz/groups/..."
+                placeholder="https://manager.line.biz/groups/..."
                 className="h-11 border-border bg-input font-mono text-sm"
               />
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground">
-                ประเภท <span className="text-destructive">*</span>
+                ประเภทไลน์ในกลุ่มนี้ <span className="text-destructive">*</span>
               </label>
               <Select value={newRole} onValueChange={(v) => setNewRole(v as BackupLineRole)}>
                 <SelectTrigger className="h-11 border-border bg-input">
-                  <SelectValue placeholder="เลือกประเภท" />
+                  <SelectValue placeholder="เลือกว่ากลุ่มนี้เป็นไลน์อะไร" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="main">ไลน์หลัก</SelectItem>
                   <SelectItem value="deposit">ไลน์ฝากถอน</SelectItem>
                 </SelectContent>
               </Select>
+              <p className="text-xs text-muted-foreground">
+                กลุ่มนี้เก็บไลน์ประเภทไหน — ระบบจะจำแนกหมวดหมู่จากตรงนี้
+              </p>
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground flex items-center gap-1.5">
                 <StickyNote className="h-3.5 w-3.5 text-muted-foreground" />
-                หมายเหตุ <span className="text-xs text-muted-foreground font-normal">(ไม่บังคับ)</span>
+                หมายเหตุ
+                <span className="text-xs text-muted-foreground font-normal">(ไม่บังคับ)</span>
               </label>
               <Input
                 value={newNote}
@@ -491,45 +615,55 @@ export function BackupPoolPage({
         <DialogContent className="border-border bg-background sm:max-w-sm">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <RotateCcw className="h-5 w-5 text-amber-400" />
-              {assigningLine?.websiteId ? "เปลี่ยนเว็บ" : "กำหนดเว็บให้ไลน์สำรอง"}
+              <AlertTriangle className="h-5 w-5 text-amber-400" />
+              {assigningLine?.websiteId ? "เปลี่ยนเว็บ" : "กำหนดเว็บให้กลุ่มนี้"}
             </DialogTitle>
           </DialogHeader>
           <form onSubmit={handleAssign} className="space-y-4 pt-2">
             {assigningLine && (
-              <div className="rounded-xl bg-muted/30 px-4 py-3 text-sm space-y-2">
-                <div>
-                  <p className="text-muted-foreground text-xs mb-1">URL</p>
-                  <p className="font-mono text-xs text-foreground truncate">{assigningLine.lineId}</p>
-                </div>
+              <div className="rounded-xl bg-muted/30 px-4 py-3 space-y-2 text-sm">
                 <div className="flex items-center gap-2">
                   <RoleBadge role={assigningLine.role} />
                   {assigningLine.websiteName && (
                     <span className="text-xs text-muted-foreground">เดิม: {assigningLine.websiteName}</span>
                   )}
                 </div>
+                <p className="font-mono text-xs text-foreground truncate" title={assigningLine.lineId}>
+                  {assigningLine.lineId}
+                </p>
+                {assigningLine.note && (
+                  <p className="text-xs text-muted-foreground flex items-center gap-1">
+                    <StickyNote className="h-3 w-3" />{assigningLine.note}
+                  </p>
+                )}
               </div>
             )}
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">เลือกเว็บปลายทาง</label>
-              <Select value={assignWebsiteId} onValueChange={setAssignWebsiteId}>
-                <SelectTrigger className="h-11 border-border bg-input">
-                  <SelectValue placeholder="เลือกเว็บ..." />
-                </SelectTrigger>
-                <SelectContent>
-                  {websites.map((w) => (
-                    <SelectItem key={w.id} value={w.id}>{w.name}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            {websites.length === 0 ? (
+              <div className="rounded-xl bg-amber-500/5 border border-amber-500/20 px-4 py-3 text-sm text-amber-400">
+                ยังไม่มีเว็บในระบบ — ไปเพิ่มเว็บที่หน้าแดชบอร์ดก่อน
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-foreground">เลือกเว็บปลายทาง</label>
+                <Select value={assignWebsiteId} onValueChange={setAssignWebsiteId}>
+                  <SelectTrigger className="h-11 border-border bg-input">
+                    <SelectValue placeholder="เลือกเว็บ..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {websites.map((w) => (
+                      <SelectItem key={w.id} value={w.id}>{w.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
             <DialogFooter className="gap-2">
               <DialogClose asChild>
                 <Button type="button" variant="outline" className="rounded-xl">ยกเลิก</Button>
               </DialogClose>
               <Button
                 type="submit"
-                disabled={!assignWebsiteId}
+                disabled={!assignWebsiteId || websites.length === 0}
                 className="rounded-xl bg-amber-500 text-black hover:bg-amber-400 disabled:opacity-50"
               >
                 ยืนยัน
@@ -539,5 +673,21 @@ export function BackupPoolPage({
         </DialogContent>
       </Dialog>
     </main>
+  )
+}
+
+function EmptySearch({ onClear }: { onClear: () => void }) {
+  return (
+    <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border py-12 text-center">
+      <Search className="h-8 w-8 text-muted-foreground/40 mb-3" />
+      <p className="text-sm text-muted-foreground">ไม่พบรายการที่ค้นหา</p>
+      <button
+        type="button"
+        onClick={onClear}
+        className="mt-2 text-xs text-primary hover:underline flex items-center gap-1"
+      >
+        <RotateCcw className="h-3 w-3" /> ล้างการค้นหา
+      </button>
+    </div>
   )
 }

@@ -43,7 +43,7 @@ export interface BackupLine {
 interface BackupPoolPageProps {
   websites: Website[]
   backupLines: BackupLine[]
-  onAddBackup: (lineId: string, role: BackupLineRole, websiteId: string | null) => void
+  onAddBackup: (lineId: string, role: BackupLineRole, groupName: string) => void
   onRemoveBackup: (id: string) => void
   onConfirmBackup: (id: string, websiteId: string, websiteName: string) => void
 }
@@ -72,6 +72,7 @@ export function BackupPoolPage({
 }: BackupPoolPageProps) {
   const [addOpen, setAddOpen] = useState(false)
   const [newLineId, setNewLineId] = useState("")
+  const [newGroupName, setNewGroupName] = useState("")
   const [newRole, setNewRole] = useState<BackupLineRole>("main")
 
   const [assignOpen, setAssignOpen] = useState(false)
@@ -83,9 +84,10 @@ export function BackupPoolPage({
 
   const handleAdd = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!newLineId.trim()) return
-    onAddBackup(newLineId.trim(), newRole, null)
+    if (!newLineId.trim() || !newGroupName.trim()) return
+    onAddBackup(newLineId.trim(), newRole, newGroupName.trim())
     setNewLineId("")
+    setNewGroupName("")
     setNewRole("main")
     setAddOpen(false)
   }
@@ -208,36 +210,42 @@ export function BackupPoolPage({
           {confirmed.length === 0 ? (
             <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border py-16 text-center">
               <Archive className="h-10 w-10 text-muted-foreground/40 mb-3" />
-              <p className="text-sm text-muted-foreground">ยังไม่มีไลน์สำรอง</p>
-              <p className="text-xs text-muted-foreground/60 mt-1">กดปุ่ม "เพิ่มไลน์สำรอง" เพื่อเริ่มต้น</p>
+              <p className="text-sm text-muted-foreground">ยังไม่มีกลุ่มไลน์สำรอง</p>
+              <p className="text-xs text-muted-foreground/60 mt-1">กดปุ่ม "เพิ่มกลุ่มไลน์สำรอง" เพื่อเริ่มต้น</p>
             </div>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-3">
               {confirmed.map((line) => (
                 <div
                   key={line.id}
-                  className="flex items-center gap-3 bg-card border border-border rounded-xl px-4 py-3 hover:border-primary/30 transition-colors"
+                  className="bg-card border border-primary/20 rounded-xl px-4 py-3 hover:border-primary/40 transition-colors"
                 >
-                  <CheckCircle2 className="h-4 w-4 text-primary shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-foreground truncate">{line.lineId}</p>
-                    <div className="flex items-center gap-2 mt-1">
-                      <RoleBadge role={line.role} />
-                      {line.websiteName ? (
-                        <span className="text-xs text-muted-foreground">→ {line.websiteName}</span>
-                      ) : (
-                        <span className="text-xs text-muted-foreground/60">ถังกลาง (ใช้แทนได้ทุกเว็บ)</span>
-                      )}
+                  <div className="flex items-center gap-3">
+                    <CheckCircle2 className="h-4 w-4 text-primary shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-sm font-semibold text-primary">
+                          กลุ่มสำรอง{line.role === "main" ? "ไลน์หลัก" : "ไลน์ฝากถอน"}
+                          {line.websiteName ? ` — ${line.websiteName}` : ""}
+                        </span>
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-primary/15 text-primary ring-1 ring-primary/25">
+                          <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                          พร้อม
+                        </span>
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-0.5 truncate" title={line.lineId}>
+                        {line.lineId}
+                      </p>
                     </div>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="shrink-0 h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                      onClick={() => onRemoveBackup(line.id)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
                   </div>
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    className="shrink-0 h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-                    onClick={() => onRemoveBackup(line.id)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
                 </div>
               ))}
             </div>
@@ -259,12 +267,26 @@ export function BackupPoolPage({
           </div>
           <form onSubmit={handleAdd} className="space-y-4 px-6 pb-6 pt-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">URL กรุ๊ปไลน์สำรอง</label>
+              <label className="text-sm font-medium text-foreground">
+                ชื่อกลุ่ม <span className="text-destructive">*</span>
+              </label>
               <Input
                 autoFocus
+                value={newGroupName}
+                onChange={(e) => setNewGroupName(e.target.value)}
+                placeholder="เช่น Jun88, F168 (ใช้จับคู่กับเว็บในแดชบอร์ด)"
+                className="h-11 border-border bg-input"
+              />
+              <p className="text-xs text-muted-foreground">ชื่อนี้จะใช้จับคู่กับชื่อเว็บในแดชบอร์ดอัตโนมัติ</p>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">
+                URL กรุ๊ปไลน์สำรอง <span className="text-destructive">*</span>
+              </label>
+              <Input
                 value={newLineId}
                 onChange={(e) => setNewLineId(e.target.value)}
-                placeholder="เช่น https://line.me/..."
+                placeholder="เช่น https://manager.line.biz/groups/..."
                 className="h-11 border-border bg-input"
               />
             </div>
@@ -286,7 +308,7 @@ export function BackupPoolPage({
               </DialogClose>
               <Button
                 type="submit"
-                disabled={!newLineId.trim()}
+                disabled={!newLineId.trim() || !newGroupName.trim()}
                 className="rounded-xl bg-primary text-primary-foreground shadow-[0_0_20px_-4px_rgba(0,185,0,0.45)] hover:bg-primary/90 disabled:opacity-50"
               >
                 เพิ่ม

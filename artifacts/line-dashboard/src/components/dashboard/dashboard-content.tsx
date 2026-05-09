@@ -1,6 +1,7 @@
 
 import { useMemo, useState } from "react"
 import { Globe, Sparkles } from "lucide-react"
+import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -160,25 +161,25 @@ export function DashboardContent({
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
               <div className="bg-card border border-border rounded-xl p-4">
                 <p className="text-sm text-muted-foreground">บัญชีทั้งหมด</p>
-                <p className="text-2xl font-bold text-foreground mt-1">
+                <p className={cn("text-2xl font-bold mt-1", totalAccounts > 0 ? "text-foreground" : "text-muted-foreground")}>
                   {totalAccounts}
                 </p>
               </div>
               <div className="bg-card border border-border rounded-xl p-4">
                 <p className="text-sm text-muted-foreground">ออนไลน์</p>
-                <p className="text-2xl font-bold text-primary mt-1">
+                <p className={cn("text-2xl font-bold mt-1", onlineCount > 0 ? "text-primary" : "text-muted-foreground")}>
                   {onlineCount}
                 </p>
               </div>
               <div className="bg-card border border-border rounded-xl p-4">
                 <p className="text-sm text-muted-foreground">โดนระงับ</p>
-                <p className="text-2xl font-bold text-destructive mt-1">
+                <p className={cn("text-2xl font-bold mt-1", suspendedCount > 0 ? "text-destructive" : "text-muted-foreground")}>
                   {suspendedCount}
                 </p>
               </div>
               <div className="bg-card border border-border rounded-xl p-4">
                 <p className="text-sm text-muted-foreground">เว็บไซต์</p>
-                <p className="text-2xl font-bold text-foreground mt-1">
+                <p className={cn("text-2xl font-bold mt-1", websites.length > 0 ? "text-foreground" : "text-muted-foreground")}>
                   {websites.length}
                 </p>
               </div>

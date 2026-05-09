@@ -241,7 +241,7 @@ export default function App() {
     });
   };
 
-  const handleAddBackup = (lineId: string, role: BackupLineRole) => {
+  const handleAddBackup = (lineId: string, role: BackupLineRole, note?: string) => {
     const newBackup: BackupLine = {
       id: crypto.randomUUID(),
       lineId,
@@ -249,6 +249,7 @@ export default function App() {
       websiteId: null,
       websiteName: null,
       confirmed: true,
+      note: note?.trim() || undefined,
     };
     setBackupLines((prev) => [...prev, newBackup]);
   };

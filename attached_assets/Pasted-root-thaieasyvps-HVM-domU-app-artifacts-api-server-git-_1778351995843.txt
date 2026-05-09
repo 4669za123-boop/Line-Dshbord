@@ -1,0 +1,45 @@
+root@thaieasyvps-HVM-domU:/app/artifacts/api-server# git pull origin main
+
+remote: Enumerating objects: 180, done.
+remote: Counting objects: 100% (180/180), done.
+remote: Compressing objects: 100% (54/54), done.
+remote: Total 155 (delta 109), reused 147 (delta 101), pack-reused 0 (from 0)
+Receiving objects: 100% (155/155), 1.82 MiB | 5.94 MiB/s, done.
+Resolving deltas: 100% (109/109), completed with 21 local objects.
+From https://github.com/4669za123-boop/Line-Dshbord
+ * branch            main       -> FETCH_HEAD
+   dbde1d7..ea85d43  main       -> origin/main
+Updating dbde1d7..ea85d43
+error: Your local changes to the following files would be overwritten by merge:
+        artifacts/api-server/bot.py
+        artifacts/api-server/src/lib/scheduler.ts
+        artifacts/api-server/src/routes/lines.ts
+        artifacts/line-dashboard/src/App.tsx
+        login-line.sh
+Please commit your changes or stash them before you merge.
+Aborting
+root@thaieasyvps-HVM-domU:/app/artifacts/api-server# pnpm install
+pnpm --filter line-dashboard build
+Scope: all 10 workspace projects
+../.. preinstall$ sh -c 'rm -f package-lock.json yarn.lock; case "$npm_config_user_agent" in pnpm/*) ;; *) echo "Use pnpm instead" >&2; exit 1 ;; esac'
+└─ Done in 57ms
+Done in 12.7s using pnpm v10.33.4
+
+> @workspace/line-dashboard@0.0.0 build /app/artifacts/line-dashboard
+> vite build --config vite.config.ts
+
+failed to load config from /app/artifacts/line-dashboard/vite.config.ts
+error during build:
+Error: PORT environment variable is required but was not provided.
+    at file:///app/artifacts/line-dashboard/node_modules/.vite-temp/vite.config.ts.timestamp-1778351954768-38b543c91a791.mjs:10:9
+    at ModuleJob.run (node:internal/modules/esm/module_job:325:25)
+    at async ModuleLoader.import (node:internal/modules/esm/loader:606:24)
+    at async loadConfigFromBundledFile (file:///app/node_modules/.pnpm/vite@7.3.2_@types+node@25.3.5_jiti@2.6.1_lightningcss@1.31.1_tsx@4.21.0_yaml@2.8.2/node_modules/vite/dist/node/chunks/config.js:35920:12)
+    at async bundleAndLoadConfigFile (file:///app/node_modules/.pnpm/vite@7.3.2_@types+node@25.3.5_jiti@2.6.1_lightningcss@1.31.1_tsx@4.21.0_yaml@2.8.2/node_modules/vite/dist/node/chunks/config.js:35808:17)
+    at async loadConfigFromFile (file:///app/node_modules/.pnpm/vite@7.3.2_@types+node@25.3.5_jiti@2.6.1_lightningcss@1.31.1_tsx@4.21.0_yaml@2.8.2/node_modules/vite/dist/node/chunks/config.js:35775:42)
+    at async resolveConfig (file:///app/node_modules/.pnpm/vite@7.3.2_@types+node@25.3.5_jiti@2.6.1_lightningcss@1.31.1_tsx@4.21.0_yaml@2.8.2/node_modules/vite/dist/node/chunks/config.js:35424:22)
+    at async createBuilder (file:///app/node_modules/.pnpm/vite@7.3.2_@types+node@25.3.5_jiti@2.6.1_lightningcss@1.31.1_tsx@4.21.0_yaml@2.8.2/node_modules/vite/dist/node/chunks/config.js:33879:19)
+    at async CAC.<anonymous> (file:///app/node_modules/.pnpm/vite@7.3.2_@types+node@25.3.5_jiti@2.6.1_lightningcss@1.31.1_tsx@4.21.0_yaml@2.8.2/node_modules/vite/dist/node/cli.js:629:10)
+/app/artifacts/line-dashboard:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @workspace/line-dashboard@0.0.0 build: `vite build --config vite.config.ts`
+Exit status 1

@@ -20,7 +20,7 @@ WEBHOOK_URL = os.environ.get(
 WEBSITES_FILE = "data/websites.json"
 DATA_FILE = "data/lines.json"
 API_STATUS_URL = os.environ.get("API_URL", "http://localhost:8080/api/line-status")
-CHROME_PROFILE_DIR = os.environ.get("CHROME_PROFILE_DIR", "/root/.line-chrome-profile")
+CHROME_PROFILE_DIR = os.environ.get("CHROME_PROFILE_DIR", "/root/.line-chrome-profile-bot")
 
 
 def get_shift_label():

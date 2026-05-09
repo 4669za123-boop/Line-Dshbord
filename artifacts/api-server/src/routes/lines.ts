@@ -16,7 +16,7 @@ export function runBotDirect() {
   const now = Date.now();
   if (now - lastBotRunAt < BOT_COOLDOWN_MS) return;
   lastBotRunAt = now;
-  exec("python bot.py", (err, stdout, stderr) => {
+  exec("python3 bot.py", { cwd: rootDir }, (err, stdout, stderr) => {
     if (err) console.error("[bot]", err.message);
     if (stdout) console.log("[bot]", stdout.trim());
     if (stderr) console.warn("[bot]", stderr.trim());

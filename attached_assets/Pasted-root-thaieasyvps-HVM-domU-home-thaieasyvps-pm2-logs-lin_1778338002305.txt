@@ -1,0 +1,42 @@
+root@thaieasyvps-HVM-domU:/home/thaieasyvps# pm2 logs line-dashboard-api --lines 100 --nostream 2>&1 | grep -E "BOT|bot\.py|DONE|error|❌|✅|Discord|WEBSITES|CLEAN|Chrome"
+/root/.pm2/logs/line-dashboard-api-error.log last 100 lines:
+0|line-das |   File "/app/artifacts/api-server/bot.py", line 79, in connect
+0|line-das |     except: return webdriver.Chrome(options=options)
+0|line-das |     self.error_handler.check_response(response)
+0|line-das |   File "/usr/local/lib/python3.10/dist-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+0|line-das | selenium.common.exceptions.SessionNotCreatedException: Message: session not created: Chrome instance exited. Examine ChromeDriver verbose log to determine the cause.; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#sessionnotcreatedexception
+0|line-das | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+0|line-das | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+0|line-das | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+0|line-das | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+0|line-das | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+0|line-das | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+0|line-das | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+0|line-das | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+0|line-das | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+0|line-das | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+0|line-das | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+0|line-das | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+0|line-das | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+0|line-das | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+0|line-das | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+0|line-das | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+0|line-das | ✅ WEBSITES: 10 รายการ
+0|line-das | ✅ DATA MAP: 24 รายการ
+0|line-das | ✅ ใช้ Chrome profile: /root/.line-chrome-profile
+0|line-das | ✅ ใช้ Chrome: /usr/bin/google-chrome
+0|line-das |    ✅ 886jslfp (MK8 / ฝากถอน) → ออนไลน์
+0|line-das |    ✅ 795elsrx (F168 / ฝากถอน) → ออนไลน์
+0|line-das |    ✅ 235npgcy (F168 / หลัก) → ออนไลน์
+0|line-das |    ✅ 222bamxi (PG688 / หลัก) → ออนไลน์
+0|line-das |    ✅ 759zfwkt (JL69 / ฝากถอน) → ออนไลน์
+0|line-das |    ✅ 823ewsrb (NM9 / ฝากถอน) → ออนไลน์
+0|line-das |    ✅ 166oipqd (Vv72 / ฝากถอน) → ออนไลน์
+0|line-das |    ✅ 604fkgus (Vv72 / หลัก) → ออนไลน์
+0|line-das |    ✅ 203bznmz (TH26 / ฝากถอน) → ออนไลน์
+0|line-das |    ✅ 545ypuvj (K188 / หลัก) → ออนไลน์
+0|line-das |    ✅ 391xrgqe (K188 / ฝากถอน) → ออนไลน์
+0|line-das |    ✅ 782jrvos (BT678 / หลัก) → ออนไลน์
+0|line-das |    ✅ 944pjpwn (BT678 / ฝากถอน) → ออนไลน์
+0|line-das | ✅ อัปเดตสถานะ 13 บัญชี → Dashboard (200)
+0|line-das | ✅ CHECKER DONE

@@ -231,20 +231,14 @@ export default function App() {
     });
   };
 
-  const handleAddBackup = (lineId: string, role: BackupLineRole, websiteId: string | null) => {
-    const matchedSite = websiteId
-      ? websites.find((w) => w.id === websiteId)
-      : websites.find((w) => lineId.toLowerCase().includes(w.name.toLowerCase()));
-
-    const confirmed = !!(matchedSite || websiteId);
-
+  const handleAddBackup = (lineId: string, role: BackupLineRole) => {
     const newBackup: BackupLine = {
       id: crypto.randomUUID(),
       lineId,
       role,
-      websiteId: matchedSite?.id ?? null,
-      websiteName: matchedSite?.name ?? null,
-      confirmed,
+      websiteId: null,
+      websiteName: null,
+      confirmed: true,
     };
     setBackupLines((prev) => [...prev, newBackup]);
   };

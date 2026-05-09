@@ -43,7 +43,7 @@ export interface BackupLine {
 interface BackupPoolPageProps {
   websites: Website[]
   backupLines: BackupLine[]
-  onAddBackup: (lineId: string, role: BackupLineRole, groupName: string) => void
+  onAddBackup: (lineId: string, role: BackupLineRole) => void
   onRemoveBackup: (id: string) => void
   onConfirmBackup: (id: string, websiteId: string, websiteName: string) => void
 }
@@ -72,7 +72,6 @@ export function BackupPoolPage({
 }: BackupPoolPageProps) {
   const [addOpen, setAddOpen] = useState(false)
   const [newLineId, setNewLineId] = useState("")
-  const [newGroupName, setNewGroupName] = useState("")
   const [newRole, setNewRole] = useState<BackupLineRole>("main")
 
   const [assignOpen, setAssignOpen] = useState(false)
@@ -84,10 +83,9 @@ export function BackupPoolPage({
 
   const handleAdd = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!newLineId.trim() || !newGroupName.trim()) return
-    onAddBackup(newLineId.trim(), newRole, newGroupName.trim())
+    if (!newLineId.trim()) return
+    onAddBackup(newLineId.trim(), newRole)
     setNewLineId("")
-    setNewGroupName("")
     setNewRole("main")
     setAddOpen(false)
   }
@@ -268,22 +266,10 @@ export function BackupPoolPage({
           <form onSubmit={handleAdd} className="space-y-4 px-6 pb-6 pt-4">
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground">
-                ชื่อกลุ่ม <span className="text-destructive">*</span>
-              </label>
-              <Input
-                autoFocus
-                value={newGroupName}
-                onChange={(e) => setNewGroupName(e.target.value)}
-                placeholder="เช่น Jun88, F168 (ใช้จับคู่กับเว็บในแดชบอร์ด)"
-                className="h-11 border-border bg-input"
-              />
-              <p className="text-xs text-muted-foreground">ชื่อนี้จะใช้จับคู่กับชื่อเว็บในแดชบอร์ดอัตโนมัติ</p>
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">
                 URL กรุ๊ปไลน์สำรอง <span className="text-destructive">*</span>
               </label>
               <Input
+                autoFocus
                 value={newLineId}
                 onChange={(e) => setNewLineId(e.target.value)}
                 placeholder="เช่น https://manager.line.biz/groups/..."
@@ -308,7 +294,7 @@ export function BackupPoolPage({
               </DialogClose>
               <Button
                 type="submit"
-                disabled={!newLineId.trim() || !newGroupName.trim()}
+                disabled={!newLineId.trim()}
                 className="rounded-xl bg-primary text-primary-foreground shadow-[0_0_20px_-4px_rgba(0,185,0,0.45)] hover:bg-primary/90 disabled:opacity-50"
               >
                 เพิ่ม
@@ -330,7 +316,7 @@ export function BackupPoolPage({
           <form onSubmit={handleAssign} className="space-y-4 pt-2">
             {assigningLine && (
               <div className="rounded-xl bg-muted/30 px-4 py-3 text-sm">
-                <p className="text-muted-foreground text-xs mb-1">LINE ID</p>
+                <p className="text-muted-foreground text-xs mb-1">URL</p>
                 <p className="font-medium text-foreground truncate">{assigningLine.lineId}</p>
                 <div className="mt-2">
                   <RoleBadge role={assigningLine.role} />

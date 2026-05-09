@@ -139,11 +139,15 @@ export function BackupPoolPage({
         <div className="grid grid-cols-4 gap-4 mb-8">
           <div className="bg-card border border-border rounded-xl p-4">
             <p className="text-sm text-muted-foreground">ไลน์สำรองทั้งหมด</p>
-            <p className="text-2xl font-bold text-foreground mt-1">{backupLines.length}</p>
+            <p className={cn("text-2xl font-bold mt-1", backupLines.length > 0 ? "text-foreground" : "text-muted-foreground")}>
+              {backupLines.length}
+            </p>
           </div>
           <div className="bg-card border border-border rounded-xl p-4">
             <p className="text-sm text-muted-foreground">พร้อมใช้งาน</p>
-            <p className="text-2xl font-bold text-primary mt-1">{confirmed.length}</p>
+            <p className={cn("text-2xl font-bold mt-1", confirmed.length > 0 ? "text-primary" : "text-muted-foreground")}>
+              {confirmed.length}
+            </p>
           </div>
           <div className="bg-card border border-border rounded-xl p-4">
             <p className="text-sm text-muted-foreground">รอการยืนยัน</p>
@@ -153,7 +157,9 @@ export function BackupPoolPage({
           </div>
           <div className="bg-card border border-border rounded-xl p-4">
             <p className="text-sm text-muted-foreground">กลุ่มสำรอง</p>
-            <p className="text-2xl font-bold text-white mt-1">{confirmed.length}</p>
+            <p className={cn("text-2xl font-bold mt-1", confirmed.length > 0 ? "text-white" : "text-muted-foreground")}>
+              {confirmed.length}
+            </p>
           </div>
         </div>
 

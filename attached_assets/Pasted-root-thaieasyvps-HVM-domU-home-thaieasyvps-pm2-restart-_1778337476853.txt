@@ -1,0 +1,73 @@
+root@thaieasyvps-HVM-domU:/home/thaieasyvps# pm2 restart line-dashboard-api && pm2 logs line-dashboard-api --lines 30 --nostream
+Use --update-env to update environment variables
+[PM2] Applying action restartProcessId on app [line-dashboard-api](ids: [ 0 ])
+[PM2] [line-dashboard-api](0) ✓
+┌────┬───────────────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name                  │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼───────────────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ line-dashboard-api    │ default     │ N/A     │ fork    │ 141537   │ 0s     │ 97   │ online    │ 0%       │ 15.5mb   │ root     │ disabled │
+└────┴───────────────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+[TAILING] Tailing last 30 lines for [line-dashboard-api] process (change the value with --lines option)
+/root/.pm2/logs/line-dashboard-api-out.log last 30 lines:
+0|line-das | 🌐 เข้าเว็บ: Vv72 → https://manager.line.biz/groups/291413/setting
+0|line-das |    พบ 2 account links
+0|line-das |    ✅ 604fkgus (Vv72 / หลัก) → ออนไลน์
+0|line-das |    ✅ 166oipqd (Vv72 / ฝากถอน) → ออนไลน์
+0|line-das | 🌐 เข้าเว็บ: TH26 → https://manager.line.biz/groups/291757/setting
+0|line-das |    พบ 2 account links
+0|line-das |    ✅ 203bznmz (TH26 / ฝากถอน) → ออนไลน์
+0|line-das | 🌐 เข้าเว็บ: K188 → https://manager.line.biz/groups/293859/setting
+0|line-das |    พบ 2 account links
+0|line-das |    ✅ 545ypuvj (K188 / หลัก) → ออนไลน์
+0|line-das |    ✅ 391xrgqe (K188 / ฝากถอน) → ออนไลน์
+0|line-das | 🌐 เข้าเว็บ: BT678 → https://manager.line.biz/groups/293858/setting
+0|line-das |    พบ 2 account links
+0|line-das |    ✅ 944pjpwn (BT678 / ฝากถอน) → ออนไลน์
+0|line-das |    ✅ 782jrvos (BT678 / หลัก) → ออนไลน์
+0|line-das | ✅ อัปเดตสถานะ 13 บัญชี → Dashboard (200)
+0|line-das | ✅ CHECKER DONE
+0|line-das | [21:36:57.368] INFO (96007): request completed
+0|line-das |     req: {
+0|line-das |       "id": 726,
+0|line-das |       "method": "POST",
+0|line-das |       "url": "/api/line-status"
+0|line-das |     }
+0|line-das |     res: {
+0|line-das |       "statusCode": 200
+0|line-das |     }
+0|line-das |     responseTime: 6
+0|line-das | [21:36:57.454] INFO (96007): 🔍 Checker: finished
+0|line-das |     code: 0
+0|line-das | [21:36:58.035] INFO (96007): 🔍 Checker: starting status scan
+
+/root/.pm2/logs/line-dashboard-api-error.log last 30 lines:
+0|line-das | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+0|line-das |   warnings.warn(
+0|line-das | /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+0|line-das |   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+0|line-das | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+0|line-das |   warnings.warn(
+0|line-das | /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+0|line-das |   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+0|line-das | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+0|line-das |   warnings.warn(
+0|line-das | /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+0|line-das |   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+0|line-das | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+0|line-das |   warnings.warn(
+0|line-das | /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+0|line-das |   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+0|line-das | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+0|line-das |   warnings.warn(
+0|line-das | /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+0|line-das |   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+0|line-das | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+0|line-das |   warnings.warn(
+0|line-das | /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+0|line-das |   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+0|line-das | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+0|line-das |   warnings.warn(
+0|line-das | /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+0|line-das |   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+0|line-das | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+0|line-das |   warnings.warn(

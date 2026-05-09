@@ -104,7 +104,17 @@ export default function App() {
       .then((data: Website[]) => setWebsites(data))
       .catch(() => setWebsites([]));
 
-    setAccounts(loadAccountsFromStorage());
+    fetch("/api/lines")
+      .then((r) => r.json())
+      .then((data: LineAccount[]) => {
+        if (data.length > 0) {
+          setAccounts(data);
+        } else {
+          setAccounts(loadAccountsFromStorage());
+        }
+      })
+      .catch(() => setAccounts(loadAccountsFromStorage()));
+
     setBackupLines(loadBackupFromStorage());
     setPersistReady(true);
   }, []);

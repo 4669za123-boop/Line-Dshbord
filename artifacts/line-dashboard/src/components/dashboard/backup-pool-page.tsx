@@ -5,7 +5,6 @@ import {
   Plus,
   Trash2,
   AlertTriangle,
-  CheckCircle2,
   Archive,
   ArrowRight,
   X,
@@ -72,7 +71,7 @@ export function BackupPoolPage({
 }: BackupPoolPageProps) {
   const [addOpen, setAddOpen] = useState(false)
   const [newLineId, setNewLineId] = useState("")
-  const [newRole, setNewRole] = useState<BackupLineRole>("main")
+  const [newRole, setNewRole] = useState<BackupLineRole | "">("")
 
   const [assignOpen, setAssignOpen] = useState(false)
   const [assigningLine, setAssigningLine] = useState<BackupLine | null>(null)
@@ -83,10 +82,10 @@ export function BackupPoolPage({
 
   const handleAdd = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!newLineId.trim()) return
-    onAddBackup(newLineId.trim(), newRole)
+    if (!newLineId.trim() || !newRole) return
+    onAddBackup(newLineId.trim(), newRole as BackupLineRole)
     setNewLineId("")
-    setNewRole("main")
+    setNewRole("")
     setAddOpen(false)
   }
 
@@ -137,9 +136,9 @@ export function BackupPoolPage({
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-4 gap-4 mb-8">
           <div className="bg-card border border-border rounded-xl p-4">
-            <p className="text-sm text-muted-foreground">สำรองทั้งหมด</p>
+            <p className="text-sm text-muted-foreground">ไลน์สำรองทั้งหมด</p>
             <p className="text-2xl font-bold text-foreground mt-1">{backupLines.length}</p>
           </div>
           <div className="bg-card border border-border rounded-xl p-4">
@@ -151,6 +150,10 @@ export function BackupPoolPage({
             <p className={cn("text-2xl font-bold mt-1", pending.length > 0 ? "text-amber-400" : "text-muted-foreground")}>
               {pending.length}
             </p>
+          </div>
+          <div className="bg-card border border-border rounded-xl p-4">
+            <p className="text-sm text-muted-foreground">กลุ่มสำรอง</p>
+            <p className="text-2xl font-bold text-white mt-1">{confirmed.length}</p>
           </div>
         </div>
 
@@ -187,7 +190,7 @@ export function BackupPoolPage({
                   <Button
                     size="icon"
                     variant="ghost"
-                    className="shrink-0 h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                    className="shrink-0 h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
                     onClick={() => onRemoveBackup(line.id)}
                   >
                     <X className="h-4 w-4" />
@@ -200,11 +203,6 @@ export function BackupPoolPage({
 
         {/* Confirmed / Pool Section */}
         <div>
-          <div className="flex items-center gap-2 mb-3">
-            <ShieldCheck className="h-4 w-4 text-primary" />
-            <h2 className="text-base font-semibold text-foreground">สต็อกสำรองพร้อมใช้ ({confirmed.length})</h2>
-          </div>
-
           {confirmed.length === 0 ? (
             <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border py-16 text-center">
               <Archive className="h-10 w-10 text-muted-foreground/40 mb-3" />
@@ -216,29 +214,23 @@ export function BackupPoolPage({
               {confirmed.map((line) => (
                 <div
                   key={line.id}
-                  className="bg-card border border-primary/20 rounded-xl px-4 py-3 hover:border-primary/40 transition-colors"
+                  className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]"
                 >
-                  <div className="flex items-center gap-3">
-                    <CheckCircle2 className="h-4 w-4 text-primary shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-sm font-semibold text-primary">
-                          กลุ่มสำรอง{line.role === "main" ? "ไลน์หลัก" : "ไลน์ฝากถอน"}
-                          {line.websiteName ? ` — ${line.websiteName}` : ""}
-                        </span>
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-primary/15 text-primary ring-1 ring-primary/25">
-                          <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                          พร้อม
-                        </span>
-                      </div>
-                      <p className="text-xs text-muted-foreground mt-0.5 truncate" title={line.lineId}>
-                        {line.lineId}
-                      </p>
-                    </div>
+                  <div className="flex items-center justify-between gap-3">
+                    <a
+                      href={line.lineId}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-lg font-bold text-foreground truncate hover:text-primary transition-colors"
+                      title={line.lineId}
+                    >
+                      กลุ่มสำรอง{line.role === "main" ? "ไลน์หลัก" : "ไลน์ฝากถอน"}
+                      {line.websiteName ? ` — ${line.websiteName}` : ""}
+                    </a>
                     <Button
                       size="icon"
                       variant="ghost"
-                      className="shrink-0 h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                      className="shrink-0 h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
                       onClick={() => onRemoveBackup(line.id)}
                     >
                       <Trash2 className="h-4 w-4" />
@@ -248,6 +240,10 @@ export function BackupPoolPage({
               ))}
             </div>
           )}
+          <div className="flex items-center gap-2 mt-3">
+            <ShieldCheck className="h-4 w-4 text-primary" />
+            <h2 className="text-base font-semibold text-foreground">สต็อกสำรองพร้อมใช้</h2>
+          </div>
         </div>
       </div>
 
@@ -266,7 +262,7 @@ export function BackupPoolPage({
           <form onSubmit={handleAdd} className="space-y-4 px-6 pb-6 pt-4">
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground">
-                URL กรุ๊ปไลน์สำรอง <span className="text-destructive">*</span>
+                URL กลุ่มไลน์สำรอง
               </label>
               <Input
                 autoFocus
@@ -280,7 +276,7 @@ export function BackupPoolPage({
               <label className="text-sm font-medium text-foreground">ประเภท</label>
               <Select value={newRole} onValueChange={(v) => setNewRole(v as BackupLineRole)}>
                 <SelectTrigger className="h-11 border-border bg-input">
-                  <SelectValue />
+                  <SelectValue placeholder="เลือกประเภท" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="main">ไลน์หลัก</SelectItem>
@@ -294,7 +290,7 @@ export function BackupPoolPage({
               </DialogClose>
               <Button
                 type="submit"
-                disabled={!newLineId.trim()}
+                disabled={!newLineId.trim() || !newRole}
                 className="rounded-xl bg-primary text-primary-foreground shadow-[0_0_20px_-4px_rgba(0,185,0,0.45)] hover:bg-primary/90 disabled:opacity-50"
               >
                 เพิ่ม

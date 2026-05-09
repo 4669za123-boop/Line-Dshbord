@@ -5,7 +5,8 @@ import { exec } from "child_process";
 
 const router = Router();
 
-const dataDir = path.join(process.cwd(), "data");
+const rootDir = process.cwd();
+const dataDir = path.join(rootDir, "data");
 const filePath = path.join(dataDir, "lines.json");
 const websitesFilePath = path.join(dataDir, "websites.json");
 
@@ -67,6 +68,44 @@ function sortByDashboardOrder(
     return typeOrder(a.type) - typeOrder(b.type);
   });
 }
+
+router.get("/lines", (req, res) => {
+  const lines = readData();
+
+  const websites = (() => {
+    try {
+      if (!fs.existsSync(websitesFilePath)) return [];
+      return JSON.parse(fs.readFileSync(websitesFilePath, "utf-8")) as {
+        id: string;
+        name: string;
+        url: string;
+      }[];
+    } catch {
+      return [];
+    }
+  })();
+
+  const result = lines.map((line) => {
+    const site = websites.find((w) => w.name === line.site);
+    return {
+      id: line.id,
+      name: line.id,
+      websiteId: site?.id ?? "",
+      websiteName: line.site,
+      lineRole: line.type === "หลัก" ? "main" : "deposit",
+      mainStatus: (line.type === "หลัก" ? "normal" : "inactive") as
+        | "normal"
+        | "suspended"
+        | "inactive",
+      depositStatus: (line.type === "ฝากถอน" ? "normal" : "inactive") as
+        | "normal"
+        | "suspended"
+        | "inactive",
+    };
+  });
+
+  res.json(result);
+});
 
 router.post("/add-line", (req, res) => {
   const { url, type, site } = req.body as { url: string; type: string; site: string };

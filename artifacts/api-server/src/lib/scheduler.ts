@@ -1,13 +1,11 @@
 import fs from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
 import { exec } from "child_process";
 import { runBotDirect } from "../routes/lines.js";
 import { logger } from "./logger.js";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const schedulesPath = path.join(__dirname, "..", "data", "schedules.json");
-const rootDir = path.join(__dirname, "..");
+const schedulesPath = path.join(process.cwd(), "data", "schedules.json");
+const rootDir = process.cwd();
 
 const TIMEZONE = "Asia/Bangkok";
 

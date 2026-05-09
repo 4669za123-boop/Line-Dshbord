@@ -1,13 +1,11 @@
 import { Router } from "express";
 import fs from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
 import { exec } from "child_process";
 
 const router = Router();
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const dataDir = path.join(__dirname, "..", "data");
+const dataDir = path.join(process.cwd(), "data");
 const filePath = path.join(dataDir, "lines.json");
 const websitesFilePath = path.join(dataDir, "websites.json");
 

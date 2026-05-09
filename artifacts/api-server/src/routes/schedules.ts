@@ -1,12 +1,10 @@
 import { Router } from "express";
 import fs from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
 
 const router = Router();
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const dataDir = path.join(__dirname, "..", "data");
+const dataDir = path.join(process.cwd(), "data");
 const filePath = path.join(dataDir, "schedules.json");
 
 const DEFAULT_TIMES = ["09:00", "14:00", "20:00"];

@@ -10,11 +10,9 @@ import {
   X,
   Copy,
   Check,
-  Search,
   RotateCcw,
   ExternalLink,
   StickyNote,
-  Layers,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -227,7 +225,6 @@ export function BackupPoolPage({
   onConfirmBackup,
 }: BackupPoolPageProps) {
   const [activeTab, setActiveTab] = useState<TabType>("all")
-  const [search, setSearch] = useState("")
 
   const [addOpen, setAddOpen] = useState(false)
   const [newLineId, setNewLineId] = useState("")
@@ -242,17 +239,6 @@ export function BackupPoolPage({
   const confirmed = useMemo(() => backupLines.filter((b) => b.confirmed), [backupLines])
   const mainCount = useMemo(() => confirmed.filter((b) => b.role === "main").length, [confirmed])
   const depositCount = useMemo(() => confirmed.filter((b) => b.role === "deposit").length, [confirmed])
-
-  const filteredBySearch = (list: BackupLine[]) => {
-    if (!search.trim()) return list
-    const q = search.trim().toLowerCase()
-    return list.filter(
-      (b) =>
-        b.lineId.toLowerCase().includes(q) ||
-        (b.websiteName ?? "").toLowerCase().includes(q) ||
-        (b.note ?? "").toLowerCase().includes(q)
-    )
-  }
 
   const tabs: { key: TabType; label: string; count: number; color?: string }[] = [
     { key: "all", label: "ทั้งหมด", count: confirmed.length },
@@ -291,7 +277,6 @@ export function BackupPoolPage({
   // Content for each tab
   const renderContent = () => {
     if (activeTab === "pending") {
-      const items = filteredBySearch(pending)
       if (pending.length === 0) {
         return (
           <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border py-16 text-center">
@@ -301,10 +286,9 @@ export function BackupPoolPage({
           </div>
         )
       }
-      if (items.length === 0) return <EmptySearch onClear={() => setSearch("")} />
       return (
         <div className="space-y-2">
-          {items.map((line) => (
+          {pending.map((line) => (
             <div
               key={line.id}
               className="flex items-center gap-3 bg-amber-500/5 border border-amber-500/20 rounded-xl px-4 py-3"
@@ -312,7 +296,9 @@ export function BackupPoolPage({
               <div className="flex-1 min-w-0 space-y-1.5">
                 <div className="flex items-center gap-2 flex-wrap">
                   <RoleBadge role={line.role} />
-                  <span className="text-xs text-amber-400/80 font-medium">ยังไม่กำหนดเว็บ</span>
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-amber-500/10 text-amber-400 ring-1 ring-amber-500/25">
+                    ยังไม่กำหนดเว็บ
+                  </span>
                 </div>
                 <p className="text-sm font-mono text-foreground truncate" title={line.lineId}>{line.lineId}</p>
                 {line.note && (
@@ -322,7 +308,6 @@ export function BackupPoolPage({
                   </p>
                 )}
               </div>
-              <CopyButton text={line.lineId} />
               <Button
                 size="sm"
                 onClick={() => openAssign(line)}
@@ -337,7 +322,7 @@ export function BackupPoolPage({
                 className="shrink-0 h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                 onClick={() => onRemoveBackup(line.id)}
               >
-                <X className="h-4 w-4" />
+                <Trash2 className="h-4 w-4" />
               </Button>
             </div>
           ))}
@@ -346,13 +331,11 @@ export function BackupPoolPage({
     }
 
     // confirmed tabs: all / main / deposit
-    const base = activeTab === "main"
+    const items = activeTab === "main"
       ? confirmed.filter((b) => b.role === "main")
       : activeTab === "deposit"
       ? confirmed.filter((b) => b.role === "deposit")
       : confirmed
-
-    const items = filteredBySearch(base)
 
     if (confirmed.length === 0) {
       return (
@@ -363,8 +346,6 @@ export function BackupPoolPage({
         </div>
       )
     }
-
-    if (items.length === 0) return <EmptySearch onClear={() => setSearch("")} />
 
     if (activeTab === "all") {
       const mainItems = items.filter((b) => b.role === "main")
@@ -431,10 +412,7 @@ export function BackupPoolPage({
         {/* Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <div className="bg-card border border-border rounded-xl p-4">
-            <div className="flex items-center gap-2 mb-1">
-              <Layers className="h-3.5 w-3.5 text-muted-foreground" />
-              <p className="text-xs text-muted-foreground">สำรองทั้งหมด</p>
-            </div>
+            <p className="text-xs text-muted-foreground mb-1">สำรองทั้งหมด</p>
             <p className={cn("text-2xl font-bold", backupLines.length > 0 ? "text-foreground" : "text-muted-foreground")}>
               {backupLines.length}
             </p>
@@ -457,10 +435,13 @@ export function BackupPoolPage({
               {depositCount}
             </p>
           </div>
-          <div className="bg-card border border-border rounded-xl p-4">
+          <div className={cn(
+            "border rounded-xl p-4 transition-colors",
+            pending.length > 0 ? "bg-amber-500/5 border-amber-500/25" : "bg-card border-border"
+          )}>
             <div className="flex items-center gap-2 mb-1">
-              <AlertTriangle className="h-3.5 w-3.5 text-muted-foreground" />
-              <p className="text-xs text-muted-foreground">รอการยืนยัน</p>
+              <AlertTriangle className={cn("h-3.5 w-3.5", pending.length > 0 ? "text-amber-400" : "text-muted-foreground")} />
+              <p className={cn("text-xs", pending.length > 0 ? "text-amber-400/80" : "text-muted-foreground")}>รอการยืนยัน</p>
             </div>
             <p className={cn("text-2xl font-bold", pending.length > 0 ? "text-amber-400" : "text-muted-foreground")}>
               {pending.length}
@@ -511,25 +492,6 @@ export function BackupPoolPage({
             })}
           </div>
 
-          {/* Search */}
-          <div className="relative flex-1 min-w-40">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-            <Input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="ค้นหา URL, เว็บ, หมายเหตุ..."
-              className="pl-9 h-9 border-border bg-card text-sm"
-            />
-            {search && (
-              <button
-                type="button"
-                onClick={() => setSearch("")}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-              >
-                <X className="h-3.5 w-3.5" />
-              </button>
-            )}
-          </div>
         </div>
 
         {/* Content */}
@@ -676,18 +638,3 @@ export function BackupPoolPage({
   )
 }
 
-function EmptySearch({ onClear }: { onClear: () => void }) {
-  return (
-    <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border py-12 text-center">
-      <Search className="h-8 w-8 text-muted-foreground/40 mb-3" />
-      <p className="text-sm text-muted-foreground">ไม่พบรายการที่ค้นหา</p>
-      <button
-        type="button"
-        onClick={onClear}
-        className="mt-2 text-xs text-primary hover:underline flex items-center gap-1"
-      >
-        <RotateCcw className="h-3 w-3" /> ล้างการค้นหา
-      </button>
-    </div>
-  )
-}

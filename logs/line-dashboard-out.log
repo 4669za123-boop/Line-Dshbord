@@ -2728,3 +2728,8 @@
 2026-05-11 04:32:18:    พบ 0 account links
 2026-05-11 04:32:18: 
 2026-05-11 04:32:18: 🌐 เข้าเว็บ: NM9 → https://manager.line.biz/groups/282784/setting
+2026-05-11 04:33:01: {"level":30,"time":1778448781827,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":763,"method":"POST","url":"/api/line-status"},"res":{"statusCode":200},"responseTime":6,"msg":"request completed"}
+2026-05-11 04:33:05: {"level":30,"time":1778448785454,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 04:33:10: {"level":30,"time":1778448790671,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":764,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 04:33:10: {"level":30,"time":1778448790689,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":765,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":7,"msg":"request completed"}
+2026-05-11 04:33:10: {"level":30,"time":1778448790696,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":766,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}

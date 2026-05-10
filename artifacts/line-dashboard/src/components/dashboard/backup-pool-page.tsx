@@ -8,6 +8,7 @@ import {
   ExternalLink,
   StickyNote,
   Users,
+  Users2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -368,7 +369,7 @@ export function BackupPoolPage({
             />
             <span className="relative flex w-full items-center justify-center gap-2 rounded-2xl bg-background/95 px-5 py-3 text-sm font-semibold text-foreground shadow-[0_0_24px_-4px_rgba(0,185,0,0.35)] backdrop-blur-sm transition-colors group-hover:bg-background dark:bg-background/90">
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/15 text-primary ring-1 ring-primary/25">
-                <Archive className="h-4 w-4" />
+                <Users2 className="h-4 w-4" />
               </span>
               เพิ่มกลุ่มไลน์สำรอง
             </span>

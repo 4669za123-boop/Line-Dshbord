@@ -1,9 +1,8 @@
-
-import { useMemo, useState } from "react"
-import { Globe, LayoutDashboard, Sparkles } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { useMemo, useState } from "react";
+import { Globe, LayoutDashboard, Sparkles } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Dialog,
   DialogClose,
@@ -11,20 +10,20 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   LineCard,
   mergeWebsitesWithLineStatus,
   type LineAccount,
-} from "./line-card"
-import type { Website } from "./types"
+} from "./line-card";
+import type { Website } from "./types";
 
 export type DashboardContentProps = {
-  websites: Website[]
-  accounts: LineAccount[]
-  onAddWebsite: (name: string, url: string) => void
-  onRemoveWebsite: (id: string) => void
-}
+  websites: Website[];
+  accounts: LineAccount[];
+  onAddWebsite: (name: string, url: string) => void;
+  onRemoveWebsite: (id: string) => void;
+};
 
 export function DashboardContent({
   websites,
@@ -32,25 +31,25 @@ export function DashboardContent({
   onAddWebsite,
   onRemoveWebsite,
 }: DashboardContentProps) {
-  const [websiteDialogOpen, setWebsiteDialogOpen] = useState(false)
-  const [newWebsiteName, setNewWebsiteName] = useState("")
-  const [newWebsiteUrl, setNewWebsiteUrl] = useState("")
+  const [websiteDialogOpen, setWebsiteDialogOpen] = useState(false);
+  const [newWebsiteName, setNewWebsiteName] = useState("");
+  const [newWebsiteUrl, setNewWebsiteUrl] = useState("");
 
   const websiteRows = useMemo(
     () => mergeWebsitesWithLineStatus(websites, accounts),
     [websites, accounts],
-  )
+  );
 
   const submitNewWebsite = (e: React.FormEvent) => {
-    e.preventDefault()
-    const trimmed = newWebsiteName.trim()
-    const trimmedUrl = newWebsiteUrl.trim()
-    if (!trimmed || !trimmedUrl) return
-    onAddWebsite(trimmed, trimmedUrl)
-    setNewWebsiteName("")
-    setNewWebsiteUrl("")
-    setWebsiteDialogOpen(false)
-  }
+    e.preventDefault();
+    const trimmed = newWebsiteName.trim();
+    const trimmedUrl = newWebsiteUrl.trim();
+    if (!trimmed || !trimmedUrl) return;
+    onAddWebsite(trimmed, trimmedUrl);
+    setNewWebsiteName("");
+    setNewWebsiteUrl("");
+    setWebsiteDialogOpen(false);
+  };
 
   return (
     <main className="lg:ml-64 min-h-screen">
@@ -61,7 +60,7 @@ export function DashboardContent({
               <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/15 ring-1 ring-primary/25">
                 <LayoutDashboard className="h-5 w-5 text-primary" />
               </span>
-              สถานะไลน์
+              แดชบอร์ด
             </h1>
             <p className="text-muted-foreground mt-1 ml-1">
               จัดการและตรวจสอบบัญชีไลน์ของคุณ
@@ -97,7 +96,10 @@ export function DashboardContent({
                 <DialogTitle className="text-xl">เพิ่มเว็บไซต์</DialogTitle>
               </DialogHeader>
             </div>
-            <form onSubmit={submitNewWebsite} className="space-y-5 px-6 pb-6 pt-4">
+            <form
+              onSubmit={submitNewWebsite}
+              className="space-y-5 px-6 pb-6 pt-4"
+            >
               <div className="space-y-2">
                 <label className="text-sm font-medium text-foreground">
                   ชื่อเว็บไซต์
@@ -124,7 +126,11 @@ export function DashboardContent({
               </div>
               <DialogFooter className="gap-2 sm:gap-3">
                 <DialogClose asChild>
-                  <Button type="button" variant="outline" className="rounded-xl">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="rounded-xl"
+                  >
                     ยกเลิก
                   </Button>
                 </DialogClose>
@@ -142,76 +148,175 @@ export function DashboardContent({
 
         {(() => {
           const totalAccounts = websiteRows.reduce(
-            (sum, s) => sum + (s.mainLineId ? 1 : 0) + (s.depositLineId ? 1 : 0),
+            (sum, s) =>
+              sum + (s.mainLineId ? 1 : 0) + (s.depositLineId ? 1 : 0),
             0,
-          )
+          );
           const onlineCount = websiteRows.reduce(
             (sum, s) =>
               sum +
               (s.mainLineId && s.mainStatus === "normal" ? 1 : 0) +
               (s.depositLineId && s.depositStatus === "normal" ? 1 : 0),
             0,
-          )
+          );
           const suspendedCount = websiteRows.reduce(
             (sum, s) =>
               sum +
               (s.mainLineId && s.mainStatus === "suspended" ? 1 : 0) +
               (s.depositLineId && s.depositStatus === "suspended" ? 1 : 0),
             0,
-          )
+          );
           return (
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
               <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)] group">
                 <div className="flex items-center gap-2 mb-3">
-                  <span className={cn("h-3 w-3 rounded-full transition-colors", totalAccounts > 0 ? "bg-foreground/70" : "bg-foreground/20")} />
-                  <p className={cn("text-sm transition-colors", totalAccounts > 0 ? "text-foreground/80" : "text-muted-foreground")}>บัญชีทั้งหมด</p>
+                  <span
+                    className={cn(
+                      "h-3 w-3 rounded-full transition-colors",
+                      totalAccounts > 0
+                        ? "bg-foreground/70"
+                        : "bg-foreground/20",
+                    )}
+                  />
+                  <p
+                    className={cn(
+                      "text-sm transition-colors",
+                      totalAccounts > 0
+                        ? "text-foreground/80"
+                        : "text-muted-foreground",
+                    )}
+                  >
+                    บัญชีทั้งหมด
+                  </p>
                 </div>
-                <p className={cn("text-2xl font-bold", totalAccounts > 0 ? "text-foreground" : "text-muted-foreground")}>
+                <p
+                  className={cn(
+                    "text-2xl font-bold",
+                    totalAccounts > 0
+                      ? "text-foreground"
+                      : "text-muted-foreground",
+                  )}
+                >
                   {totalAccounts}
                 </p>
               </div>
-              <div className={cn(
-                "border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)] group",
-                onlineCount > 0 ? "bg-primary/5 border-primary/25" : "bg-card border-border"
-              )}>
+              <div
+                className={cn(
+                  "border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)] group",
+                  onlineCount > 0
+                    ? "bg-primary/5 border-primary/25"
+                    : "bg-card border-border",
+                )}
+              >
                 <div className="flex items-center gap-2 mb-3">
-                  <span className={cn("h-3 w-3 rounded-full transition-colors", onlineCount > 0 ? "bg-primary" : "bg-primary/30")} />
-                  <p className={cn("text-sm", onlineCount > 0 ? "text-primary/80" : "text-muted-foreground")}>ออนไลน์</p>
+                  <span
+                    className={cn(
+                      "h-3 w-3 rounded-full transition-colors",
+                      onlineCount > 0 ? "bg-primary" : "bg-primary/30",
+                    )}
+                  />
+                  <p
+                    className={cn(
+                      "text-sm",
+                      onlineCount > 0
+                        ? "text-primary/80"
+                        : "text-muted-foreground",
+                    )}
+                  >
+                    ออนไลน์
+                  </p>
                 </div>
-                <p className={cn("text-2xl font-bold", onlineCount > 0 ? "text-primary" : "text-muted-foreground")}>
+                <p
+                  className={cn(
+                    "text-2xl font-bold",
+                    onlineCount > 0 ? "text-primary" : "text-muted-foreground",
+                  )}
+                >
                   {onlineCount}
                 </p>
               </div>
-              <div className={cn(
-                "border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)] group",
-                suspendedCount > 0 ? "bg-destructive/5 border-destructive/25" : "bg-card border-border"
-              )}>
+              <div
+                className={cn(
+                  "border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)] group",
+                  suspendedCount > 0
+                    ? "bg-destructive/5 border-destructive/25"
+                    : "bg-card border-border",
+                )}
+              >
                 <div className="flex items-center gap-2 mb-3">
-                  <span className={cn("h-3 w-3 rounded-full transition-colors", suspendedCount > 0 ? "bg-destructive" : "bg-destructive/30")} />
-                  <p className={cn("text-sm", suspendedCount > 0 ? "text-destructive/80" : "text-muted-foreground")}>โดนระงับ</p>
+                  <span
+                    className={cn(
+                      "h-3 w-3 rounded-full transition-colors",
+                      suspendedCount > 0
+                        ? "bg-destructive"
+                        : "bg-destructive/30",
+                    )}
+                  />
+                  <p
+                    className={cn(
+                      "text-sm",
+                      suspendedCount > 0
+                        ? "text-destructive/80"
+                        : "text-muted-foreground",
+                    )}
+                  >
+                    โดนระงับ
+                  </p>
                 </div>
-                <p className={cn("text-2xl font-bold", suspendedCount > 0 ? "text-destructive" : "text-muted-foreground")}>
+                <p
+                  className={cn(
+                    "text-2xl font-bold",
+                    suspendedCount > 0
+                      ? "text-destructive"
+                      : "text-muted-foreground",
+                  )}
+                >
                   {suspendedCount}
                 </p>
               </div>
               <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)] group">
                 <div className="flex items-center gap-2 mb-3">
-                  <span className={cn("h-3 w-3 rounded-full transition-colors", websites.length > 0 ? "bg-foreground/70" : "bg-foreground/20")} />
-                  <p className={cn("text-sm transition-colors", websites.length > 0 ? "text-foreground/80" : "text-muted-foreground")}>เว็บไซต์</p>
+                  <span
+                    className={cn(
+                      "h-3 w-3 rounded-full transition-colors",
+                      websites.length > 0
+                        ? "bg-foreground/70"
+                        : "bg-foreground/20",
+                    )}
+                  />
+                  <p
+                    className={cn(
+                      "text-sm transition-colors",
+                      websites.length > 0
+                        ? "text-foreground/80"
+                        : "text-muted-foreground",
+                    )}
+                  >
+                    เว็บไซต์
+                  </p>
                 </div>
-                <p className={cn("text-2xl font-bold", websites.length > 0 ? "text-foreground" : "text-muted-foreground")}>
+                <p
+                  className={cn(
+                    "text-2xl font-bold",
+                    websites.length > 0
+                      ? "text-foreground"
+                      : "text-muted-foreground",
+                  )}
+                >
                   {websites.length}
                 </p>
               </div>
             </div>
-          )
+          );
         })()}
 
         {websiteRows.length === 0 ? (
           <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border py-14 text-center">
             <Globe className="h-10 w-10 text-muted-foreground/30 mb-3" />
             <p className="text-sm text-muted-foreground">ยังไม่มีเว็บไซต์</p>
-            <p className="text-xs text-muted-foreground/60 mt-1">กดปุ่ม "เพิ่มเว็บไซต์" มุมบนขวาเพื่อเริ่มต้น</p>
+            <p className="text-xs text-muted-foreground/60 mt-1">
+              กดปุ่ม "เพิ่มเว็บไซต์" มุมบนขวาเพื่อเริ่มต้น
+            </p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
@@ -226,5 +331,5 @@ export function DashboardContent({
         )}
       </div>
     </main>
-  )
+  );
 }

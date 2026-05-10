@@ -120,8 +120,8 @@ router.post("/add-line", (req, res) => {
     return { id: extractId(raw), type: item.type, site: item.site };
   });
 
-  // remove old entry with same id, then add new one
-  data = data.filter((item) => item.id !== newId);
+  // ลบรายการเก่าที่ซ้ำ LINE ID หรือซ้ำ site+type (เคลียร์อันเก่าออกเมื่อมีอันใหม่มาแทน)
+  data = data.filter((item) => item.id !== newId && !(item.site === site && item.type === type));
   data.push({ id: newId, type, site });
 
   // re-sort to match dashboard website order

@@ -72,4 +72,38 @@ router.delete("/websites/:id", (req, res) => {
   res.json({ ok: true });
 });
 
+router.put("/websites/reorder", (req, res) => {
+  const { ids } = req.body as { ids: string[] };
+  if (!Array.isArray(ids)) {
+    res.status(400).json({ error: "ids must be an array" });
+    return;
+  }
+
+  const all = readWebsites();
+  const idToSite = new Map(all.map((w) => [w.id, w]));
+
+  const reordered = ids
+    .map((id) => idToSite.get(id))
+    .filter((w): w is WebsiteRecord => w !== undefined);
+
+  const missing = all.filter((w) => !ids.includes(w.id));
+  const final = [...reordered, ...missing];
+  writeWebsites(final);
+
+  const siteOrder = final.map((w) => w.name);
+  const lines = readLines();
+  const sortedLines = [...lines].sort((a, b) => {
+    const ai = siteOrder.indexOf(a.site);
+    const bi = siteOrder.indexOf(b.site);
+    const siteA = ai === -1 ? Infinity : ai;
+    const siteB = bi === -1 ? Infinity : bi;
+    if (siteA !== siteB) return siteA - siteB;
+    const typeOrder = (t: string) => (t === "หลัก" ? 0 : 1);
+    return typeOrder(a.type) - typeOrder(b.type);
+  });
+  writeLines(sortedLines);
+
+  res.json({ ok: true });
+});
+
 export default router;

@@ -201,6 +201,24 @@ export default function App() {
     setAccounts((prev) => prev.filter((a) => a.websiteId !== id));
   };
 
+  const handleReorderWebsites = async (orderedIds: string[]) => {
+    const idToWebsite = new Map(websites.map((w) => [w.id, w]));
+    const reordered = orderedIds
+      .map((id) => idToWebsite.get(id))
+      .filter((w): w is Website => w !== undefined);
+    const missing = websites.filter((w) => !orderedIds.includes(w.id));
+    setWebsites([...reordered, ...missing]);
+    try {
+      await fetch("/api/websites/reorder", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids: orderedIds }),
+      });
+    } catch (err) {
+      console.log("REORDER WEBSITES ERROR:", err);
+    }
+  };
+
   const handleAddBackup = (lineId: string, role: BackupLineRole, note?: string) => {
     const newBackup: BackupLine = {
       id: crypto.randomUUID(),
@@ -234,6 +252,7 @@ export default function App() {
       accounts={accounts}
       onAddWebsite={handleAddWebsite}
       onRemoveWebsite={handleRemoveWebsite}
+      onReorderWebsites={handleReorderWebsites}
     />
   );
 

@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { Globe, LayoutDashboard, Sparkles } from "lucide-react";
+import { useMemo, useState, useRef } from "react";
+import { Globe, LayoutDashboard, GripVertical } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,7 @@ import {
   LineCard,
   mergeWebsitesWithLineStatus,
   type LineAccount,
+  type WebsiteSummary,
 } from "./line-card";
 import type { Website } from "./types";
 
@@ -23,22 +24,96 @@ export type DashboardContentProps = {
   accounts: LineAccount[];
   onAddWebsite: (name: string, url: string) => void;
   onRemoveWebsite: (id: string) => void;
+  onReorderWebsites: (orderedIds: string[]) => void;
 };
+
+type SortableCardProps = {
+  summary: WebsiteSummary;
+  onRemove: (id: string) => void;
+  onDragStart: (id: string) => void;
+  onDragEnter: (id: string) => void;
+  onDragEnd: () => void;
+  isDragging: boolean;
+  isOver: boolean;
+};
+
+function SortableCard({
+  summary,
+  onRemove,
+  onDragStart,
+  onDragEnter,
+  onDragEnd,
+  isDragging,
+  isOver,
+}: SortableCardProps) {
+  const handleRef = useRef<HTMLButtonElement>(null);
+
+  return (
+    <div
+      draggable
+      onDragStart={(e) => {
+        e.dataTransfer.effectAllowed = "move";
+        onDragStart(summary.websiteId);
+      }}
+      onDragEnter={(e) => {
+        e.preventDefault();
+        onDragEnter(summary.websiteId);
+      }}
+      onDragOver={(e) => e.preventDefault()}
+      onDragEnd={onDragEnd}
+      className={cn(
+        "relative group/drag transition-all duration-200 cursor-default",
+        isDragging && "opacity-40 scale-[0.98]",
+        isOver && !isDragging && "ring-2 ring-primary/60 rounded-2xl scale-[1.01]",
+      )}
+    >
+      <button
+        ref={handleRef}
+        className="absolute top-3 right-10 z-10 p-1 rounded-lg opacity-0 group-hover/drag:opacity-50 hover:!opacity-100 transition-opacity cursor-grab active:cursor-grabbing text-muted-foreground hover:text-primary"
+        title="ลากเพื่อเรียงลำดับ"
+        type="button"
+        onMouseDown={(e) => e.stopPropagation()}
+      >
+        <GripVertical className="h-4 w-4" />
+      </button>
+      <LineCard summary={summary} onRemove={onRemove} />
+    </div>
+  );
+}
 
 export function DashboardContent({
   websites,
   accounts,
   onAddWebsite,
   onRemoveWebsite,
+  onReorderWebsites,
 }: DashboardContentProps) {
   const [websiteDialogOpen, setWebsiteDialogOpen] = useState(false);
   const [newWebsiteName, setNewWebsiteName] = useState("");
   const [newWebsiteUrl, setNewWebsiteUrl] = useState("");
+  const [dragId, setDragId] = useState<string | null>(null);
+  const [overId, setOverId] = useState<string | null>(null);
 
   const websiteRows = useMemo(
     () => mergeWebsitesWithLineStatus(websites, accounts),
     [websites, accounts],
   );
+
+  const handleDragEnd = () => {
+    if (dragId && overId && dragId !== overId) {
+      const ids = websiteRows.map((r) => r.websiteId);
+      const from = ids.indexOf(dragId);
+      const to = ids.indexOf(overId);
+      if (from !== -1 && to !== -1) {
+        const reordered = [...ids];
+        reordered.splice(from, 1);
+        reordered.splice(to, 0, dragId);
+        onReorderWebsites(reordered);
+      }
+    }
+    setDragId(null);
+    setOverId(null);
+  };
 
   const submitNewWebsite = (e: React.FormEvent) => {
     e.preventDefault();
@@ -321,10 +396,15 @@ export function DashboardContent({
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {websiteRows.map((summary) => (
-              <LineCard
+              <SortableCard
                 key={summary.websiteId}
                 summary={summary}
                 onRemove={onRemoveWebsite}
+                onDragStart={(id) => setDragId(id)}
+                onDragEnter={(id) => setOverId(id)}
+                onDragEnd={handleDragEnd}
+                isDragging={dragId === summary.websiteId}
+                isOver={overId === summary.websiteId && dragId !== summary.websiteId}
               />
             ))}
           </div>

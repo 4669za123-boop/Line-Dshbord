@@ -164,8 +164,8 @@ export function DashboardContent({
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
               <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)] group">
                 <div className="flex items-center gap-2 mb-3">
-                  <span className={cn("h-3 w-3 rounded-full transition-colors", totalAccounts > 0 ? "bg-foreground/60" : "bg-foreground/20")} />
-                  <p className="text-sm text-muted-foreground">บัญชีทั้งหมด</p>
+                  <span className={cn("h-3 w-3 rounded-full transition-colors", totalAccounts > 0 ? "bg-foreground/70" : "bg-foreground/20")} />
+                  <p className={cn("text-sm transition-colors", totalAccounts > 0 ? "text-foreground/80" : "text-muted-foreground")}>บัญชีทั้งหมด</p>
                 </div>
                 <p className={cn("text-2xl font-bold", totalAccounts > 0 ? "text-foreground" : "text-muted-foreground")}>
                   {totalAccounts}
@@ -197,8 +197,8 @@ export function DashboardContent({
               </div>
               <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)] group">
                 <div className="flex items-center gap-2 mb-3">
-                  <span className={cn("h-3 w-3 rounded-full transition-colors", websites.length > 0 ? "bg-foreground/60" : "bg-foreground/20")} />
-                  <p className="text-sm text-muted-foreground">เว็บไซต์</p>
+                  <span className={cn("h-3 w-3 rounded-full transition-colors", websites.length > 0 ? "bg-foreground/70" : "bg-foreground/20")} />
+                  <p className={cn("text-sm transition-colors", websites.length > 0 ? "text-foreground/80" : "text-muted-foreground")}>เว็บไซต์</p>
                 </div>
                 <p className={cn("text-2xl font-bold", websites.length > 0 ? "text-foreground" : "text-muted-foreground")}>
                   {websites.length}

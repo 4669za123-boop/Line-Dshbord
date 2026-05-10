@@ -344,8 +344,8 @@ export function BackupPoolPage({
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]">
             <div className="flex items-center gap-2 mb-3">
-              <span className={cn("h-3 w-3 rounded-full transition-colors", backupLines.length > 0 ? "bg-foreground/60" : "bg-foreground/20")} />
-              <p className="text-sm text-muted-foreground">กลุ่มสำรองทั้งหมด</p>
+              <span className={cn("h-3 w-3 rounded-full transition-colors", backupLines.length > 0 ? "bg-foreground/70" : "bg-foreground/20")} />
+              <p className={cn("text-sm transition-colors", backupLines.length > 0 ? "text-foreground/80" : "text-muted-foreground")}>กลุ่มสำรองทั้งหมด</p>
             </div>
             <p className={cn("text-2xl font-bold", backupLines.length > 0 ? "text-foreground" : "text-muted-foreground")}>
               {backupLines.length}
@@ -357,7 +357,7 @@ export function BackupPoolPage({
           )}>
             <div className="flex items-center gap-2 mb-3">
               <span className={cn("h-3 w-3 rounded-full transition-colors", mainCount > 0 ? "bg-blue-400" : "bg-blue-400/30")} />
-              <p className={cn("text-sm", mainCount > 0 ? "text-blue-400/80" : "text-muted-foreground")}>ไลน์หลัก</p>
+              <p className={cn("text-sm transition-colors", mainCount > 0 ? "text-blue-400" : "text-muted-foreground")}>ไลน์หลัก</p>
             </div>
             <p className={cn("text-2xl font-bold", mainCount > 0 ? "text-blue-400" : "text-muted-foreground")}>
               {mainCount}
@@ -369,7 +369,7 @@ export function BackupPoolPage({
           )}>
             <div className="flex items-center gap-2 mb-3">
               <span className={cn("h-3 w-3 rounded-full transition-colors", depositCount > 0 ? "bg-purple-400" : "bg-purple-400/30")} />
-              <p className={cn("text-sm", depositCount > 0 ? "text-purple-400/80" : "text-muted-foreground")}>ไลน์ฝากถอน</p>
+              <p className={cn("text-sm transition-colors", depositCount > 0 ? "text-purple-400" : "text-muted-foreground")}>ไลน์ฝากถอน</p>
             </div>
             <p className={cn("text-2xl font-bold", depositCount > 0 ? "text-purple-400" : "text-muted-foreground")}>
               {depositCount}
@@ -381,7 +381,7 @@ export function BackupPoolPage({
           )}>
             <div className="flex items-center gap-2 mb-3">
               <span className={cn("h-3 w-3 rounded-full transition-colors", pending.length > 0 ? "bg-amber-400" : "bg-amber-400/30")} />
-              <p className={cn("text-sm", pending.length > 0 ? "text-amber-400/80" : "text-muted-foreground")}>รอการยืนยัน</p>
+              <p className={cn("text-sm transition-colors", pending.length > 0 ? "text-amber-400" : "text-muted-foreground")}>รอการยืนยัน</p>
             </div>
             <p className={cn("text-2xl font-bold", pending.length > 0 ? "text-amber-400" : "text-muted-foreground")}>
               {pending.length}

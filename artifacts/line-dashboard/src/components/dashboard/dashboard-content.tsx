@@ -170,7 +170,7 @@ export function DashboardContent({
                 onlineCount > 0 ? "bg-primary/5 border-primary/25" : "bg-card border-border"
               )}>
                 <div className="flex items-center gap-2 mb-3">
-                  <Wifi className={cn("h-4 w-4 transition-colors", onlineCount > 0 ? "text-primary" : "text-primary/30")} />
+                  <span className={cn("h-3 w-3 rounded-full transition-colors", onlineCount > 0 ? "bg-primary" : "bg-primary/30")} />
                   <p className={cn("text-sm", onlineCount > 0 ? "text-primary/80" : "text-muted-foreground")}>ออนไลน์</p>
                 </div>
                 <p className={cn("text-2xl font-bold", onlineCount > 0 ? "text-primary" : "text-muted-foreground")}>
@@ -182,7 +182,7 @@ export function DashboardContent({
                 suspendedCount > 0 ? "bg-destructive/5 border-destructive/25" : "bg-card border-border"
               )}>
                 <div className="flex items-center gap-2 mb-3">
-                  <WifiOff className={cn("h-4 w-4 transition-colors", suspendedCount > 0 ? "text-destructive" : "text-destructive/30")} />
+                  <span className={cn("h-3 w-3 rounded-full transition-colors", suspendedCount > 0 ? "bg-destructive" : "bg-destructive/30")} />
                   <p className={cn("text-sm", suspendedCount > 0 ? "text-destructive/80" : "text-muted-foreground")}>โดนระงับ</p>
                 </div>
                 <p className={cn("text-2xl font-bold", suspendedCount > 0 ? "text-destructive" : "text-muted-foreground")}>

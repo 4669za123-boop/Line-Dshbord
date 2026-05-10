@@ -349,19 +349,25 @@ export function BackupPoolPage({
               {backupLines.length}
             </p>
           </div>
-          <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]">
+          <div className={cn(
+            "border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]",
+            mainCount > 0 ? "bg-blue-500/5 border-blue-500/25" : "bg-card border-border"
+          )}>
             <div className="flex items-center gap-2 mb-1">
-              <span className="h-3 w-3 rounded-full bg-blue-400/60" />
-              <p className="text-xs text-muted-foreground">ไลน์หลัก</p>
+              <span className={cn("h-3 w-3 rounded-full", mainCount > 0 ? "bg-blue-400" : "bg-blue-400/40")} />
+              <p className={cn("text-xs", mainCount > 0 ? "text-blue-400/80" : "text-muted-foreground")}>ไลน์หลัก</p>
             </div>
             <p className={cn("text-2xl font-bold", mainCount > 0 ? "text-blue-400" : "text-muted-foreground")}>
               {mainCount}
             </p>
           </div>
-          <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]">
+          <div className={cn(
+            "border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]",
+            depositCount > 0 ? "bg-purple-500/5 border-purple-500/25" : "bg-card border-border"
+          )}>
             <div className="flex items-center gap-2 mb-1">
-              <span className="h-3 w-3 rounded-full bg-purple-400/60" />
-              <p className="text-xs text-muted-foreground">ไลน์ฝากถอน</p>
+              <span className={cn("h-3 w-3 rounded-full", depositCount > 0 ? "bg-purple-400" : "bg-purple-400/40")} />
+              <p className={cn("text-xs", depositCount > 0 ? "text-purple-400/80" : "text-muted-foreground")}>ไลน์ฝากถอน</p>
             </div>
             <p className={cn("text-2xl font-bold", depositCount > 0 ? "text-purple-400" : "text-muted-foreground")}>
               {depositCount}

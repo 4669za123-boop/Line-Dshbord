@@ -165,19 +165,25 @@ export function DashboardContent({
                   {totalAccounts}
                 </p>
               </div>
-              <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)] group">
+              <div className={cn(
+                "border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)] group",
+                onlineCount > 0 ? "bg-primary/5 border-primary/25" : "bg-card border-border"
+              )}>
                 <div className="flex items-center gap-2 mb-3">
-                  <Wifi className="h-4 w-4 text-primary" />
-                  <p className="text-sm text-muted-foreground">ออนไลน์</p>
+                  <Wifi className={cn("h-4 w-4", onlineCount > 0 ? "text-primary" : "text-muted-foreground")} />
+                  <p className={cn("text-sm", onlineCount > 0 ? "text-primary/80" : "text-muted-foreground")}>ออนไลน์</p>
                 </div>
                 <p className={cn("text-2xl font-bold", onlineCount > 0 ? "text-primary" : "text-muted-foreground")}>
                   {onlineCount}
                 </p>
               </div>
-              <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)] group">
+              <div className={cn(
+                "border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)] group",
+                suspendedCount > 0 ? "bg-destructive/5 border-destructive/25" : "bg-card border-border"
+              )}>
                 <div className="flex items-center gap-2 mb-3">
-                  <WifiOff className="h-4 w-4 text-destructive" />
-                  <p className="text-sm text-muted-foreground">โดนระงับ</p>
+                  <WifiOff className={cn("h-4 w-4", suspendedCount > 0 ? "text-destructive" : "text-muted-foreground")} />
+                  <p className={cn("text-sm", suspendedCount > 0 ? "text-destructive/80" : "text-muted-foreground")}>โดนระงับ</p>
                 </div>
                 <p className={cn("text-2xl font-bold", suspendedCount > 0 ? "text-destructive" : "text-muted-foreground")}>
                   {suspendedCount}

@@ -120,7 +120,7 @@ export function NotificationSettingsPage() {
             ตั้งค่าแจ้งเตือน
           </h1>
           <p className="text-muted-foreground mt-1 ml-1">
-            กำหนดรอบเวลาส่งข้อมูล (เวลาไทย) — ใช้จับกับงานดึง Selenium แล้วส่ง Discord
+            กำหนดรอบเวลาส่งข้อมูลเข้า Discord
           </p>
         </div>
 
@@ -131,22 +131,19 @@ export function NotificationSettingsPage() {
             <div className="rounded-2xl border border-primary/20 bg-card overflow-hidden">
               <div className="relative overflow-hidden bg-gradient-to-br from-primary/15 via-background to-background px-5 py-4">
                 <div className="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-primary/15 blur-3xl" />
-                <div className="relative flex items-start justify-between gap-4">
-                  <div>
-                    <p className="text-sm font-medium text-foreground">เวลาอ้างอิง (ประเทศไทย)</p>
-                    <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
+                <div className="relative space-y-1">
+                  <p className="text-sm font-medium text-foreground">
+                    เวลาอ้างอิง (ประเทศไทย){" "}
+                    <span className="text-xs font-normal text-muted-foreground">
                       โซนเวลา{" "}
-                      <span className="font-mono text-foreground">{NOTIFICATION_TIMEZONE}</span>{" "}
+                      <span className="font-mono text-foreground/80">{NOTIFICATION_TIMEZONE}</span>{" "}
                       (UTC+7)
-                    </p>
-                  </div>
-                  <p className="font-mono text-lg tabular-nums text-primary shrink-0 pt-0.5">
-                    {bangkokNow ? bangkokNow.split(" ").slice(-1)[0] : "—"}
+                    </span>
+                  </p>
+                  <p className="font-mono tabular-nums text-primary text-sm">
+                    {bangkokNow || "—"}
                   </p>
                 </div>
-                <p className="relative mt-2 text-xs text-muted-foreground/70">
-                  {bangkokNow ? bangkokNow.split(" ").slice(0, -1).join(" ") : ""}
-                </p>
               </div>
             </div>
 
@@ -251,17 +248,6 @@ export function NotificationSettingsPage() {
               </div>
             </div>
 
-            {/* Footer note */}
-            <p className="text-xs text-muted-foreground text-center leading-relaxed px-2">
-              ข้อมูลเก็บที่เซิร์ฟเวอร์{" "}
-              <code className="rounded bg-muted px-1 py-0.5 font-mono text-[11px]">
-                data/schedules.json
-              </code>
-              <br />
-              ฝั่งสคริปต์ให้สร้าง cron เปรียบเทียบเวลาใน{" "}
-              <code className="font-mono">Asia/Bangkok</code> กับรายการ{" "}
-              <code className="font-mono">HH:mm</code>
-            </p>
           </div>
         </div>
       </div>

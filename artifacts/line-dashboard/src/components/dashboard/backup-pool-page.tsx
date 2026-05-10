@@ -354,7 +354,7 @@ export function BackupPoolPage({
               ไลน์สำรอง
             </h1>
             <p className="text-muted-foreground mt-1 ml-1">
-              สต็อกกลุ่ม LINE สำรอง — หากไลน์โดนระงับระบบจะดึงจากในสต๊อกทันที
+              หากไลน์โดนระงับระบบจะดึงจากในสต๊อกทันที
             </p>
           </div>
           <button

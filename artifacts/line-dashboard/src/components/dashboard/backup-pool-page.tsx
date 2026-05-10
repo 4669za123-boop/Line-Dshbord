@@ -182,6 +182,7 @@ export function BackupPoolPage({
   onConfirmBackup,
 }: BackupPoolPageProps) {
   const [activeTab, setActiveTab] = useState<TabType>("main")
+  const [groupTab, setGroupTab] = useState<"main" | "deposit">("main")
 
   const [addOpen, setAddOpen] = useState(false)
   const [newLineId, setNewLineId] = useState("")
@@ -388,30 +389,54 @@ export function BackupPoolPage({
             <p className="text-xs text-muted-foreground/60 mt-1">กดปุ่ม "เพิ่มกลุ่มไลน์สำรอง" เพื่อเริ่มต้น</p>
           </div>
         ) : (
-          <div className="space-y-4 mb-6">
-            {(["main", "deposit"] as const).map((role) => {
-              const group = backupLines.filter((l) => l.role === role)
-              if (group.length === 0) return null
-              return (
-                <div key={role}>
-                  <p className={cn(
-                    "text-xs font-semibold uppercase tracking-widest mb-2 flex items-center gap-1.5",
-                    role === "main" ? "text-blue-400" : "text-violet-400"
-                  )}>
+          <div className="mb-6">
+            {/* Group tab bar */}
+            <div className="inline-flex rounded-xl border border-border bg-card p-1 gap-1 mb-4">
+              {([
+                { key: "main" as const, label: "กลุ่มไลน์หลัก", count: backupLines.filter(l => l.role === "main").length, color: "blue" },
+                { key: "deposit" as const, label: "กลุ่มไลน์ฝากถอน", count: backupLines.filter(l => l.role === "deposit").length, color: "purple" },
+              ]).map((t) => {
+                const isActive = groupTab === t.key
+                return (
+                  <button
+                    key={t.key}
+                    type="button"
+                    onClick={() => setGroupTab(t.key)}
+                    className={cn(
+                      "flex items-center gap-1.5 whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-semibold transition-all",
+                      isActive
+                        ? t.color === "blue"
+                          ? "bg-blue-500/15 text-blue-400 ring-1 ring-blue-500/25"
+                          : "bg-violet-500/15 text-violet-400 ring-1 ring-violet-500/25"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+                    )}
+                  >
+                    {t.label}
                     <span className={cn(
-                      "inline-block w-1.5 h-1.5 rounded-full",
-                      role === "main" ? "bg-blue-400" : "bg-violet-400"
-                    )} />
-                    {role === "main" ? "กลุ่มไลน์หลัก" : "กลุ่มไลน์ฝากถอน"}
-                  </p>
-                  <div className="space-y-2">
-                    {group.map((line) => (
-                      <GroupRow key={line.id} line={line} onRemove={onRemoveBackup} />
-                    ))}
-                  </div>
-                </div>
-              )
-            })}
+                      "inline-flex items-center justify-center h-4 min-w-4 px-1 rounded-full text-[10px] font-bold",
+                      isActive
+                        ? t.color === "blue"
+                          ? "bg-blue-500/20 text-blue-300"
+                          : "bg-violet-500/20 text-violet-300"
+                        : "bg-muted text-muted-foreground"
+                    )}>
+                      {t.count}
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
+            {/* Filtered group rows */}
+            <div className="space-y-2">
+              {backupLines.filter(l => l.role === groupTab).map((line) => (
+                <GroupRow key={line.id} line={line} onRemove={onRemoveBackup} />
+              ))}
+              {backupLines.filter(l => l.role === groupTab).length === 0 && (
+                <p className="text-sm text-muted-foreground text-center py-6">
+                  ยังไม่มี{groupTab === "main" ? "กลุ่มไลน์หลัก" : "กลุ่มไลน์ฝากถอน"}
+                </p>
+              )}
+            </div>
           </div>
         )}
 

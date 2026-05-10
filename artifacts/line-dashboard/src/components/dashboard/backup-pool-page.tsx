@@ -3,7 +3,6 @@ import { cn } from "@/lib/utils"
 import {
   Plus,
   Trash2,
-  AlertTriangle,
   Archive,
   ArrowRight,
   ExternalLink,
@@ -344,7 +343,10 @@ export function BackupPoolPage({
         {/* Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]">
-            <p className="text-xs text-muted-foreground mb-1">กลุ่มสำรองทั้งหมด</p>
+            <div className="flex items-center gap-2 mb-3">
+              <span className={cn("h-3 w-3 rounded-full transition-colors", backupLines.length > 0 ? "bg-foreground/60" : "bg-foreground/20")} />
+              <p className="text-sm text-muted-foreground">กลุ่มสำรองทั้งหมด</p>
+            </div>
             <p className={cn("text-2xl font-bold", backupLines.length > 0 ? "text-foreground" : "text-muted-foreground")}>
               {backupLines.length}
             </p>
@@ -353,9 +355,9 @@ export function BackupPoolPage({
             "border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]",
             mainCount > 0 ? "bg-blue-500/5 border-blue-500/25" : "bg-card border-border"
           )}>
-            <div className="flex items-center gap-2 mb-1">
-              <span className={cn("h-3 w-3 rounded-full", mainCount > 0 ? "bg-blue-400" : "bg-blue-400/40")} />
-              <p className={cn("text-xs", mainCount > 0 ? "text-blue-400/80" : "text-muted-foreground")}>ไลน์หลัก</p>
+            <div className="flex items-center gap-2 mb-3">
+              <span className={cn("h-3 w-3 rounded-full transition-colors", mainCount > 0 ? "bg-blue-400" : "bg-blue-400/30")} />
+              <p className={cn("text-sm", mainCount > 0 ? "text-blue-400/80" : "text-muted-foreground")}>ไลน์หลัก</p>
             </div>
             <p className={cn("text-2xl font-bold", mainCount > 0 ? "text-blue-400" : "text-muted-foreground")}>
               {mainCount}
@@ -365,9 +367,9 @@ export function BackupPoolPage({
             "border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]",
             depositCount > 0 ? "bg-purple-500/5 border-purple-500/25" : "bg-card border-border"
           )}>
-            <div className="flex items-center gap-2 mb-1">
-              <span className={cn("h-3 w-3 rounded-full", depositCount > 0 ? "bg-purple-400" : "bg-purple-400/40")} />
-              <p className={cn("text-xs", depositCount > 0 ? "text-purple-400/80" : "text-muted-foreground")}>ไลน์ฝากถอน</p>
+            <div className="flex items-center gap-2 mb-3">
+              <span className={cn("h-3 w-3 rounded-full transition-colors", depositCount > 0 ? "bg-purple-400" : "bg-purple-400/30")} />
+              <p className={cn("text-sm", depositCount > 0 ? "text-purple-400/80" : "text-muted-foreground")}>ไลน์ฝากถอน</p>
             </div>
             <p className={cn("text-2xl font-bold", depositCount > 0 ? "text-purple-400" : "text-muted-foreground")}>
               {depositCount}
@@ -377,9 +379,9 @@ export function BackupPoolPage({
             "border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]",
             pending.length > 0 ? "bg-amber-500/5 border-amber-500/25" : "bg-card border-border"
           )}>
-            <div className="flex items-center gap-2 mb-1">
-              <AlertTriangle className={cn("h-3.5 w-3.5", pending.length > 0 ? "text-amber-400" : "text-muted-foreground")} />
-              <p className={cn("text-xs", pending.length > 0 ? "text-amber-400/80" : "text-muted-foreground")}>รอการยืนยัน</p>
+            <div className="flex items-center gap-2 mb-3">
+              <span className={cn("h-3 w-3 rounded-full transition-colors", pending.length > 0 ? "bg-amber-400" : "bg-amber-400/30")} />
+              <p className={cn("text-sm", pending.length > 0 ? "text-amber-400/80" : "text-muted-foreground")}>รอการยืนยัน</p>
             </div>
             <p className={cn("text-2xl font-bold", pending.length > 0 ? "text-amber-400" : "text-muted-foreground")}>
               {pending.length}

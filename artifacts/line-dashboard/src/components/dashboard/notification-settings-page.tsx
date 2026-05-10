@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react"
+import { Bell, Plus, Trash2, Pencil, Check, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Plus, Trash2, Pencil, Check, X } from "lucide-react"
 import { NOTIFICATION_TIMEZONE } from "@/lib/notification-schedule"
 import { ScrollTimePicker } from "@/components/ui/scroll-time-picker"
 
@@ -110,59 +110,84 @@ export function NotificationSettingsPage() {
   return (
     <main className="lg:ml-64 min-h-screen">
       <div className="p-6 lg:p-10">
+
+        {/* Header */}
         <div className="mb-8">
-          <h1 className="text-2xl lg:text-3xl font-bold text-foreground">
+          <h1 className="text-2xl lg:text-3xl font-bold text-foreground flex items-center gap-3">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/15 ring-1 ring-primary/25">
+              <Bell className="h-5 w-5 text-primary" />
+            </span>
             ตั้งค่าแจ้งเตือน
           </h1>
-          <p className="text-muted-foreground mt-1">
+          <p className="text-muted-foreground mt-1 ml-1">
             กำหนดรอบเวลาส่งข้อมูล (เวลาไทย) — ใช้จับกับงานดึง Selenium แล้วส่ง Discord
           </p>
         </div>
 
         <div className="flex justify-center">
-          <div className="w-full max-w-md space-y-6">
-            <div className="rounded-xl border border-primary/20 bg-card/80 px-4 py-3 text-sm">
-              <p className="font-medium text-foreground">เวลาอ้างอิง (ประเทศไทย)</p>
-              <p className="mt-1 text-xs text-muted-foreground">
-                โซนเวลา <span className="font-mono text-foreground">{NOTIFICATION_TIMEZONE}</span>{" "}
-                (UTC+7) — ค่าที่เลือกในรายการด้านล่างคือเวลาไทยโดยตรง ไม่ตามนาฬิกาของเบราว์เซอร์
-              </p>
-              <p className="mt-2 font-mono text-sm tabular-nums text-primary">
-                {bangkokNow || "—"}
-              </p>
+          <div className="w-full max-w-md space-y-4">
+
+            {/* Clock card */}
+            <div className="rounded-2xl border border-primary/20 bg-card overflow-hidden">
+              <div className="relative overflow-hidden bg-gradient-to-br from-primary/15 via-background to-background px-5 py-4">
+                <div className="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-primary/15 blur-3xl" />
+                <div className="relative flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-sm font-medium text-foreground">เวลาอ้างอิง (ประเทศไทย)</p>
+                    <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
+                      โซนเวลา{" "}
+                      <span className="font-mono text-foreground">{NOTIFICATION_TIMEZONE}</span>{" "}
+                      (UTC+7)
+                    </p>
+                  </div>
+                  <p className="font-mono text-lg tabular-nums text-primary shrink-0 pt-0.5">
+                    {bangkokNow ? bangkokNow.split(" ").slice(-1)[0] : "—"}
+                  </p>
+                </div>
+                <p className="relative mt-2 text-xs text-muted-foreground/70">
+                  {bangkokNow ? bangkokNow.split(" ").slice(0, -1).join(" ") : ""}
+                </p>
+              </div>
             </div>
 
-            {loading ? (
-              <p className="text-center text-sm text-muted-foreground">กำลังโหลด...</p>
-            ) : (
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <label className="text-sm font-medium text-foreground">
-                    เวลาแจ้งเตือน (เวลาไทย)
-                  </label>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={addTime}
-                    disabled={times.length >= 10 || editingIndex !== null}
-                    className="text-primary hover:text-primary hover:bg-primary/10"
-                  >
-                    <Plus className="h-4 w-4 mr-1" />
-                    เพิ่มเวลา
-                  </Button>
+            {/* Times card */}
+            <div className="rounded-2xl border border-border bg-card overflow-hidden">
+              {/* Section header */}
+              <div className="flex items-center justify-between px-5 py-4 border-b border-border">
+                <div className="flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-primary" />
+                  <p className="text-sm font-medium text-foreground">เวลาแจ้งเตือน (เวลาไทย)</p>
+                  <span className="inline-flex items-center justify-center h-5 min-w-5 px-1.5 rounded-full text-[10px] font-bold bg-primary/10 text-primary">
+                    {times.length}
+                  </span>
                 </div>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={addTime}
+                  disabled={times.length >= 10 || editingIndex !== null}
+                  className="h-8 gap-1.5 text-primary hover:text-primary hover:bg-primary/10 text-xs"
+                >
+                  <Plus className="h-3.5 w-3.5" />
+                  เพิ่มเวลา
+                </Button>
+              </div>
 
-                <div className="space-y-3">
-                  {times.map((time, index) => (
+              {/* Time rows */}
+              <div className="p-3 space-y-2">
+                {loading ? (
+                  <p className="text-center text-sm text-muted-foreground py-6">กำลังโหลด...</p>
+                ) : (
+                  times.map((time, index) => (
                     <div
                       key={index}
-                      className="rounded-xl border border-border bg-card overflow-hidden"
+                      className="rounded-xl border border-border bg-background overflow-hidden"
                     >
                       {editingIndex === index ? (
                         <div className="p-3 space-y-3">
                           <div className="flex items-center justify-between">
-                            <span className="text-sm text-muted-foreground">
+                            <span className="text-xs text-muted-foreground font-medium">
                               รอบที่ {index + 1}
                             </span>
                             <div className="flex items-center gap-2">
@@ -179,9 +204,9 @@ export function NotificationSettingsPage() {
                                 type="button"
                                 size="sm"
                                 onClick={confirmEdit}
-                                className="h-8 px-3 bg-primary text-primary-foreground hover:bg-primary/90"
+                                className="h-8 px-3 bg-primary text-primary-foreground hover:bg-primary/90 gap-1.5"
                               >
-                                <Check className="h-4 w-4 mr-1" />
+                                <Check className="h-3.5 w-3.5" />
                                 บันทึก
                               </Button>
                             </div>
@@ -192,8 +217,8 @@ export function NotificationSettingsPage() {
                           />
                         </div>
                       ) : (
-                        <div className="flex items-center gap-3 p-3">
-                          <span className="text-sm text-muted-foreground shrink-0 w-16">
+                        <div className="flex items-center gap-3 px-4 py-3">
+                          <span className="text-xs text-muted-foreground shrink-0 w-12">
                             รอบที่ {index + 1}
                           </span>
                           <button
@@ -202,7 +227,7 @@ export function NotificationSettingsPage() {
                             className="flex flex-1 items-center gap-2 font-mono tabular-nums text-foreground text-base hover:text-primary transition-colors text-left"
                           >
                             <span>{time}</span>
-                            <Pencil className="h-3.5 w-3.5 text-muted-foreground" />
+                            <Pencil className="h-3 w-3 text-muted-foreground" />
                           </button>
                           <Button
                             type="button"
@@ -217,26 +242,27 @@ export function NotificationSettingsPage() {
                         </div>
                       )}
                     </div>
-                  ))}
-                </div>
+                  ))
+                )}
 
                 {savedFlash && (
-                  <p className="text-center text-xs text-primary" role="status">
+                  <p className="text-center text-xs text-primary py-1" role="status">
                     ✅ บันทึกแล้ว (เซิร์ฟเวอร์ · เวลาไทย)
                   </p>
                 )}
               </div>
-            )}
+            </div>
 
-            <p className="text-xs text-muted-foreground text-center leading-relaxed">
+            {/* Footer note */}
+            <p className="text-xs text-muted-foreground text-center leading-relaxed px-2">
               ข้อมูลเก็บที่เซิร์ฟเวอร์{" "}
               <code className="rounded bg-muted px-1 py-0.5 font-mono text-[11px]">
                 data/schedules.json
               </code>
               <br />
-              ฝั่งสคริปต์ (เช่น Node รัน Discord) ให้สร้าง cron / scheduler เปรียบเทียบเวลาปัจจุบันใน{" "}
+              ฝั่งสคริปต์ให้สร้าง cron เปรียบเทียบเวลาใน{" "}
               <code className="font-mono">Asia/Bangkok</code> กับรายการ{" "}
-              <code className="font-mono">HH:mm</code> เหล่านี้
+              <code className="font-mono">HH:mm</code>
             </p>
           </div>
         </div>

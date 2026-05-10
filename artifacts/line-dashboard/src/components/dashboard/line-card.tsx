@@ -139,58 +139,59 @@ export function mergeWebsitesWithLineStatus(
 
 export function LineCard({ summary, onRemove }: LineCardProps) {
   return (
-    <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]">
-      <div className="grid grid-cols-[1fr_auto] gap-y-3 items-center">
-        <div className="min-w-0 pr-4">
-          {summary.websiteUrl ? (
-            <a
-              href={summary.websiteUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-lg font-bold text-foreground truncate block hover:text-primary transition-colors"
-              title={summary.websiteUrl}
-            >
-              {summary.websiteName}
-            </a>
-          ) : (
-            <h3 className="text-lg font-bold text-foreground truncate">
-              {summary.websiteName}
-            </h3>
-          )}
-        </div>
-        <button
-          type="button"
-          className="h-8 w-8 shrink-0 flex items-center justify-center rounded-lg text-destructive/60 hover:text-red-500 hover:bg-zinc-800 hover:shadow-[0_0_12px_rgba(239,68,68,0.25)] transition-all duration-200"
-          onClick={() => onRemove(summary.websiteId)}
-        >
-          <Trash2 className="h-4 w-4" />
-        </button>
+    <div className="relative bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]">
+      {/* Trash — absolute top-right */}
+      <button
+        type="button"
+        className="absolute top-3 right-3 h-8 w-8 flex items-center justify-center rounded-lg text-destructive/50 hover:text-red-500 hover:bg-zinc-800 hover:shadow-[0_0_12px_rgba(239,68,68,0.25)] transition-all duration-200"
+        onClick={() => onRemove(summary.websiteId)}
+      >
+        <Trash2 className="h-4 w-4" />
+      </button>
 
-        <div className="min-w-0">
-          <p className="text-sm text-muted-foreground">ไลน์หลัก</p>
-          {summary.mainLineId ? (
-            <p
-              className="mt-0.5 truncate text-[11px] text-muted-foreground/90"
-              title={summary.mainLineId}
-            >
-              {summary.mainLineId}
-            </p>
-          ) : null}
-        </div>
-        <StatusBadge status={summary.mainStatus} />
+      {/* Website name */}
+      <div className="mb-4 pr-10 min-w-0">
+        {summary.websiteUrl ? (
+          <a
+            href={summary.websiteUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-lg font-bold text-foreground truncate block hover:text-primary transition-colors"
+            title={summary.websiteUrl}
+          >
+            {summary.websiteName}
+          </a>
+        ) : (
+          <h3 className="text-lg font-bold text-foreground truncate">
+            {summary.websiteName}
+          </h3>
+        )}
+      </div>
 
-        <div className="min-w-0">
-          <p className="text-sm text-muted-foreground">ไลน์ฝากถอน</p>
-          {summary.depositLineId ? (
-            <p
-              className="mt-0.5 truncate text-[11px] text-muted-foreground/90"
-              title={summary.depositLineId}
-            >
-              {summary.depositLineId}
-            </p>
-          ) : null}
+      {/* Line rows */}
+      <div className="space-y-2.5">
+        <div className="flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-sm text-muted-foreground">ไลน์หลัก</p>
+            {summary.mainLineId && (
+              <p className="mt-0.5 truncate text-[11px] text-muted-foreground/80" title={summary.mainLineId}>
+                {summary.mainLineId}
+              </p>
+            )}
+          </div>
+          <StatusBadge status={summary.mainStatus} />
         </div>
-        <StatusBadge status={summary.depositStatus} />
+        <div className="flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-sm text-muted-foreground">ไลน์ฝากถอน</p>
+            {summary.depositLineId && (
+              <p className="mt-0.5 truncate text-[11px] text-muted-foreground/80" title={summary.depositLineId}>
+                {summary.depositLineId}
+              </p>
+            )}
+          </div>
+          <StatusBadge status={summary.depositStatus} />
+        </div>
       </div>
     </div>
   )

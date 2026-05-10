@@ -127,46 +127,44 @@ function LineDetailCard({
   onReassign: (line: BackupLine) => void
 }) {
   return (
-    <div className="bg-card border border-border rounded-2xl p-4 transition-all duration-300 hover:border-primary/40 hover:shadow-[0_0_20px_rgba(0,185,0,0.07)] group">
-      <div className="flex items-start gap-3">
-        <div className="flex-1 min-w-0 space-y-2">
-          <div className="flex items-center gap-2 flex-wrap">
-            <RoleBadge role={line.role} />
-            {line.websiteName && (
-              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-muted/60 text-muted-foreground ring-1 ring-border">
-                {line.websiteName}
-              </span>
-            )}
-            <ReadyBadge />
-          </div>
-          <div className="flex items-center gap-1.5 min-w-0">
-            <a
-              href={line.lineId}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-foreground truncate hover:text-primary transition-colors font-mono"
-              title={line.lineId}
-            >
-              {line.lineId}
-            </a>
-            <ExternalLink className="h-3 w-3 text-muted-foreground shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
-          </div>
-          {line.note && (
-            <p className="text-xs text-muted-foreground flex items-center gap-1.5">
-              <StickyNote className="h-3 w-3 shrink-0" />
-              {line.note}
-            </p>
+    <div className="relative bg-card border border-border rounded-2xl p-4 transition-all duration-300 hover:border-primary/40 hover:shadow-[0_0_20px_rgba(0,185,0,0.07)] group">
+      {/* Trash — absolute top-right */}
+      <button
+        type="button"
+        className="absolute top-3 right-3 h-8 w-8 flex items-center justify-center rounded-lg text-destructive/50 hover:text-red-500 hover:bg-zinc-800 hover:shadow-[0_0_12px_rgba(239,68,68,0.25)] transition-all duration-200"
+        onClick={() => onRemove(line.id)}
+      >
+        <Trash2 className="h-4 w-4" />
+      </button>
+
+      <div className="pr-10 space-y-2">
+        <div className="flex items-center gap-2 flex-wrap">
+          <RoleBadge role={line.role} />
+          {line.websiteName && (
+            <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-muted/60 text-muted-foreground ring-1 ring-border">
+              {line.websiteName}
+            </span>
           )}
+          <ReadyBadge />
         </div>
-        <div className="flex items-center gap-1 shrink-0">
-          <button
-            type="button"
-            className="h-8 w-8 shrink-0 flex items-center justify-center rounded-lg text-destructive/60 hover:text-red-500 hover:bg-zinc-800 hover:shadow-[0_0_12px_rgba(239,68,68,0.25)] transition-all duration-200"
-            onClick={() => onRemove(line.id)}
+        <div className="flex items-center gap-1.5 min-w-0">
+          <a
+            href={line.lineId}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm text-foreground truncate hover:text-primary transition-colors font-mono"
+            title={line.lineId}
           >
-            <Trash2 className="h-4 w-4" />
-          </button>
+            {line.lineId}
+          </a>
+          <ExternalLink className="h-3 w-3 text-muted-foreground shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
         </div>
+        {line.note && (
+          <p className="text-xs text-muted-foreground flex items-center gap-1.5">
+            <StickyNote className="h-3 w-3 shrink-0" />
+            {line.note}
+          </p>
+        )}
       </div>
     </div>
   )

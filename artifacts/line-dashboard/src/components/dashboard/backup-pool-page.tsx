@@ -486,20 +486,20 @@ export function BackupPoolPage({
             </div>
             <form onSubmit={handleAdd} className="space-y-5 px-6 pb-6 pt-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground">ลิ้งค์กลุ่ม LINE</label>
+                <label className="text-sm font-medium text-foreground">URL กลุ่มไลน์สำรอง</label>
                 <Input
                   autoFocus
                   value={newLineId}
                   onChange={(e) => setNewLineId(e.target.value)}
-                  placeholder="https://line.me/..."
+                  placeholder="https://manager.line.biz/groups/..."
                   className="h-11 border-border bg-input text-foreground placeholder:text-muted-foreground"
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground">ประเภท</label>
+                <label className="text-sm font-medium text-foreground">ประเภทไลน์ในกลุ่มนี้</label>
                 <Select value={newRole} onValueChange={(v) => setNewRole(v as BackupLineRole)}>
                   <SelectTrigger className="h-11 border-border bg-input text-foreground">
-                    <SelectValue placeholder="เลือกประเภท..." />
+                    <SelectValue placeholder="เลือกว่ากลุ่มนี้เป็นไลน์อะไร" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="main">ไลน์หลัก</SelectItem>

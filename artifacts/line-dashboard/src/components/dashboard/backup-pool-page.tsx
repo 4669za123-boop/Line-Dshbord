@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import {
   Plus,
@@ -58,7 +58,9 @@ export interface BackupAccount {
 interface BackupPoolPageProps {
   websites: Website[];
   backupLines: BackupLine[];
-  backupAccounts: BackupAccount[];
+  backupAccountsMain: BackupAccount[];
+  backupAccountsDeposit: BackupAccount[];
+  backupAccountsPending: BackupAccount[];
   onAddBackup: (lineId: string, role: BackupLineRole, note?: string) => void;
   onRemoveBackup: (id: string) => void;
   onConfirmBackup: (id: string, websiteId: string, websiteName: string) => void;
@@ -90,7 +92,6 @@ function ReadyBadge() {
   );
 }
 
-/** การ์ดแสดงบัญชี LINE ที่ scanner ดึงมา */
 function AccountCard({
   account,
   onRemove,
@@ -109,7 +110,6 @@ function AccountCard({
       >
         <Trash2 className="h-4 w-4" />
       </button>
-
       <div className="pr-10 space-y-2">
         <div className="flex items-center gap-2 flex-wrap">
           <RoleBadge role={account.role} />
@@ -120,8 +120,6 @@ function AccountCard({
           )}
           <ReadyBadge />
         </div>
-
-        {/* ชื่อไลน์ — คลิกได้เปิด URL บัญชี */}
         <div className="flex items-center gap-1.5 min-w-0">
           <a
             href={account.lineAccountUrl}
@@ -134,22 +132,13 @@ function AccountCard({
           </a>
           <ExternalLink className="h-3 w-3 text-muted-foreground shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
         </div>
-
-        {/* LINE ID */}
         <p className="text-xs font-mono text-muted-foreground">{account.lineAccountId}</p>
       </div>
     </div>
   );
 }
 
-/** แถวแสดงกลุ่มสำรอง (section บน) */
-function GroupRow({
-  line,
-  onRemove,
-}: {
-  line: BackupLine;
-  onRemove: (id: string) => void;
-}) {
+function GroupRow({ line, onRemove }: { line: BackupLine; onRemove: (id: string) => void }) {
   const groupName = line.note || (line.role === "main" ? "กลุ่มไลน์หลัก" : "กลุ่มไลน์ฝากถอน");
   return (
     <div className="flex items-center gap-3 bg-card border border-border rounded-2xl px-4 py-3 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)] group">
@@ -186,10 +175,12 @@ function GroupRow({
 export function BackupPoolPage({
   websites,
   backupLines,
-  backupAccounts,
+  backupAccountsMain,
+  backupAccountsDeposit,
+  backupAccountsPending,
   onAddBackup,
   onRemoveBackup,
-  onConfirmBackup,
+  onConfirmBackup: _onConfirmBackup,
   onRemoveBackupAccount,
   onConfirmBackupAccount,
 }: BackupPoolPageProps) {
@@ -205,27 +196,14 @@ export function BackupPoolPage({
   const [assigningAccount, setAssigningAccount] = useState<BackupAccount | null>(null);
   const [assignWebsiteId, setAssignWebsiteId] = useState<string>("");
 
-  const pendingAccounts = useMemo(
-    () => backupAccounts.filter((a) => !a.confirmed),
-    [backupAccounts],
-  );
-  const confirmedAccounts = useMemo(
-    () => backupAccounts.filter((a) => a.confirmed),
-    [backupAccounts],
-  );
-  const mainCount = useMemo(
-    () => confirmedAccounts.filter((a) => a.role === "main").length,
-    [confirmedAccounts],
-  );
-  const depositCount = useMemo(
-    () => confirmedAccounts.filter((a) => a.role === "deposit").length,
-    [confirmedAccounts],
-  );
+  const mainCount = backupAccountsMain.length;
+  const depositCount = backupAccountsDeposit.length;
+  const pendingCount = backupAccountsPending.length;
 
   const tabs: { key: TabType; label: string; count: number; color: string }[] = [
-    { key: "main",    label: "ไลน์หลัก",    count: mainCount,           color: "blue"  },
-    { key: "deposit", label: "ฝากถอน",       count: depositCount,        color: "purple"},
-    { key: "pending", label: "รอการยืนยัน", count: pendingAccounts.length, color: "amber" },
+    { key: "main",    label: "ไลน์หลัก",    count: mainCount,    color: "blue"   },
+    { key: "deposit", label: "ฝากถอน",       count: depositCount, color: "purple" },
+    { key: "pending", label: "รอการยืนยัน", count: pendingCount,  color: "amber"  },
   ];
 
   const handleAdd = (e: React.FormEvent) => {
@@ -256,7 +234,7 @@ export function BackupPoolPage({
 
   const renderTabContent = () => {
     if (activeTab === "pending") {
-      if (pendingAccounts.length === 0) {
+      if (pendingCount === 0) {
         return (
           <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border py-12 text-center">
             <Archive className="h-9 w-9 text-muted-foreground/40 mb-3" />
@@ -267,7 +245,7 @@ export function BackupPoolPage({
       }
       return (
         <div className="space-y-2">
-          {pendingAccounts.map((acc) => (
+          {backupAccountsPending.map((acc) => (
             <div
               key={acc.id}
               className="relative bg-amber-500/5 border border-amber-500/20 rounded-2xl p-4 transition-all duration-300 hover:border-amber-500/40 group"
@@ -297,7 +275,6 @@ export function BackupPoolPage({
                     ยังไม่กำหนดเว็บ
                   </span>
                 </div>
-                {/* ชื่อไลน์ — คลิกได้ */}
                 <div className="flex items-center gap-1.5 min-w-0">
                   <a
                     href={acc.lineAccountUrl}
@@ -318,17 +295,13 @@ export function BackupPoolPage({
       );
     }
 
-    const items = confirmedAccounts.filter(
-      (a) => a.role === (activeTab === "main" ? "main" : "deposit"),
-    );
+    const items = activeTab === "main" ? backupAccountsMain : backupAccountsDeposit;
     if (items.length === 0) {
       return (
         <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border py-12 text-center">
           <Archive className="h-9 w-9 text-muted-foreground/40 mb-3" />
           <p className="text-sm text-muted-foreground">ยังไม่มีบัญชีไลน์สำรองในหมวดนี้</p>
-          <p className="text-xs text-muted-foreground/60 mt-1">
-            รอ scanner สแกนกลุ่มและกำหนดเว็บ
-          </p>
+          <p className="text-xs text-muted-foreground/60 mt-1">รอ scanner สแกนกลุ่มและกำหนดเว็บ</p>
         </div>
       );
     }
@@ -367,10 +340,7 @@ export function BackupPoolPage({
             onClick={() => setAddOpen(true)}
             className="group relative flex w-full shrink-0 items-center justify-center gap-2.5 overflow-hidden rounded-2xl p-[1px] transition-transform active:scale-[0.99] sm:w-auto"
           >
-            <span
-              className="absolute inset-0 bg-gradient-to-r from-primary via-emerald-400/80 to-primary opacity-80 transition-opacity group-hover:opacity-100"
-              aria-hidden
-            />
+            <span className="absolute inset-0 bg-gradient-to-r from-primary via-emerald-400/80 to-primary opacity-80 transition-opacity group-hover:opacity-100" aria-hidden />
             <span className="relative flex w-full items-center justify-center gap-2 rounded-2xl bg-background/95 px-5 py-3 text-sm font-semibold text-foreground shadow-[0_0_24px_-4px_rgba(0,185,0,0.35)] backdrop-blur-sm transition-colors group-hover:bg-background dark:bg-background/90">
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/15 text-primary ring-1 ring-primary/25">
                 <Plus className="h-4 w-4" />
@@ -403,16 +373,16 @@ export function BackupPoolPage({
             </div>
             <p className={cn("text-2xl font-bold", depositCount > 0 ? "text-purple-400" : "text-muted-foreground")}>{depositCount}</p>
           </div>
-          <div className={cn("border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]", pendingAccounts.length > 0 ? "bg-amber-500/5 border-amber-500/25" : "bg-card border-border")}>
+          <div className={cn("border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]", pendingCount > 0 ? "bg-amber-500/5 border-amber-500/25" : "bg-card border-border")}>
             <div className="flex items-center gap-2 mb-3">
-              <span className={cn("h-3 w-3 rounded-full", pendingAccounts.length > 0 ? "bg-amber-400" : "bg-amber-400/30")} />
-              <p className={cn("text-sm", pendingAccounts.length > 0 ? "text-amber-400" : "text-muted-foreground")}>รอการยืนยัน</p>
+              <span className={cn("h-3 w-3 rounded-full", pendingCount > 0 ? "bg-amber-400" : "bg-amber-400/30")} />
+              <p className={cn("text-sm", pendingCount > 0 ? "text-amber-400" : "text-muted-foreground")}>รอการยืนยัน</p>
             </div>
-            <p className={cn("text-2xl font-bold", pendingAccounts.length > 0 ? "text-amber-400" : "text-muted-foreground")}>{pendingAccounts.length}</p>
+            <p className={cn("text-2xl font-bold", pendingCount > 0 ? "text-amber-400" : "text-muted-foreground")}>{pendingCount}</p>
           </div>
         </div>
 
-        {/* Section 1: กลุ่มที่เพิ่ม — tab ALWAYS visible */}
+        {/* Section 1: กลุ่มที่เพิ่ม — tab แสดงเสมอ */}
         <div className="mb-8">
           <div className="inline-flex rounded-xl border border-border bg-card p-1 gap-1 mb-4">
             {(["main", "deposit"] as const).map((key) => {
@@ -448,7 +418,6 @@ export function BackupPoolPage({
             })}
           </div>
 
-          {/* Group rows */}
           {backupLines.filter((l) => l.role === groupTab).length === 0 ? (
             <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border py-10 text-center">
               <Users2 className="h-9 w-9 text-muted-foreground/30 mb-3" />
@@ -468,7 +437,7 @@ export function BackupPoolPage({
           )}
         </div>
 
-        {/* Section 2: บัญชีไลน์สำรองที่ scanner ดึงมา */}
+        {/* Section 2: บัญชีจาก scanner — แยก tab ไลน์หลัก / ฝากถอน / รอการยืนยัน */}
         <div className="inline-flex rounded-xl border border-border bg-card p-1 gap-1 mb-6">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.key;
@@ -563,7 +532,7 @@ export function BackupPoolPage({
           </DialogContent>
         </Dialog>
 
-        {/* Dialog กำหนดเว็บ */}
+        {/* Dialog กำหนดเว็บ (pending → confirm) */}
         <Dialog open={assignOpen} onOpenChange={setAssignOpen}>
           <DialogContent className="border-border bg-background sm:max-w-sm">
             <DialogHeader>

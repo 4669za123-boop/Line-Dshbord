@@ -1,14 +1,14 @@
 """
-backup_scanner.py — สแกนกลุ่มไลน์สำรอง
+backup_scanner.py — สแกนกลุ่มไลน์สำรองแบบต่อเนื่อง
 อ่าน URL กลุ่มจาก data/backup-groups.json
 เข้าแต่ละกลุ่มด้วย Selenium → ดึง URL บัญชีภายใน → ดึงชื่อ + ไอดีไลน์
 จับคู่กับเว็บไซต์ → POST ผลลัพธ์ไปยัง /api/backup-accounts
+รันซ้ำทุก SCAN_INTERVAL_SECONDS วินาที (ค่าเริ่มต้น 300 = 5 นาที)
 """
 
 import time
 import json
 import os
-import re
 import platform
 import requests
 from selenium import webdriver
@@ -17,10 +17,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-GROUPS_FILE = "data/backup-groups.json"
+GROUPS_FILE  = "data/backup-groups.json"
 WEBSITES_FILE = "data/websites.json"
-API_BASE = os.environ.get("API_URL", "http://localhost:8080/api")
+API_BASE     = os.environ.get("API_URL", "http://localhost:8080/api")
 CHROME_PROFILE_DIR = os.environ.get("CHROME_PROFILE_DIR", "/root/.line-chrome-profile")
+SCAN_INTERVAL_SECONDS = int(os.environ.get("BACKUP_SCAN_INTERVAL", "300"))  # 5 นาที
 
 
 def load_groups():
@@ -79,7 +80,6 @@ def connect():
 
 
 def extract_account_id(url):
-    """ดึง LINE ID จาก URL เช่น .../account/@abc123 → abc123"""
     try:
         part = url.split("/account/")[-1]
         return part.split("?")[0].replace("@", "").lower().strip()
@@ -88,7 +88,7 @@ def extract_account_id(url):
 
 
 def detect_role_from_page(driver, default_role):
-    """ตรวจสอบประเภทจากเนื้อหาหน้ากลุ่ม"""
+    """ตรวจประเภทหลัก/ฝากถอนจากเนื้อหาหน้ากลุ่ม"""
     try:
         text = driver.find_element(By.TAG_NAME, "body").text.lower()
         if "ฝากถอน" in text or "deposit" in text:
@@ -101,7 +101,6 @@ def detect_role_from_page(driver, default_role):
 
 
 def get_account_links(driver):
-    """ดึง URL ของบัญชี LINE ในหน้ากลุ่ม (scroll ซ้ำเพื่อโหลด lazy content)"""
     accounts = set()
     for _ in range(8):
         driver.execute_script("window.scrollBy(0, 800);")
@@ -115,22 +114,15 @@ def get_account_links(driver):
 
 
 def get_line_name(driver):
-    """ดึงชื่อไลน์จากหน้าบัญชี"""
-    selectors = [
-        "h1", "h2",
-        "[class*='name']",
-        "[class*='title']",
-        "title",
-    ]
+    selectors = ["h1", "h2", "[class*='name']", "[class*='title']"]
     for sel in selectors:
         try:
             el = driver.find_element(By.CSS_SELECTOR, sel)
-            text = el.text.strip() if sel != "title" else driver.title.strip()
+            text = el.text.strip()
             if text and len(text) > 1:
                 return text
         except:
             continue
-    # fallback: ใช้ page title
     try:
         return driver.title.strip()
     except:
@@ -138,52 +130,50 @@ def get_line_name(driver):
 
 
 def match_website(line_name, websites):
-    """
-    จับคู่ชื่อไลน์กับเว็บไซต์โดยดูว่าชื่อไลน์มีชื่อเว็บอยู่ไหม
-    คืน (websiteId, websiteName) หรือ (None, None) ถ้าไม่มั่นใจ
-    """
-    name_lower = line_name.lower()
+    """จับคู่ชื่อไลน์กับเว็บไซต์ด้วย substring match (ยาวที่สุดชนะ)"""
+    name_lower = line_name.lower().replace(" ", "")
     best = None
     best_len = 0
     for site in websites:
-        site_name = site["name"].lower()
-        # ตรวจสอบทั้งแบบ exact substr และ fuzzy (ตัดช่องว่าง)
-        if site_name in name_lower or site_name.replace(" ", "") in name_lower.replace(" ", ""):
-            if len(site_name) > best_len:
+        site_key = site["name"].lower().replace(" ", "")
+        if site_key and site_key in name_lower:
+            if len(site_key) > best_len:
                 best = site
-                best_len = len(site_name)
+                best_len = len(site_key)
     if best:
         return best["id"], best["name"]
     return None, None
 
 
-def main():
-    print("🔍 BACKUP SCANNER START")
+def run_scan():
+    """รัน 1 รอบการสแกนทุกกลุ่ม"""
+    print(f"\n{'='*50}")
+    print("🗂️  BACKUP SCANNER: เริ่มรอบการสแกน")
+    print(f"{'='*50}")
 
     groups = load_groups()
     if not groups:
-        print("❌ ไม่พบกลุ่มไลน์สำรอง — ตรวจสอบ data/backup-groups.json")
+        print("⚠️  ไม่พบกลุ่มไลน์สำรอง — รอการเพิ่มกลุ่มใหม่")
         return
 
     websites = load_websites()
-    print(f"✅ เว็บไซต์: {len(websites)} รายการ")
+    print(f"✅ เว็บไซต์: {len(websites)} รายการ (ลำดับจากแดชบอร์ด)")
 
     driver = connect()
     wait = WebDriverWait(driver, 20)
     results = []
 
     for group in groups:
-        group_id = group["id"]
+        group_id  = group["id"]
         group_url = group["url"]
-        default_role = group["role"]  # "main" หรือ "deposit"
-        print(f"\n🌐 สแกนกลุ่ม: {group_url} (ค่าเริ่มต้น: {default_role})")
+        default_role = group["role"]
+        print(f"\n🌐 สแกนกลุ่ม: {group_url} (default: {default_role})")
 
         try:
             driver.get(group_url)
             wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
             time.sleep(2)
 
-            # ตรวจสอบประเภทจากหน้ากลุ่ม (อาจมีระบุไว้)
             role = detect_role_from_page(driver, default_role)
             print(f"   ประเภท: {role}")
 
@@ -195,61 +185,73 @@ def main():
                 if not line_account_id:
                     continue
 
-                print(f"   → ตรวจสอบ: {acc_url}")
                 try:
                     driver.get(acc_url)
                     wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
                     time.sleep(1.5)
 
-                    line_name = get_line_name(driver)
-                    if not line_name:
-                        line_name = f"@{line_account_id}"
-
+                    line_name = get_line_name(driver) or f"@{line_account_id}"
                     website_id, website_name = match_website(line_name, websites)
                     confirmed = website_id is not None
 
-                    result = {
-                        "groupId": group_id,
-                        "groupUrl": group_url,
-                        "lineName": line_name,
-                        "lineAccountId": f"@{line_account_id}",
+                    results.append({
+                        "groupId":        group_id,
+                        "groupUrl":       group_url,
+                        "lineName":       line_name,
+                        "lineAccountId":  f"@{line_account_id}",
                         "lineAccountUrl": acc_url,
-                        "role": role,
-                        "websiteId": website_id,
-                        "websiteName": website_name,
-                        "confirmed": confirmed,
-                    }
-                    results.append(result)
+                        "role":           role,
+                        "websiteId":      website_id,
+                        "websiteName":    website_name,
+                        "confirmed":      confirmed,
+                    })
 
-                    status_icon = "✅" if confirmed else "⚠️"
-                    print(f"   {status_icon} {line_name} ({line_account_id}) → {website_name or 'ไม่ทราบเว็บ'}")
+                    icon = "✅" if confirmed else "⚠️ "
+                    print(f"   {icon} {line_name} → {website_name or 'รอการยืนยัน'}")
 
                 except Exception as e:
-                    print(f"   ❌ error บัญชี {acc_url}: {e}")
+                    print(f"   ❌ บัญชี {acc_url}: {e}")
                     continue
 
         except Exception as e:
-            print(f"❌ error กลุ่ม {group_url}: {e}")
+            print(f"❌ กลุ่ม {group_url}: {e}")
             continue
 
     driver.quit()
 
     if not results:
-        print("⚠️ ไม่พบบัญชีในกลุ่มใดเลย")
+        print("⚠️  ไม่พบบัญชีในรอบนี้")
         return
 
-    # POST ผลลัพธ์ไปยัง API
     try:
         res = requests.post(
             f"{API_BASE}/backup-accounts",
             json={"accounts": results},
             timeout=15,
         )
-        print(f"\n✅ อัปเดต {len(results)} บัญชีสำรอง → Dashboard ({res.status_code})")
+        confirmed_count = sum(1 for r in results if r["confirmed"])
+        pending_count = len(results) - confirmed_count
+        print(f"\n✅ อัปเดต {len(results)} บัญชี "
+              f"(หลัก/ฝากถอน: {confirmed_count}, รอยืนยัน: {pending_count}) "
+              f"→ API ({res.status_code})")
     except Exception as e:
         print(f"❌ POST /api/backup-accounts ล้มเหลว: {e}")
 
-    print("✅ BACKUP SCANNER DONE")
+    print("✅ รอบการสแกนเสร็จสิ้น")
+
+
+def main():
+    print("🗂️  BACKUP SCANNER เริ่มทำงาน (continuous mode)")
+    print(f"   สแกนซ้ำทุก {SCAN_INTERVAL_SECONDS} วินาที ({SCAN_INTERVAL_SECONDS//60} นาที)")
+
+    while True:
+        try:
+            run_scan()
+        except Exception as e:
+            print(f"❌ เกิดข้อผิดพลาดใน run_scan: {e}")
+
+        print(f"\n⏳ รอ {SCAN_INTERVAL_SECONDS} วินาทีก่อนสแกนรอบถัดไป...")
+        time.sleep(SCAN_INTERVAL_SECONDS)
 
 
 if __name__ == "__main__":

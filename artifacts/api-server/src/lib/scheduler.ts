@@ -9,6 +9,9 @@ const rootDir = process.cwd();
 
 const TIMEZONE = "Asia/Bangkok";
 
+// backup_scanner รันทุก 5 นาที
+const BACKUP_SCANNER_INTERVAL_TICKS = 5;
+
 function getBangkokHHMM(): string {
   return new Intl.DateTimeFormat("en-GB", {
     timeZone: TIMEZONE,
@@ -30,6 +33,8 @@ function readScheduledTimes(): string[] {
 
 let lastFiredMinute = "";
 let checkerRunning = false;
+let scannerRunning = false;
+let tickCount = 0;
 
 function runCheckerDirect() {
   if (checkerRunning) {
@@ -47,13 +52,35 @@ function runCheckerDirect() {
   });
 }
 
+function runBackupScannerDirect() {
+  if (scannerRunning) {
+    logger.info("⏭️  Backup scanner already running, skipping this tick");
+    return;
+  }
+  scannerRunning = true;
+  logger.info("🗂️  Backup Scanner: starting group scan");
+  const proc = exec("python3 backup_scanner.py", { cwd: rootDir });
+  proc.stdout?.on("data", (d) => process.stdout.write(d));
+  proc.stderr?.on("data", (d) => process.stderr.write(d));
+  proc.on("exit", (code) => {
+    scannerRunning = false;
+    logger.info({ code }, `🗂️  Backup Scanner: finished — จะรันรอบถัดไปใน ${BACKUP_SCANNER_INTERVAL_TICKS} นาที`);
+  });
+}
+
 function tick() {
+  tickCount++;
   const now = getBangkokHHMM();
 
-  // รัน checker ทุก 1 นาที (ถ้ารอบก่อนยังไม่เสร็จจะข้ามไป)
+  // checker ทุก 1 นาที
   runCheckerDirect();
 
-  // รัน bot (Discord summary) ตามเวลาที่ตั้งไว้
+  // backup scanner ทุก 5 นาที
+  if (tickCount % BACKUP_SCANNER_INTERVAL_TICKS === 0) {
+    runBackupScannerDirect();
+  }
+
+  // bot (Discord) ตามเวลาที่ตั้งไว้
   if (now === lastFiredMinute) return;
   const times = readScheduledTimes();
   if (times.includes(now)) {
@@ -65,8 +92,9 @@ function tick() {
 
 export function startScheduler() {
   logger.info(
-    "🗓️  Scheduler started — checker รันทุก 1 นาที (real-time), bot ตาม schedule (Asia/Bangkok)"
+    `🗓️  Scheduler started — checker ทุก 1 นาที | backup scanner ทุก ${BACKUP_SCANNER_INTERVAL_TICKS} นาที | bot ตาม schedule (Asia/Bangkok)`
   );
   setInterval(tick, 60_000);
+  // รัน backup scanner ทันทีที่เริ่ม (tick แรก)
   tick();
 }

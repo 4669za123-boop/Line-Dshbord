@@ -94,7 +94,9 @@ export default function App() {
   const [websites, setWebsites] = useState<Website[]>([]);
   const [accounts, setAccounts] = useState<LineAccount[]>([]);
   const [backupLines, setBackupLines] = useState<BackupLine[]>([]);
-  const [backupAccounts, setBackupAccounts] = useState<BackupAccount[]>([]);
+  const [backupAccountsMain, setBackupAccountsMain] = useState<BackupAccount[]>([]);
+  const [backupAccountsDeposit, setBackupAccountsDeposit] = useState<BackupAccount[]>([]);
+  const [backupAccountsPending, setBackupAccountsPending] = useState<BackupAccount[]>([]);
   const [persistReady, setPersistReady] = useState(false);
 
   useEffect(() => {
@@ -116,8 +118,16 @@ export default function App() {
 
     fetch("/api/backup-accounts")
       .then((r) => r.json())
-      .then((data: BackupAccount[]) => setBackupAccounts(data))
-      .catch(() => setBackupAccounts([]));
+      .then((data: { main: BackupAccount[]; deposit: BackupAccount[]; pending: BackupAccount[] }) => {
+        setBackupAccountsMain(data.main ?? []);
+        setBackupAccountsDeposit(data.deposit ?? []);
+        setBackupAccountsPending(data.pending ?? []);
+      })
+      .catch(() => {
+        setBackupAccountsMain([]);
+        setBackupAccountsDeposit([]);
+        setBackupAccountsPending([]);
+      });
 
     setBackupLines(loadBackupFromStorage());
     setPersistReady(true);
@@ -273,7 +283,10 @@ export default function App() {
   };
 
   const handleRemoveBackupAccount = async (id: string) => {
-    setBackupAccounts((prev) => prev.filter((a) => a.id !== id));
+    // ลบจากทั้ง 3 sections ใน state
+    setBackupAccountsMain((prev) => prev.filter((a) => a.id !== id));
+    setBackupAccountsDeposit((prev) => prev.filter((a) => a.id !== id));
+    setBackupAccountsPending((prev) => prev.filter((a) => a.id !== id));
     try {
       await fetch(`/api/backup-accounts/${id}`, { method: "DELETE" });
     } catch (err) {
@@ -282,9 +295,17 @@ export default function App() {
   };
 
   const handleConfirmBackupAccount = async (id: string, websiteId: string, websiteName: string) => {
-    setBackupAccounts((prev) =>
-      prev.map((a) => a.id === id ? { ...a, websiteId, websiteName, confirmed: true } : a)
-    );
+    // หา account จาก pending แล้วย้ายไป main หรือ deposit
+    const acc = backupAccountsPending.find((a) => a.id === id);
+    if (acc) {
+      const confirmed = { ...acc, websiteId, websiteName, confirmed: true };
+      setBackupAccountsPending((prev) => prev.filter((a) => a.id !== id));
+      if (acc.role === "main") {
+        setBackupAccountsMain((prev) => [...prev, confirmed]);
+      } else {
+        setBackupAccountsDeposit((prev) => [...prev, confirmed]);
+      }
+    }
     try {
       await fetch(`/api/backup-accounts/${id}/confirm`, {
         method: "PUT",
@@ -298,7 +319,7 @@ export default function App() {
 
   const pendingBackupCount =
     backupLines.filter((b) => !b.confirmed).length +
-    backupAccounts.filter((a) => !a.confirmed).length;
+    backupAccountsPending.length;
 
   const dashboard = (
     <DashboardContent
@@ -319,7 +340,9 @@ export default function App() {
           <BackupPoolPage
             websites={websites}
             backupLines={backupLines}
-            backupAccounts={backupAccounts}
+            backupAccountsMain={backupAccountsMain}
+            backupAccountsDeposit={backupAccountsDeposit}
+            backupAccountsPending={backupAccountsPending}
             onAddBackup={handleAddBackup}
             onRemoveBackup={handleRemoveBackup}
             onConfirmBackup={handleConfirmBackup}

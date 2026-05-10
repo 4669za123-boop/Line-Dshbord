@@ -237,7 +237,7 @@ export function BackupPoolPage({
       if (pendingCount === 0) {
         return (
           <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border py-12 text-center">
-            <Archive className="h-9 w-9 text-muted-foreground/40 mb-3" />
+            <Users2 className="h-9 w-9 text-muted-foreground/40 mb-3" />
             <p className="text-sm text-muted-foreground">ไม่มีรายการที่รอการยืนยัน</p>
             <p className="text-xs text-muted-foreground/60 mt-1">ทุกบัญชีได้รับการกำหนดเว็บแล้ว</p>
           </div>

@@ -1,6 +1,6 @@
 
 import { useMemo, useState } from "react"
-import { Globe, Sparkles } from "lucide-react"
+import { Globe, Sparkles, Users, Wifi, WifiOff } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -159,27 +159,39 @@ export function DashboardContent({
           )
           return (
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-              <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]">
-                <p className="text-sm text-muted-foreground">บัญชีทั้งหมด</p>
-                <p className={cn("text-2xl font-bold mt-1", totalAccounts > 0 ? "text-foreground" : "text-muted-foreground")}>
+              <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)] group">
+                <div className="flex items-center gap-2 mb-3">
+                  <Users className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors duration-300" />
+                  <p className="text-sm text-muted-foreground">บัญชีทั้งหมด</p>
+                </div>
+                <p className={cn("text-2xl font-bold", totalAccounts > 0 ? "text-foreground" : "text-muted-foreground")}>
                   {totalAccounts}
                 </p>
               </div>
-              <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]">
-                <p className="text-sm text-muted-foreground">ออนไลน์</p>
-                <p className={cn("text-2xl font-bold mt-1", onlineCount > 0 ? "text-primary" : "text-muted-foreground")}>
+              <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)] group">
+                <div className="flex items-center gap-2 mb-3">
+                  <Wifi className="h-4 w-4 text-primary" />
+                  <p className="text-sm text-muted-foreground">ออนไลน์</p>
+                </div>
+                <p className={cn("text-2xl font-bold", onlineCount > 0 ? "text-primary" : "text-muted-foreground")}>
                   {onlineCount}
                 </p>
               </div>
-              <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]">
-                <p className="text-sm text-muted-foreground">โดนระงับ</p>
-                <p className={cn("text-2xl font-bold mt-1", suspendedCount > 0 ? "text-destructive" : "text-muted-foreground")}>
+              <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)] group">
+                <div className="flex items-center gap-2 mb-3">
+                  <WifiOff className="h-4 w-4 text-destructive" />
+                  <p className="text-sm text-muted-foreground">โดนระงับ</p>
+                </div>
+                <p className={cn("text-2xl font-bold", suspendedCount > 0 ? "text-destructive" : "text-muted-foreground")}>
                   {suspendedCount}
                 </p>
               </div>
-              <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]">
-                <p className="text-sm text-muted-foreground">เว็บไซต์</p>
-                <p className={cn("text-2xl font-bold mt-1", websites.length > 0 ? "text-foreground" : "text-muted-foreground")}>
+              <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)] group">
+                <div className="flex items-center gap-2 mb-3">
+                  <Globe className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors duration-300" />
+                  <p className="text-sm text-muted-foreground">เว็บไซต์</p>
+                </div>
+                <p className={cn("text-2xl font-bold", websites.length > 0 ? "text-foreground" : "text-muted-foreground")}>
                   {websites.length}
                 </p>
               </div>

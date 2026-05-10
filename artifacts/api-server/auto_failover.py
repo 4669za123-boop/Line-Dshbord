@@ -2,11 +2,16 @@
 auto_failover.py — ระบบสับเปลี่ยนไลน์สำรองอัตโนมัติ
 
 เมื่อ checker.py ตรวจพบไลน์โดนระงับ จะเรียก promote_backup() เพื่อ:
-1. ดึงไลน์สำรองจาก backup pool ที่ตรงกับเว็บ + ประเภท
-2. ใช้ Selenium เพิ่มไลน์สำรองเข้ากรุ๊ป LINE Manager
+1. หาไลน์สำรองจาก backup pool ที่ตรงกับเว็บ + ประเภท
+2. ใช้ Selenium เข้าหน้า Group Settings ของเว็บนั้น:
+   a. ลบบัญชีที่โดนระงับออกจากกรุ๊ป (ค้นหาจาก LINE ID)
+   b. กดปุ่ม "เพิ่ม" แล้วเลื่อนหาชื่อบัญชีสำรอง (lineName) แล้วกด "เพิ่มบัญชี"
 3. อัปเดต lines.json (แทนที่ ID เก่าด้วย ID ใหม่)
 4. ลบออกจาก backup pool
 5. บันทึก log การสับเปลี่ยน
+
+ลำดับขั้นตอน:
+  Selenium (ลบ+เพิ่ม) → อัปเดตข้อมูล → checker.py รอบถัดไปยืนยันสถานะ
 """
 
 import json
@@ -17,6 +22,7 @@ from datetime import datetime, timezone, timedelta
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
 DATA_DIR      = "data"
 LINES_FILE    = os.path.join(DATA_DIR, "lines.json")
@@ -29,6 +35,7 @@ BACKUP_FILES = {
 }
 
 BANGKOK_TZ = timezone(timedelta(hours=7))
+WAIT_TIMEOUT = 15
 
 # ป้องกัน backup เดิมถูกใช้ซ้ำในรอบสแกนเดียวกัน
 _used_backup_ids: set = set()
@@ -93,124 +100,230 @@ def find_backup(role: str, site_name: str, website_id: str = None) -> dict | Non
 
 
 # ─────────────────────────────────────────────
-# Selenium — เพิ่มสมาชิกเข้ากรุ๊ป LINE Manager
+# Selenium — ลบบัญชีเก่า + เพิ่มบัญชีใหม่
 # ─────────────────────────────────────────────
 
-def add_to_line_group(driver, group_url: str, line_account_id: str) -> bool:
-    """
-    ใช้ Selenium เพิ่ม LINE account เข้ากรุ๊ป LINE Manager
-    group_url  : https://manager.line.biz/groups/XXXXXX/setting
-    line_account_id : @abc1234 หรือ abc1234
-    คืน True ถ้าสำเร็จ
-    """
-    wait = WebDriverWait(driver, 20)
+def _wait_click(driver, by, selector, timeout=WAIT_TIMEOUT):
+    """รอให้ element คลิกได้แล้วคลิก"""
+    el = WebDriverWait(driver, timeout).until(
+        EC.element_to_be_clickable((by, selector))
+    )
+    el.click()
+    return el
 
-    # ทำให้ ID มี @ เสมอ
-    clean_id = line_account_id.strip()
-    if not clean_id.startswith("@"):
-        clean_id = f"@{clean_id}"
+
+def _wait_visible(driver, by, selector, timeout=WAIT_TIMEOUT):
+    """รอให้ element มองเห็น"""
+    return WebDriverWait(driver, timeout).until(
+        EC.visibility_of_element_located((by, selector))
+    )
+
+
+def remove_account_from_group(driver, suspended_line_id: str) -> bool:
+    """
+    ลบบัญชีที่โดนระงับออกจากกรุ๊ป LINE Manager
+    ค้นหาจาก LINE ID ในลิงก์ href ของแถวในตาราง
+    คืน True ถ้าลบสำเร็จ
+    """
+    print(f"   🗑️  ลบบัญชี: {suspended_line_id}")
+    clean_id = suspended_line_id.replace("@", "").lower().strip()
+
+    max_pages = 5
+    for page in range(max_pages):
+        # หาแถวที่มี href ของบัญชีที่ต้องการลบ
+        rows = driver.find_elements(
+            By.XPATH,
+            f"//tr[.//a[contains(@href,'{clean_id}')]] | "
+            f"//div[contains(@class,'account-row') and .//a[contains(@href,'{clean_id}')]]"
+        )
+
+        if rows:
+            try:
+                # กดปุ่ม "ลบ" ในแถวนั้น
+                delete_btn = rows[0].find_element(
+                    By.XPATH,
+                    ".//button[normalize-space()='ลบ'] | "
+                    ".//button[normalize-space()='Remove'] | "
+                    ".//button[contains(@class,'delete') or contains(@class,'remove')]"
+                )
+                delete_btn.click()
+                print(f"   ✅ กดปุ่ม 'ลบ' สำหรับบัญชี {clean_id}")
+                time.sleep(1.5)
+
+                # ถ้ามี confirm dialog ให้กด confirm
+                try:
+                    confirm = WebDriverWait(driver, 5).until(
+                        EC.element_to_be_clickable(
+                            (By.XPATH,
+                             "//button[contains(@class,'confirm')] | "
+                             "//button[normalize-space()='ตกลง'] | "
+                             "//button[normalize-space()='ยืนยัน'] | "
+                             "//button[normalize-space()='OK']")
+                        )
+                    )
+                    confirm.click()
+                    print(f"   ✅ ยืนยันการลบแล้ว")
+                    time.sleep(1.5)
+                except TimeoutException:
+                    pass  # ไม่มี confirm dialog ก็ผ่าน
+
+                print(f"   ✅ ลบบัญชี {clean_id} สำเร็จ!")
+                return True
+
+            except NoSuchElementException:
+                print(f"   ⚠️  พบแถวแต่ไม่พบปุ่มลบ")
+                return False
+
+        # ลองไปหน้าถัดไป
+        try:
+            next_btn = driver.find_element(
+                By.XPATH,
+                "//button[@aria-label='Next page'] | "
+                "//a[contains(@class,'next') and not(@disabled)]"
+            )
+            next_btn.click()
+            time.sleep(2)
+        except NoSuchElementException:
+            break  # ไม่มีหน้าถัดไป
+
+    print(f"   ⚠️  ไม่พบบัญชี {clean_id} ในกรุ๊ป")
+    return False
+
+
+def add_account_to_group(driver, backup_line_name: str) -> bool:
+    """
+    เพิ่มบัญชีสำรองเข้ากรุ๊ป LINE Manager
+    ค้นหาจาก lineName โดยเลื่อน scroll ใน modal
+    คืน True ถ้าเพิ่มสำเร็จ
+    """
+    print(f"   ➕ เพิ่มบัญชี: {backup_line_name}")
 
     try:
-        print(f"   🌐 ไปที่กรุ๊ป: {group_url}")
-        driver.get(group_url)
-        wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
+        # กดปุ่ม "เพิ่ม" (ปุ่มสีเขียวในส่วน การจัดการบัญชี)
+        _wait_click(
+            driver,
+            By.XPATH,
+            "//button[contains(@class,'btn') and normalize-space()='เพิ่ม'] | "
+            "//button[normalize-space()='Add'] | "
+            "//button[normalize-space()='เพิ่ม']"
+        )
+        print(f"   ✅ กดปุ่ม 'เพิ่ม' แล้ว")
+        time.sleep(1.5)
+
+        # รอ modal เปิด
+        _wait_visible(
+            driver,
+            By.XPATH,
+            "//div[contains(@class,'modal') and "
+            "  .//*[contains(text(),'เพิ่มบัญชีนี้ที่กลุ่ม') or contains(text(),'Add account')]]"
+        )
+        print(f"   ✅ Modal เปิดแล้ว")
+
+        # เลื่อนหาชื่อบัญชีใน list ฝั่งซ้าย
+        account_found = False
+        max_scroll = 15
+
+        for _ in range(max_scroll):
+            # หา item ที่ตรงชื่อ (ค้นหาแบบ contains เพื่อรองรับ emoji/ชื่อพิเศษ)
+            items = driver.find_elements(
+                By.XPATH,
+                f"//div[contains(@class,'modal')]"
+                f"//li[contains(normalize-space(),'{backup_line_name}')] | "
+                f"//div[contains(@class,'modal')]"
+                f"//div[contains(@class,'account-item') and contains(normalize-space(),'{backup_line_name}')]"
+            )
+
+            if items:
+                items[0].click()
+                print(f"   ✅ เลือกบัญชี '{backup_line_name}' แล้ว")
+                account_found = True
+                break
+
+            # scroll ลงใน list
+            try:
+                scrollable = driver.find_element(
+                    By.XPATH,
+                    "//div[contains(@class,'modal')]//ul[contains(@class,'account-list')] | "
+                    "//div[contains(@class,'modal')]//div[contains(@class,'list-wrap')]"
+                )
+                driver.execute_script("arguments[0].scrollTop += 150", scrollable)
+            except NoSuchElementException:
+                break
+            time.sleep(0.5)
+
+        if not account_found:
+            print(f"   ⚠️  ไม่พบบัญชี '{backup_line_name}' ใน modal list")
+            # ปิด modal แล้วคืน False
+            try:
+                driver.find_element(
+                    By.XPATH,
+                    "//div[contains(@class,'modal')]//button[contains(@class,'close') or normalize-space()='ยกเลิก' or normalize-space()='Cancel']"
+                ).click()
+            except Exception:
+                pass
+            return False
+
+        time.sleep(0.5)
+
+        # กดปุ่ม "เพิ่มบัญชี" (สีเขียว ใน modal)
+        _wait_click(
+            driver,
+            By.XPATH,
+            "//div[contains(@class,'modal')]//button[contains(normalize-space(),'เพิ่มบัญชี')] | "
+            "//div[contains(@class,'modal')]//button[contains(normalize-space(),'Add account')]"
+        )
+        print(f"   ✅ กดปุ่ม 'เพิ่มบัญชี' แล้ว")
         time.sleep(2)
 
-        # ─── ขั้นตอน 1: คลิกปุ่มเพิ่มสมาชิก ───
-        add_btn = None
-        add_btn_xpaths = [
-            "//button[contains(., 'Add accounts')]",
-            "//button[contains(., 'เพิ่มบัญชี')]",
-            "//button[contains(., 'Add')]",
-            "//button[contains(., 'เพิ่ม')]",
-            "//a[contains(., 'Add')]",
-        ]
-        add_btn_css = [
-            "[data-testid='add-account-btn']",
-            ".add-account-button",
-            "button.add",
-        ]
-
-        for xpath in add_btn_xpaths:
-            try:
-                add_btn = driver.find_element(By.XPATH, xpath)
-                if add_btn.is_displayed():
-                    break
-                add_btn = None
-            except Exception:
-                add_btn = None
-
-        if not add_btn:
-            for sel in add_btn_css:
-                try:
-                    add_btn = driver.find_element(By.CSS_SELECTOR, sel)
-                    if add_btn.is_displayed():
-                        break
-                    add_btn = None
-                except Exception:
-                    add_btn = None
-
-        if add_btn:
-            add_btn.click()
-            time.sleep(1.5)
-            print(f"   ✅ คลิกปุ่มเพิ่มสมาชิก")
-        else:
-            print(f"   ⚠️  ไม่พบปุ่มเพิ่มสมาชิก")
-
-        # ─── ขั้นตอน 2: กรอก LINE ID ───
-        input_el = None
-        input_selectors = [
-            "input[placeholder*='LINE ID']",
-            "input[placeholder*='line id']",
-            "input[placeholder*='ID']",
-            "input[placeholder*='Search']",
-            "input[type='search']",
-            "input[type='text']",
-        ]
-        for sel in input_selectors:
-            try:
-                input_el = driver.find_element(By.CSS_SELECTOR, sel)
-                if input_el.is_displayed():
-                    break
-                input_el = None
-            except Exception:
-                input_el = None
-
-        if input_el:
-            input_el.clear()
-            input_el.send_keys(clean_id)
-            time.sleep(1)
-            print(f"   ✅ กรอก LINE ID: {clean_id}")
-
-            # ─── ขั้นตอน 3: ยืนยัน / ค้นหา ───
-            confirm_xpaths = [
-                "//button[contains(., 'Add')]",
-                "//button[contains(., 'เพิ่ม')]",
-                "//button[contains(., 'OK')]",
-                "//button[contains(., 'ยืนยัน')]",
-                "//button[contains(., 'Confirm')]",
-                "//button[contains(., 'Search')]",
-                "//button[contains(., 'ค้นหา')]",
-                "//button[@type='submit']",
-            ]
-            for xpath in confirm_xpaths:
-                try:
-                    btn = driver.find_element(By.XPATH, xpath)
-                    if btn.is_displayed() and btn.is_enabled():
-                        btn.click()
-                        time.sleep(2)
-                        print(f"   ✅ ยืนยันการเพิ่ม {clean_id} เข้ากรุ๊ปสำเร็จ")
-                        return True
-                except Exception:
-                    continue
-        else:
-            print(f"   ⚠️  ไม่พบช่องกรอก LINE ID")
-
-        print(f"   ⚠️  Selenium ไม่สามารถเพิ่ม {clean_id} เข้ากรุ๊ปได้ครบทุกขั้นตอน")
-        return False
+        # รอ modal ปิด
+        WebDriverWait(driver, WAIT_TIMEOUT).until(
+            EC.invisibility_of_element_located(
+                (By.XPATH,
+                 "//div[contains(@class,'modal') and "
+                 "  .//*[contains(text(),'เพิ่มบัญชีนี้ที่กลุ่ม') or contains(text(),'Add account')]]")
+            )
+        )
+        print(f"   ✅ เพิ่มบัญชี '{backup_line_name}' สำเร็จ!")
+        return True
 
     except Exception as e:
-        print(f"   ❌ add_to_line_group error: {e}")
+        print(f"   ❌ add_account_to_group error: {e}")
+        return False
+
+
+def swap_line_in_group(
+    driver,
+    group_url: str,
+    suspended_line_id: str,
+    backup_line_name: str,
+) -> bool:
+    """
+    สับเปลี่ยนไลน์ในกรุ๊ป LINE Manager:
+      1. เปิดหน้า Group Settings
+      2. ลบบัญชีที่โดนระงับ (ค้นหาจาก suspended_line_id)
+      3. เพิ่มบัญชีสำรอง (ค้นหาจาก backup_line_name ใน modal)
+    คืน True ถ้าทั้งลบและเพิ่มสำเร็จ
+    """
+    wait = WebDriverWait(driver, WAIT_TIMEOUT)
+
+    try:
+        print(f"   🌐 เปิดหน้า Group Settings: {group_url}")
+        driver.get(group_url)
+        wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
+        time.sleep(3)  # รอหน้าโหลดสมบูรณ์
+
+        # STEP 1: ลบบัญชีเก่าก่อน
+        removed = remove_account_from_group(driver, suspended_line_id)
+        if not removed:
+            print(f"   ⚠️  ลบบัญชีเก่าไม่สำเร็จ — ยังคงดำเนินการเพิ่มบัญชีใหม่ต่อ")
+
+        # STEP 2: เพิ่มบัญชีใหม่
+        added = add_account_to_group(driver, backup_line_name)
+
+        return added
+
+    except Exception as e:
+        print(f"   ❌ swap_line_in_group error: {e}")
         return False
 
 
@@ -252,14 +365,13 @@ def update_lines_json(old_id: str, new_account: dict) -> str:
         _write_json(LINES_FILE, lines)
         print(f"   ✅ lines.json: แทนที่ {old_id} → {new_id}")
     else:
-        print(f"   ⚠️  ไม่พบ {old_id} ใน lines.json — เพิ่มรายการใหม่")
-        # ถ้าไม่เจอ ให้เพิ่มใหม่ด้วย site/type เดิม (fallback)
+        print(f"   ⚠️  ไม่พบ {old_id} ใน lines.json")
 
     return new_id
 
 
 def remove_from_backup_pool(account_id: str, role: str) -> None:
-    """ลบบัญชีสำรองที่ถูกใช้แล้วออกจาก pool"""
+    """ลบบัญชีสำรองที่ถูกใช้แล้วออกจาก pool (เพราะถูกดึงไปแสดงในแดชบอร์ดแล้ว)"""
     section = "main" if role in ("main", "หลัก") else "deposit"
     path = BACKUP_FILES[section]
     pool = _read_json(path)
@@ -304,16 +416,26 @@ def promote_backup(
     """
     สับเปลี่ยนไลน์สำรองเพื่อแทนที่ไลน์ที่โดนระงับ
 
+    ลำดับการทำงาน:
+      1. หาไลน์สำรองจาก pool
+      2. Selenium: เปิด Group Settings → ลบไลน์เก่า → เพิ่มไลน์สำรอง
+         (ไลน์ใหม่ปรากฏในแดชบอร์ดทันที)
+      3. อัปเดต lines.json
+      4. ลบออกจาก backup pool (เพราะถูกดึงไปใช้แล้ว)
+      5. ล้างสถานะ suspended เก่า
+      6. บันทึก log
+      → checker.py รอบถัดไปจะตรวจยืนยันสถานะออนไลน์เอง
+
     Args:
         driver          : Selenium WebDriver ที่เปิดอยู่แล้ว
         suspended_line_id: LINE ID ที่โดนระงับ (ไม่มี @)
         role            : "หลัก" หรือ "ฝากถอน"
         site_name       : ชื่อเว็บ เช่น "Jun88"
-        group_url       : URL กรุ๊ป LINE Manager
+        group_url       : URL หน้า Group Settings ของ LINE Manager
         website_id      : UUID ของเว็บ (optional, เพิ่มความแม่นยำ)
 
     Returns:
-        dict { ok, message, newLineId?, seleniumOk? }
+        dict { ok, message, newLineId?, newLineName?, seleniumOk? }
     """
     print(f"\n{'─'*50}")
     print(f"🔄 FAILOVER: {suspended_line_id} | {site_name} | {role}")
@@ -326,21 +448,34 @@ def promote_backup(
         print(f"   ⚠️  {msg}")
         return {"ok": False, "message": msg}
 
-    backup_id   = backup.get("id", "")
-    backup_name = backup.get("lineName", "")
-    backup_acc  = backup.get("lineAccountId", "")
-    backup_url  = backup.get("lineAccountUrl", "")
-    print(f"   📦 ไลน์สำรองที่เลือก: {backup_name} ({backup_acc})")
+    backup_id        = backup.get("id", "")
+    backup_line_name = backup.get("lineName", "")
+    backup_acc_id    = backup.get("lineAccountId", "")
+    backup_url       = backup.get("lineAccountUrl", "")
 
-    # 2. Selenium — เพิ่มเข้ากรุ๊ป
-    selenium_ok = add_to_line_group(driver, group_url, backup_acc)
+    print(f"   📦 ไลน์สำรองที่เลือก: {backup_line_name} ({backup_acc_id})")
+
+    if not backup_line_name:
+        msg = f"backup account ไม่มีชื่อ (lineName) — ไม่สามารถหาในกรุ๊ปได้"
+        print(f"   ❌ {msg}")
+        return {"ok": False, "message": msg}
+
+    # 2. Selenium — ลบบัญชีเก่า แล้วเพิ่มบัญชีใหม่เข้ากรุ๊ป
+    #    (ทำก่อนอัปเดตข้อมูล เพื่อให้ไลน์ใหม่แสดงในแดชบอร์ดทันที)
+    selenium_ok = swap_line_in_group(
+        driver=driver,
+        group_url=group_url,
+        suspended_line_id=suspended_line_id,
+        backup_line_name=backup_line_name,
+    )
     if not selenium_ok:
         print(f"   ⚠️  Selenium ไม่สำเร็จ — ยังคงอัปเดตข้อมูลต่อ")
 
-    # 3. อัปเดต lines.json
+    # 3. อัปเดต lines.json (แทนที่ ID เก่าด้วย ID ใหม่)
     new_id = update_lines_json(suspended_line_id, backup)
 
     # 4. ลบออกจาก backup pool
+    #    (ไลน์ถูกดึงไปแสดงในแดชบอร์ดแล้ว จึงต้องเอาออกจากรายการสำรอง)
     remove_from_backup_pool(backup_id, backup.get("role", role))
 
     # 5. ล้างสถานะ suspended เก่า
@@ -353,7 +488,7 @@ def promote_backup(
         "role":        role,
         "oldLineId":   suspended_line_id,
         "newLineId":   new_id,
-        "newLineName": backup_name,
+        "newLineName": backup_line_name,
         "newLineUrl":  backup_url,
         "seleniumOk":  selenium_ok,
         "groupUrl":    group_url,
@@ -364,12 +499,12 @@ def promote_backup(
     _used_backup_ids.add(backup_id)
 
     result_msg = "สับเปลี่ยนสำเร็จ" if selenium_ok else "อัปเดตข้อมูลสำเร็จ (Selenium ไม่สมบูรณ์)"
-    print(f"   ✅ FAILOVER เสร็จ: {suspended_line_id} → {new_id} | Selenium: {selenium_ok}")
+    print(f"   ✅ FAILOVER เสร็จ: {suspended_line_id} → {new_id} ({backup_line_name}) | Selenium: {selenium_ok}")
     return {
         "ok":          True,
         "message":     result_msg,
         "newLineId":   new_id,
-        "newLineName": backup_name,
+        "newLineName": backup_line_name,
         "seleniumOk":  selenium_ok,
     }
 

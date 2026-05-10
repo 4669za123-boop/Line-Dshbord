@@ -2733,3 +2733,7 @@
 2026-05-11 04:33:10: {"level":30,"time":1778448790671,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":764,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
 2026-05-11 04:33:10: {"level":30,"time":1778448790689,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":765,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":7,"msg":"request completed"}
 2026-05-11 04:33:10: {"level":30,"time":1778448790696,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":766,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 04:34:05: {"level":30,"time":1778448845486,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 04:34:10: {"level":30,"time":1778448850673,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":767,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":5,"msg":"request completed"}
+2026-05-11 04:34:10: {"level":30,"time":1778448850677,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":768,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 04:34:10: {"level":30,"time":1778448850680,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":769,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}

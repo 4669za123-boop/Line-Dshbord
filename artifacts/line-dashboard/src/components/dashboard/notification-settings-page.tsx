@@ -112,21 +112,20 @@ export function NotificationSettingsPage() {
       <div className="p-6 lg:p-10">
 
         {/* Header */}
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-          <div>
-            <h1 className="text-2xl lg:text-3xl font-bold text-foreground flex items-center gap-3">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/15 ring-1 ring-primary/25">
-                <Bell className="h-5 w-5 text-primary" />
-              </span>
-              ตั้งค่าแจ้งเตือน
-            </h1>
-            <p className="text-muted-foreground mt-1 ml-1">
-              กำหนดรอบเวลาส่งข้อมูลเข้า Discord
-            </p>
-          </div>
+        <div className="mb-8">
+          <h1 className="text-2xl lg:text-3xl font-bold text-foreground flex items-center gap-3">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/15 ring-1 ring-primary/25">
+              <Bell className="h-5 w-5 text-primary" />
+            </span>
+            ตั้งค่าแจ้งเตือน
+          </h1>
+          <p className="text-muted-foreground mt-1 ml-1">
+            กำหนดรอบเวลาส่งข้อมูลเข้า Discord
+          </p>
         </div>
 
-        <div className="max-w-md space-y-4">
+        <div className="flex justify-center">
+          <div className="w-full max-w-md space-y-4">
 
             {/* Clock card */}
             <div className="rounded-2xl border border-primary/20 bg-card overflow-hidden">
@@ -249,6 +248,7 @@ export function NotificationSettingsPage() {
               </div>
             </div>
 
+          </div>
         </div>
       </div>
     </main>

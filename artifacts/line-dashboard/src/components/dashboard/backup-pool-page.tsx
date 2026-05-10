@@ -569,7 +569,7 @@ export function BackupPoolPage({
         <DialogContent className="border-border bg-background sm:max-w-sm">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-amber-400" />
+              <span className="h-4 w-4 rounded-full bg-amber-400/80 shrink-0" />
               {assigningLine?.websiteId ? "เปลี่ยนเว็บ" : "กำหนดเว็บให้กลุ่มนี้"}
             </DialogTitle>
           </DialogHeader>

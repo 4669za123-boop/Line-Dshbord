@@ -9,19 +9,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Wifi, WifiOff, Globe } from "lucide-react"
-import type { AddLineFormPayload, Website, LineAccount } from "./types"
+import type { AddLineFormPayload, Website } from "./types"
 
 export type AddLinePageProps = {
   websites: Website[]
-  accounts: LineAccount[]
+  accounts?: unknown[]
   onAddLine: (payload: AddLineFormPayload) => void
   onNavigateDashboard: () => void
 }
 
 export function AddLinePage({
   websites,
-  accounts,
   onAddLine,
   onNavigateDashboard,
 }: AddLinePageProps) {
@@ -53,20 +51,9 @@ export function AddLinePage({
     onNavigateDashboard()
   }
 
-  const online = accounts.filter((a) => a.status === "normal").length
-  const suspended = accounts.filter((a) => a.status === "suspended").length
-  const totalWebsites = websites.length
-
-  const stats = [
-    { label: "ออนไลน์", value: online, icon: Wifi, green: true },
-    { label: "โดนระงับ", value: suspended, icon: WifiOff, green: false },
-    { label: "เว็บไซต์", value: totalWebsites, icon: Globe, green: false },
-  ]
-
   return (
     <main className="lg:ml-64 min-h-screen">
       <div className="p-6 lg:p-10">
-        {/* Header */}
         <div className="mb-8">
           <h1 className="text-2xl lg:text-3xl font-bold text-foreground">
             เพิ่ม LINE
@@ -76,30 +63,8 @@ export function AddLinePage({
           </p>
         </div>
 
-        {/* Stat Cards */}
-        <div className="grid grid-cols-3 gap-4 mb-10">
-          {stats.map((s) => {
-            const Icon = s.icon
-            return (
-              <div
-                key={s.label}
-                className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)] group"
-              >
-                <div className="flex items-center gap-2 mb-3">
-                  <Icon className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors duration-300" />
-                  <p className="text-sm text-muted-foreground">{s.label}</p>
-                </div>
-                <p className={`text-3xl font-bold ${s.green ? "text-primary" : "text-foreground"}`}>
-                  {s.value}
-                </p>
-              </div>
-            )
-          })}
-        </div>
-
-        {/* Form */}
         <div className="flex justify-center">
-          <div className="w-full max-w-md bg-card border border-border rounded-2xl p-8 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]">
+          <div className="w-full max-w-md">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-foreground">

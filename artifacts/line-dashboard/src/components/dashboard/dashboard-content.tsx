@@ -159,25 +159,25 @@ export function DashboardContent({
           )
           return (
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-              <div className="bg-card border border-border rounded-xl p-4">
+              <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]">
                 <p className="text-sm text-muted-foreground">บัญชีทั้งหมด</p>
                 <p className={cn("text-2xl font-bold mt-1", totalAccounts > 0 ? "text-foreground" : "text-muted-foreground")}>
                   {totalAccounts}
                 </p>
               </div>
-              <div className="bg-card border border-border rounded-xl p-4">
+              <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]">
                 <p className="text-sm text-muted-foreground">ออนไลน์</p>
                 <p className={cn("text-2xl font-bold mt-1", onlineCount > 0 ? "text-primary" : "text-muted-foreground")}>
                   {onlineCount}
                 </p>
               </div>
-              <div className="bg-card border border-border rounded-xl p-4">
+              <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]">
                 <p className="text-sm text-muted-foreground">โดนระงับ</p>
                 <p className={cn("text-2xl font-bold mt-1", suspendedCount > 0 ? "text-destructive" : "text-muted-foreground")}>
                   {suspendedCount}
                 </p>
               </div>
-              <div className="bg-card border border-border rounded-xl p-4">
+              <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]">
                 <p className="text-sm text-muted-foreground">เว็บไซต์</p>
                 <p className={cn("text-2xl font-bold mt-1", websites.length > 0 ? "text-foreground" : "text-muted-foreground")}>
                   {websites.length}

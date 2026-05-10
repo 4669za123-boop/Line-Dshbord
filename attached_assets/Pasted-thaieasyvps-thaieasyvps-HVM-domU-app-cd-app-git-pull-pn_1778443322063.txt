@@ -1,0 +1,46 @@
+thaieasyvps@thaieasyvps-HVM-domU:/app$ cd /app && git pull && pnpm install && pnpm --filter @workspace/line-dashboard run build && pm2 restart line-dashboard-api
+Already up to date.
+Scope: all 10 workspace projects
+? The modules directories will be removed and reinstalled from scratch. Proceed? (Y/n) ‣ true
+   ╭─────────────────────────────────────────╮
+   │                                         │
+   │   Update available! 10.33.4 → 11.0.9.   │
+   │   Changelog: https://pnpm.io/v/11.0.9   │
+   │    To update, run: pnpm add -g pnpm     │
+   │                                         │
+   ╰─────────────────────────────────────────╯
+
+✔ The modules directories will be removed and reinstalled from scratch. Proceed? (Y/n) · true
+Recreating /app/node_modules
+Lockfile is up to date, resolution step is skipped
+Packages: +486
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 486, reused 486, downloaded 0, added 486, done
+
+devDependencies:
++ prettier 3.8.1
++ typescript 5.9.3
+
+. preinstall$ sh -c 'rm -f package-lock.json yarn.lock; case "$npm_config_user_agent" in pnpm/*) ;; *) echo "Use pnpm instead" >&2; exit 1 ;; esac'
+└─ Done in 203ms
+Done in 1m 26.1s using pnpm v10.33.4
+
+> @workspace/line-dashboard@0.0.0 build /app/artifacts/line-dashboard
+> vite build --config vite.config.ts
+
+vite v7.3.2 building client environment for production...
+src/components/ui/dialog.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+src/components/ui/select.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+✓ 1758 modules transformed.
+dist/public/index.html                   1.12 kB │ gzip:   0.59 kB
+dist/public/assets/index-BQzq2Od_.css  136.30 kB │ gzip:  20.41 kB
+dist/public/assets/index-CQfMT3Ck.js   354.96 kB │ gzip: 111.73 kB
+✓ built in 43.11s
+Use --update-env to update environment variables
+[PM2] Applying action restartProcessId on app [line-dashboard-api](ids: [ 0 ])
+[PM2] [line-dashboard-api](0) ✓
+┌────┬───────────────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name                  │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼───────────────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ line-dashboard-api    │ default     │ N/A     │ fork    │ 177075   │ 0s     │ 103  │ online    │ 0%       │ 20.1mb   │ tha… │ disabled │
+└────┴───────────────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘

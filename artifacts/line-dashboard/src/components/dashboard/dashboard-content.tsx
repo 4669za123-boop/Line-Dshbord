@@ -160,10 +160,7 @@ export function DashboardContent({
           return (
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
               <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)] group">
-                <div className="flex items-center gap-2 mb-3">
-                  <Users className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors duration-300" />
-                  <p className="text-sm text-muted-foreground">บัญชีทั้งหมด</p>
-                </div>
+                <p className="text-sm text-muted-foreground mb-3">บัญชีทั้งหมด</p>
                 <p className={cn("text-2xl font-bold", totalAccounts > 0 ? "text-foreground" : "text-muted-foreground")}>
                   {totalAccounts}
                 </p>
@@ -188,7 +185,7 @@ export function DashboardContent({
               </div>
               <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)] group">
                 <div className="flex items-center gap-2 mb-3">
-                  <Globe className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors duration-300" />
+                  <Globe className={cn("h-4 w-4 transition-colors duration-300", websites.length > 0 ? "text-primary" : "text-muted-foreground")} />
                   <p className="text-sm text-muted-foreground">เว็บไซต์</p>
                 </div>
                 <p className={cn("text-2xl font-bold", websites.length > 0 ? "text-foreground" : "text-muted-foreground")}>

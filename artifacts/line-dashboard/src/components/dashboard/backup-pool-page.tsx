@@ -84,23 +84,39 @@ function GroupRow({
   onRemove: (id: string) => void
 }) {
   const groupName = line.note || `กลุ่มสำรอง${line.role === "main" ? "ไลน์หลัก" : "ไลน์ฝากถอน"}`
+  const isMain = line.role === "main"
   return (
     <div className="flex items-center gap-3 bg-card border border-border rounded-2xl px-4 py-3 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)] group">
       <Users className="h-4 w-4 text-muted-foreground group-hover:text-primary shrink-0 transition-colors duration-300" />
-      <a
-        href={line.lineId}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex-1 text-sm font-medium text-foreground truncate hover:text-primary transition-colors duration-200"
-        title={line.lineId}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {groupName}
-      </a>
+      <div className="flex-1 min-w-0 flex items-center gap-2">
+        <a
+          href={line.lineId}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-sm font-medium text-foreground truncate hover:text-primary transition-colors duration-200"
+          title={line.lineId}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {groupName}
+        </a>
+        <span className={cn(
+          "shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-full border",
+          isMain
+            ? "bg-blue-500/10 text-blue-400 border-blue-500/20"
+            : "bg-violet-500/10 text-violet-400 border-violet-500/20"
+        )}>
+          {isMain ? "ไลน์หลัก" : "ฝากถอน"}
+        </span>
+        {line.websiteName && (
+          <span className="shrink-0 text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
+            {line.websiteName}
+          </span>
+        )}
+      </div>
       <button
         type="button"
         onClick={() => onRemove(line.id)}
-        className="shrink-0 h-7 w-7 flex items-center justify-center rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors opacity-0 group-hover:opacity-100"
+        className="shrink-0 h-7 w-7 flex items-center justify-center rounded-lg text-destructive hover:bg-destructive/10 transition-colors"
         title="ลบกลุ่มนี้"
       >
         <Trash2 className="h-3.5 w-3.5" />
@@ -158,8 +174,7 @@ function LineDetailCard({
             className="h-8 shrink-0 px-3 text-destructive hover:text-destructive hover:bg-destructive/10"
             onClick={() => onRemove(line.id)}
           >
-            <Trash2 className="h-4 w-4 mr-1.5" />
-            <span className="text-sm">ลบ</span>
+            <Trash2 className="h-4 w-4" />
           </Button>
         </div>
       </div>
@@ -271,8 +286,7 @@ export function BackupPoolPage({
                 className="shrink-0 h-8 px-3 text-destructive hover:text-destructive hover:bg-destructive/10"
                 onClick={() => onRemoveBackup(line.id)}
               >
-                <Trash2 className="h-4 w-4 mr-1.5" />
-                <span className="text-sm">ลบ</span>
+                <Trash2 className="h-4 w-4" />
               </Button>
             </div>
           ))}

@@ -210,10 +210,9 @@ export function NotificationSettingsPage() {
                             size="sm"
                             onClick={() => removeTime(index)}
                             disabled={times.length <= 1}
-                            className="h-8 px-3 text-destructive hover:text-destructive hover:bg-destructive/10"
+                            className="h-8 w-8 px-0 text-destructive hover:text-destructive hover:bg-destructive/10"
                           >
-                            <Trash2 className="h-4 w-4 mr-1.5" />
-                            <span className="text-sm">ลบ</span>
+                            <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>
                       )}

@@ -229,16 +229,14 @@ export function NotificationSettingsPage() {
                             <span>{time}</span>
                             <Pencil className="h-3 w-3 text-muted-foreground" />
                           </button>
-                          <Button
+                          <button
                             type="button"
-                            variant="ghost"
-                            size="sm"
                             onClick={() => removeTime(index)}
                             disabled={times.length <= 1}
-                            className="h-8 w-8 px-0 text-destructive/60 hover:text-red-500 hover:bg-zinc-800 hover:shadow-[0_0_12px_rgba(239,68,68,0.25)] transition-all duration-200"
+                            className="h-8 w-8 flex items-center justify-center rounded-lg text-destructive/60 hover:text-red-500 hover:bg-zinc-800 hover:shadow-[0_0_12px_rgba(239,68,68,0.25)] transition-all duration-200 disabled:opacity-30 disabled:pointer-events-none"
                           >
                             <Trash2 className="h-4 w-4" />
-                          </Button>
+                          </button>
                         </div>
                       )}
                     </div>

@@ -61,7 +61,7 @@ interface BackupPoolPageProps {
   backupAccountsMain: BackupAccount[];
   backupAccountsDeposit: BackupAccount[];
   backupAccountsPending: BackupAccount[];
-  onAddBackup: (lineId: string, role: BackupLineRole, note?: string) => void;
+  onAddBackup: (lineId: string, role: BackupLineRole) => void;
   onRemoveBackup: (id: string) => void;
   onConfirmBackup: (id: string, websiteId: string, websiteName: string) => void;
   onRemoveBackupAccount: (id: string) => void;
@@ -190,7 +190,6 @@ export function BackupPoolPage({
   const [addOpen, setAddOpen] = useState(false);
   const [newLineId, setNewLineId] = useState("");
   const [newRole, setNewRole] = useState<BackupLineRole | "">("");
-  const [newNote, setNewNote] = useState("");
 
   const [assignOpen, setAssignOpen] = useState(false);
   const [assigningAccount, setAssigningAccount] = useState<BackupAccount | null>(null);
@@ -209,10 +208,9 @@ export function BackupPoolPage({
   const handleAdd = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newLineId.trim() || !newRole) return;
-    onAddBackup(newLineId.trim(), newRole as BackupLineRole, newNote || undefined);
+    onAddBackup(newLineId.trim(), newRole as BackupLineRole);
     setNewLineId("");
     setNewRole("");
-    setNewNote("");
     setAddOpen(false);
   };
 
@@ -507,15 +505,7 @@ export function BackupPoolPage({
                   </SelectContent>
                 </Select>
               </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground">ชื่อกลุ่ม (ไม่บังคับ)</label>
-                <Input
-                  value={newNote}
-                  onChange={(e) => setNewNote(e.target.value)}
-                  placeholder="เช่น กลุ่มสำรอง Jun88"
-                  className="h-11 border-border bg-input text-foreground placeholder:text-muted-foreground"
-                />
-              </div>
+
               <div className="flex gap-2 pt-1">
                 <DialogClose asChild>
                   <Button type="button" variant="outline" className="flex-1 rounded-xl">ยกเลิก</Button>

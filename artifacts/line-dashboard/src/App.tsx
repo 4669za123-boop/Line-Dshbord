@@ -275,15 +275,14 @@ export default function App() {
     }
   };
 
-  const handleAddBackup = async (lineId: string, role: BackupLineRole, note?: string) => {
+  const handleAddBackup = async (lineId: string, role: BackupLineRole) => {
     const newBackup: BackupLine = {
-      id: crypto.randomUUID(),
+      id: Math.random().toString(36).slice(2) + Date.now().toString(36),
       lineId,
       role,
       websiteId: null,
       websiteName: null,
       confirmed: false,
-      note: note?.trim() || undefined,
     };
     setBackupLines((prev) => [...prev, newBackup]);
     // ซิงค์กลุ่มไปยัง server เพื่อให้ backup_scanner.py อ่านได้

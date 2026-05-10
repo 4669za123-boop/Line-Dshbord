@@ -2737,3 +2737,951 @@
 2026-05-11 04:34:10: {"level":30,"time":1778448850673,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":767,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":5,"msg":"request completed"}
 2026-05-11 04:34:10: {"level":30,"time":1778448850677,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":768,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
 2026-05-11 04:34:10: {"level":30,"time":1778448850680,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":769,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 04:34:39: {"level":30,"time":1778448879513,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":770,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":12,"msg":"request completed"}
+2026-05-11 04:34:39: {"level":30,"time":1778448879550,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":771,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":22,"msg":"request completed"}
+2026-05-11 04:34:39: {"level":30,"time":1778448879566,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":772,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":9,"msg":"request completed"}
+2026-05-11 04:34:40: {"level":30,"time":1778448880370,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":773,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":16,"msg":"request completed"}
+2026-05-11 04:34:43: {"level":30,"time":1778448883069,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":774,"method":"GET","url":"/api/backup-accounts"},"res":{"statusCode":304},"responseTime":18,"msg":"request completed"}
+2026-05-11 04:34:43: {"level":30,"time":1778448883100,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":775,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":10,"msg":"request completed"}
+2026-05-11 04:34:43: {"level":30,"time":1778448883152,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":776,"method":"GET","url":"/api/websites"},"res":{"statusCode":304},"responseTime":31,"msg":"request completed"}
+2026-05-11 04:34:43: {"level":30,"time":1778448883213,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":777,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":34,"msg":"request completed"}
+2026-05-11 04:34:43: {"level":30,"time":1778448883275,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":778,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":29,"msg":"request completed"}
+2026-05-11 04:34:53: {"level":30,"time":1778448893077,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":779,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":32,"msg":"request completed"}
+2026-05-11 04:35:03: {"level":30,"time":1778448903666,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":780,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 04:35:05: {"level":30,"time":1778448905489,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 04:35:05: {"level":30,"time":1778448905489,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Backup scanner already running, skipping this tick"}
+2026-05-11 04:35:13: {"level":30,"time":1778448913694,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":781,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":14,"msg":"request completed"}
+2026-05-11 04:35:13: {"level":30,"time":1778448913726,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":782,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":14,"msg":"request completed"}
+2026-05-11 04:35:13: {"level":30,"time":1778448913764,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":783,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":16,"msg":"request completed"}
+2026-05-11 04:35:23: {"level":30,"time":1778448923683,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":784,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":4,"msg":"request completed"}
+2026-05-11 04:35:33: {"level":30,"time":1778448933677,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":785,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":9,"msg":"request completed"}
+2026-05-11 04:35:43: {"level":30,"time":1778448943685,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":786,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":11,"msg":"request completed"}
+2026-05-11 04:35:43: {"level":30,"time":1778448943714,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":787,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":10,"msg":"request completed"}
+2026-05-11 04:35:43: {"level":30,"time":1778448943738,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":788,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":12,"msg":"request completed"}
+2026-05-11 04:35:53: {"level":30,"time":1778448953672,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":789,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":9,"msg":"request completed"}
+2026-05-11 04:36:05: {"level":30,"time":1778448965502,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 04:36:07: {"level":30,"time":1778448967904,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":790,"method":"POST","url":"/api/line-status"},"res":{"statusCode":200},"responseTime":6,"msg":"request completed"}
+2026-05-11 04:36:10: {"level":30,"time":1778448970673,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":791,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":5,"msg":"request completed"}
+2026-05-11 04:36:13: {"level":30,"time":1778448973679,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":792,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":8,"msg":"request completed"}
+2026-05-11 04:36:13: {"level":30,"time":1778448973686,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":793,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":6,"msg":"request completed"}
+2026-05-11 04:36:30: {"level":30,"time":1778448990615,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":794,"method":"POST","url":"/api/line-status"},"res":{"statusCode":200},"responseTime":7,"msg":"request completed"}
+2026-05-11 04:36:43: {"level":30,"time":1778449003667,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":795,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":4,"msg":"request completed"}
+2026-05-11 04:36:43: {"level":30,"time":1778449003670,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":796,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 04:37:05: {"level":30,"time":1778449025517,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 04:37:10: {"level":30,"time":1778449030669,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":797,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 04:37:13: {"level":30,"time":1778449033669,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":798,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":4,"msg":"request completed"}
+2026-05-11 04:37:13: {"level":30,"time":1778449033673,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":799,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":1,"msg":"request completed"}
+2026-05-11 04:37:43: {"level":30,"time":1778449063667,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":800,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 04:37:43: {"level":30,"time":1778449063671,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":801,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 04:38:05: {"level":30,"time":1778449085534,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 04:38:10: {"level":30,"time":1778449090681,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":802,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":16,"msg":"request completed"}
+2026-05-11 04:39:05: {"level":30,"time":1778449145554,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 04:39:10: {"level":30,"time":1778449150690,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":803,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":19,"msg":"request completed"}
+2026-05-11 04:39:10: {"level":30,"time":1778449150715,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":804,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":9,"msg":"request completed"}
+2026-05-11 04:39:10: {"level":30,"time":1778449150742,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":805,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":22,"msg":"request completed"}
+2026-05-11 04:40:01: {"level":30,"time":1778449201804,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":806,"method":"POST","url":"/api/line-status"},"res":{"statusCode":200},"responseTime":9,"msg":"request completed"}
+2026-05-11 04:40:05: {"level":30,"time":1778449205558,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 04:40:05: {"level":30,"time":1778449205561,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Backup scanner already running, skipping this tick"}
+2026-05-11 04:40:10: {"level":30,"time":1778449210665,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":807,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 04:40:10: {"level":30,"time":1778449210673,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":808,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 04:40:10: {"level":30,"time":1778449210679,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":809,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 04:40:24: {"level":30,"time":1778449224655,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":810,"method":"POST","url":"/api/line-status"},"res":{"statusCode":200},"responseTime":5,"msg":"request completed"}
+2026-05-11 04:41:05: {"level":30,"time":1778449265571,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 04:41:10: {"level":30,"time":1778449270665,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":811,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 04:41:10: {"level":30,"time":1778449270672,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":812,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 04:41:10: {"level":30,"time":1778449270676,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":813,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 04:42:05: {"level":30,"time":1778449325601,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 04:42:10: {"level":30,"time":1778449330665,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":814,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 04:42:10: {"level":30,"time":1778449330668,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":815,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 04:42:10: {"level":30,"time":1778449330676,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":816,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":6,"msg":"request completed"}
+2026-05-11 04:43:05: {"level":30,"time":1778449385632,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 04:43:10: {"level":30,"time":1778449390664,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":817,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 04:43:10: {"level":30,"time":1778449390675,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":818,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":4,"msg":"request completed"}
+2026-05-11 04:43:10: {"level":30,"time":1778449390678,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":819,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 04:43:22: {"level":30,"time":1778449402207,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":820,"method":"POST","url":"/api/line-status"},"res":{"statusCode":200},"responseTime":6,"msg":"request completed"}
+2026-05-11 04:44:05: {"level":30,"time":1778449445632,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 04:44:10: {"level":30,"time":1778449450667,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":821,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":4,"msg":"request completed"}
+2026-05-11 04:44:10: {"level":30,"time":1778449450673,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":822,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":4,"msg":"request completed"}
+2026-05-11 04:44:10: {"level":30,"time":1778449450678,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":823,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 04:44:33: {"level":30,"time":1778449473978,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":824,"method":"POST","url":"/api/line-status"},"res":{"statusCode":200},"responseTime":7,"msg":"request completed"}
+2026-05-11 04:45:05: {"level":30,"time":1778449505657,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 04:45:05: {"level":30,"time":1778449505658,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Backup scanner already running, skipping this tick"}
+2026-05-11 04:45:10: {"level":30,"time":1778449510670,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":825,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":4,"msg":"request completed"}
+2026-05-11 04:45:10: {"level":30,"time":1778449510675,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":826,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 04:45:10: {"level":30,"time":1778449510680,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":827,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 04:45:24: {"level":30,"time":1778449524775,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":828,"method":"GET","url":"/api/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php"},"res":{"statusCode":404},"responseTime":10,"msg":"request completed"}
+2026-05-11 04:46:05: {"level":30,"time":1778449565687,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 04:46:10: {"level":30,"time":1778449570668,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":829,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 04:46:10: {"level":30,"time":1778449570672,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":830,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 04:46:10: {"level":30,"time":1778449570683,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":831,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":9,"msg":"request completed"}
+2026-05-11 04:46:33: {"level":30,"time":1778449593311,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":832,"method":"POST","url":"/api/line-status"},"res":{"statusCode":200},"responseTime":15,"msg":"request completed"}
+2026-05-11 04:47:05: {"level":30,"time":1778449625700,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 04:47:10: {"level":30,"time":1778449630666,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":833,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 04:47:10: {"level":30,"time":1778449630671,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":834,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":4,"msg":"request completed"}
+2026-05-11 04:47:10: {"level":30,"time":1778449630675,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":835,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: Vv72 → https://manager.line.biz/groups/291413/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: TH26 → https://manager.line.biz/groups/291757/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: K188 → https://manager.line.biz/groups/293859/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: BT678 → https://manager.line.biz/groups/293858/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: ✅ อัปเดตสถานะ 0 บัญชี → Dashboard (200)
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: ✅ ทุกไลน์ปกติ — ไม่จำเป็นต้องสับเปลี่ยน
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: ✅ CHECKER รอบนี้เสร็จสมบูรณ์
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: ⏳ รอ 60 วินาทีก่อนรอบถัดไป...
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: =======================================================
+2026-05-11 04:47:34: 🔍 CHECKER: เริ่มรอบตรวจสถานะ
+2026-05-11 04:47:34: =======================================================
+2026-05-11 04:47:34: ✅ WEBSITES: 10 รายการ
+2026-05-11 04:47:34: ✅ DATA MAP: 20 รายการ
+2026-05-11 04:47:34: ⚠️  ไม่พบ Chrome profile ที่ /root/.line-chrome-profile
+2026-05-11 04:47:34: ✅ ใช้ Chrome: /usr/bin/google-chrome
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: Jun88 → https://manager.line.biz/groups/284033/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: MK8 → https://manager.line.biz/groups/274572/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: F168 → https://manager.line.biz/groups/274574/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: PG688 → https://manager.line.biz/groups/273467/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: JL69 → https://manager.line.biz/groups/281962/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: NM9 → https://manager.line.biz/groups/282784/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: Vv72 → https://manager.line.biz/groups/291413/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: TH26 → https://manager.line.biz/groups/291757/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: K188 → https://manager.line.biz/groups/293859/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: BT678 → https://manager.line.biz/groups/293858/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: ✅ อัปเดตสถานะ 0 บัญชี → Dashboard (200)
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: ✅ ทุกไลน์ปกติ — ไม่จำเป็นต้องสับเปลี่ยน
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: ✅ CHECKER รอบนี้เสร็จสมบูรณ์
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: ⏳ รอ 60 วินาทีก่อนรอบถัดไป...
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: =======================================================
+2026-05-11 04:47:34: 🔍 CHECKER: เริ่มรอบตรวจสถานะ
+2026-05-11 04:47:34: =======================================================
+2026-05-11 04:47:34: ✅ WEBSITES: 10 รายการ
+2026-05-11 04:47:34: ✅ DATA MAP: 20 รายการ
+2026-05-11 04:47:34: ⚠️  ไม่พบ Chrome profile ที่ /root/.line-chrome-profile
+2026-05-11 04:47:34: ✅ ใช้ Chrome: /usr/bin/google-chrome
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: Jun88 → https://manager.line.biz/groups/284033/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: MK8 → https://manager.line.biz/groups/274572/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: F168 → https://manager.line.biz/groups/274574/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: PG688 → https://manager.line.biz/groups/273467/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: JL69 → https://manager.line.biz/groups/281962/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: NM9 → https://manager.line.biz/groups/282784/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: Vv72 → https://manager.line.biz/groups/291413/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: TH26 → https://manager.line.biz/groups/291757/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: K188 → https://manager.line.biz/groups/293859/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: BT678 → https://manager.line.biz/groups/293858/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: ✅ อัปเดตสถานะ 0 บัญชี → Dashboard (200)
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: ✅ ทุกไลน์ปกติ — ไม่จำเป็นต้องสับเปลี่ยน
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: ✅ CHECKER รอบนี้เสร็จสมบูรณ์
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: ⏳ รอ 60 วินาทีก่อนรอบถัดไป...
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: =======================================================
+2026-05-11 04:47:34: 🔍 CHECKER: เริ่มรอบตรวจสถานะ
+2026-05-11 04:47:34: =======================================================
+2026-05-11 04:47:34: ✅ WEBSITES: 10 รายการ
+2026-05-11 04:47:34: ✅ DATA MAP: 20 รายการ
+2026-05-11 04:47:34: ⚠️  ไม่พบ Chrome profile ที่ /root/.line-chrome-profile
+2026-05-11 04:47:34: ✅ ใช้ Chrome: /usr/bin/google-chrome
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: Jun88 → https://manager.line.biz/groups/284033/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: MK8 → https://manager.line.biz/groups/274572/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: F168 → https://manager.line.biz/groups/274574/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: PG688 → https://manager.line.biz/groups/273467/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: JL69 → https://manager.line.biz/groups/281962/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: NM9 → https://manager.line.biz/groups/282784/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: Vv72 → https://manager.line.biz/groups/291413/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: TH26 → https://manager.line.biz/groups/291757/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: K188 → https://manager.line.biz/groups/293859/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: BT678 → https://manager.line.biz/groups/293858/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: ✅ อัปเดตสถานะ 0 บัญชี → Dashboard (200)
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: ✅ ทุกไลน์ปกติ — ไม่จำเป็นต้องสับเปลี่ยน
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: ✅ CHECKER รอบนี้เสร็จสมบูรณ์
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: ⏳ รอ 60 วินาทีก่อนรอบถัดไป...
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: =======================================================
+2026-05-11 04:47:34: 🔍 CHECKER: เริ่มรอบตรวจสถานะ
+2026-05-11 04:47:34: =======================================================
+2026-05-11 04:47:34: ✅ WEBSITES: 10 รายการ
+2026-05-11 04:47:34: ✅ DATA MAP: 20 รายการ
+2026-05-11 04:47:34: ⚠️  ไม่พบ Chrome profile ที่ /root/.line-chrome-profile
+2026-05-11 04:47:34: ✅ ใช้ Chrome: /usr/bin/google-chrome
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: Jun88 → https://manager.line.biz/groups/284033/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: MK8 → https://manager.line.biz/groups/274572/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: F168 → https://manager.line.biz/groups/274574/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: PG688 → https://manager.line.biz/groups/273467/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: JL69 → https://manager.line.biz/groups/281962/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: NM9 → https://manager.line.biz/groups/282784/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: Vv72 → https://manager.line.biz/groups/291413/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: TH26 → https://manager.line.biz/groups/291757/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: K188 → https://manager.line.biz/groups/293859/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: 🌐 เข้าเว็บ: BT678 → https://manager.line.biz/groups/293858/setting
+2026-05-11 04:47:34:    พบ 0 account links
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: ✅ อัปเดตสถานะ 0 บัญชี → Dashboard (200)
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: ✅ ทุกไลน์ปกติ — ไม่จำเป็นต้องสับเปลี่ยน
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: ✅ CHECKER รอบนี้เสร็จสมบูรณ์
+2026-05-11 04:47:34: 
+2026-05-11 04:47:34: ⏳ รอ 60 วินาทีก่อนรอบถัดไป...
+2026-05-11 04:48:05: {"level":30,"time":1778449685729,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 04:48:10: {"level":30,"time":1778449690676,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":836,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":8,"msg":"request completed"}
+2026-05-11 04:48:10: {"level":30,"time":1778449690685,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":837,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 04:48:10: {"level":30,"time":1778449690691,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":838,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 04:48:33: {"level":30,"time":1778449713769,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":839,"method":"POST","url":"/api/line-status"},"res":{"statusCode":200},"responseTime":7,"msg":"request completed"}
+2026-05-11 04:49:05: {"level":30,"time":1778449745756,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 04:49:10: {"level":30,"time":1778449750671,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":840,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":6,"msg":"request completed"}
+2026-05-11 04:49:10: {"level":30,"time":1778449750681,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":841,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":6,"msg":"request completed"}
+2026-05-11 04:49:10: {"level":30,"time":1778449750686,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":842,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 04:49:50: {"level":30,"time":1778449790526,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":843,"method":"POST","url":"/api/line-status"},"res":{"statusCode":200},"responseTime":4,"msg":"request completed"}
+2026-05-11 04:50:05: {"level":30,"time":1778449805759,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 04:50:05: {"level":30,"time":1778449805760,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Backup scanner already running, skipping this tick"}
+2026-05-11 04:50:10: {"level":30,"time":1778449810666,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":844,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 04:50:10: {"level":30,"time":1778449810670,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":845,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 04:50:10: {"level":30,"time":1778449810674,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":846,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 04:51:05: {"level":30,"time":1778449865768,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 04:51:10: {"level":30,"time":1778449870684,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":847,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":10,"msg":"request completed"}
+2026-05-11 04:51:10: {"level":30,"time":1778449870722,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":848,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":21,"msg":"request completed"}
+2026-05-11 04:51:10: {"level":30,"time":1778449870775,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":849,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":32,"msg":"request completed"}
+2026-05-11 04:52:05: {"level":30,"time":1778449925798,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 04:52:10: {"level":30,"time":1778449930686,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":850,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":12,"msg":"request completed"}
+2026-05-11 04:52:10: {"level":30,"time":1778449930713,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":851,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":16,"msg":"request completed"}
+2026-05-11 04:52:10: {"level":30,"time":1778449930739,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":852,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":11,"msg":"request completed"}
+2026-05-11 04:52:22: {"level":30,"time":1778449942565,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":853,"method":"GET","url":"/"},"res":{"statusCode":404},"responseTime":63,"msg":"request completed"}
+2026-05-11 04:52:47: {"level":30,"time":1778449967734,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":854,"method":"POST","url":"/api/line-status"},"res":{"statusCode":200},"responseTime":5,"msg":"request completed"}
+2026-05-11 04:53:05: {"level":30,"time":1778449985809,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 04:53:10: {"level":30,"time":1778449990679,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":855,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":8,"msg":"request completed"}
+2026-05-11 04:53:10: {"level":30,"time":1778449990695,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":856,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":12,"msg":"request completed"}
+2026-05-11 04:53:10: {"level":30,"time":1778449990710,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":857,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":4,"msg":"request completed"}
+2026-05-11 04:53:20: {"level":30,"time":1778450000263,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":858,"method":"POST","url":"/api/line-status"},"res":{"statusCode":200},"responseTime":5,"msg":"request completed"}
+2026-05-11 04:54:05: {"level":30,"time":1778450045838,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 04:54:10: {"level":30,"time":1778450050691,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":859,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 04:54:10: {"level":30,"time":1778450050695,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":860,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":1,"msg":"request completed"}
+2026-05-11 04:54:10: {"level":30,"time":1778450050699,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":861,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 04:55:05: {"level":30,"time":1778450105869,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 04:55:05: {"level":30,"time":1778450105872,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Backup scanner already running, skipping this tick"}
+2026-05-11 04:55:10: {"level":30,"time":1778450110683,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":862,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":9,"msg":"request completed"}
+2026-05-11 04:55:10: {"level":30,"time":1778450110692,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":863,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 04:55:10: {"level":30,"time":1778450110698,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":864,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 04:56:05: {"level":30,"time":1778450165898,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 04:56:10: {"level":30,"time":1778450170692,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":865,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":13,"msg":"request completed"}
+2026-05-11 04:56:10: {"level":30,"time":1778450170707,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":866,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":5,"msg":"request completed"}
+2026-05-11 04:56:10: {"level":30,"time":1778450170731,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":867,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":9,"msg":"request completed"}
+2026-05-11 04:56:49: {"level":30,"time":1778450209038,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":868,"method":"POST","url":"/api/line-status"},"res":{"statusCode":200},"responseTime":4,"msg":"request completed"}
+2026-05-11 04:57:03: {"level":30,"time":1778450223117,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":869,"method":"POST","url":"/api/line-status"},"res":{"statusCode":200},"responseTime":4,"msg":"request completed"}
+2026-05-11 04:57:05: {"level":30,"time":1778450225901,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 04:57:10: {"level":30,"time":1778450230674,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":870,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 04:57:10: {"level":30,"time":1778450230679,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":871,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 04:57:10: {"level":30,"time":1778450230682,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":872,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 04:58:05: {"level":30,"time":1778450285931,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 04:58:10: {"level":30,"time":1778450290674,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":873,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 04:58:10: {"level":30,"time":1778450290684,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":874,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":6,"msg":"request completed"}
+2026-05-11 04:58:10: {"level":30,"time":1778450290703,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":875,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":17,"msg":"request completed"}
+2026-05-11 04:59:05: {"level":30,"time":1778450345963,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 04:59:10: {"level":30,"time":1778450350681,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":876,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":8,"msg":"request completed"}
+2026-05-11 04:59:10: {"level":30,"time":1778450350691,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":877,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 04:59:10: {"level":30,"time":1778450350700,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":878,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 05:00:05: {"level":30,"time":1778450405993,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 05:00:06: {"level":30,"time":1778450405999,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Backup scanner already running, skipping this tick"}
+2026-05-11 05:00:08: {"level":30,"time":1778450408649,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":879,"method":"POST","url":"/api/line-status"},"res":{"statusCode":200},"responseTime":7,"msg":"request completed"}
+2026-05-11 05:00:10: {"level":30,"time":1778450410676,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":880,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":4,"msg":"request completed"}
+2026-05-11 05:00:10: {"level":30,"time":1778450410681,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":881,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 05:00:10: {"level":30,"time":1778450410686,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":882,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 05:01:06: {"level":30,"time":1778450466010,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 05:01:10: {"level":30,"time":1778450470677,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":883,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 05:01:10: {"level":30,"time":1778450470682,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":884,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 05:01:10: {"level":30,"time":1778450470686,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":885,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 05:02:06: {"level":30,"time":1778450526042,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 05:02:10: {"level":30,"time":1778450530684,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":886,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":7,"msg":"request completed"}
+2026-05-11 05:02:10: {"level":30,"time":1778450530698,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":887,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":7,"msg":"request completed"}
+2026-05-11 05:02:10: {"level":30,"time":1778450530712,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":888,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":11,"msg":"request completed"}
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: =======================================================
+2026-05-11 05:02:28: 🔍 CHECKER: เริ่มรอบตรวจสถานะ
+2026-05-11 05:02:28: =======================================================
+2026-05-11 05:02:28: ✅ WEBSITES: 10 รายการ
+2026-05-11 05:02:28: ✅ DATA MAP: 20 รายการ
+2026-05-11 05:02:28: ⚠️  ไม่พบ Chrome profile ที่ /root/.line-chrome-profile
+2026-05-11 05:02:28: ✅ ใช้ Chrome: /usr/bin/google-chrome
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: Jun88 → https://manager.line.biz/groups/284033/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: MK8 → https://manager.line.biz/groups/274572/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: F168 → https://manager.line.biz/groups/274574/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: PG688 → https://manager.line.biz/groups/273467/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: JL69 → https://manager.line.biz/groups/281962/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: NM9 → https://manager.line.biz/groups/282784/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: Vv72 → https://manager.line.biz/groups/291413/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: TH26 → https://manager.line.biz/groups/291757/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: K188 → https://manager.line.biz/groups/293859/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: BT678 → https://manager.line.biz/groups/293858/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: ✅ อัปเดตสถานะ 0 บัญชี → Dashboard (200)
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: ✅ ทุกไลน์ปกติ — ไม่จำเป็นต้องสับเปลี่ยน
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: ✅ CHECKER รอบนี้เสร็จสมบูรณ์
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: ⏳ รอ 60 วินาทีก่อนรอบถัดไป...
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: =======================================================
+2026-05-11 05:02:28: 🔍 CHECKER: เริ่มรอบตรวจสถานะ
+2026-05-11 05:02:28: =======================================================
+2026-05-11 05:02:28: ✅ WEBSITES: 10 รายการ
+2026-05-11 05:02:28: ✅ DATA MAP: 20 รายการ
+2026-05-11 05:02:28: ⚠️  ไม่พบ Chrome profile ที่ /root/.line-chrome-profile
+2026-05-11 05:02:28: ✅ ใช้ Chrome: /usr/bin/google-chrome
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: Jun88 → https://manager.line.biz/groups/284033/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: MK8 → https://manager.line.biz/groups/274572/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: F168 → https://manager.line.biz/groups/274574/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: PG688 → https://manager.line.biz/groups/273467/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: JL69 → https://manager.line.biz/groups/281962/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: NM9 → https://manager.line.biz/groups/282784/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: Vv72 → https://manager.line.biz/groups/291413/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: TH26 → https://manager.line.biz/groups/291757/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: K188 → https://manager.line.biz/groups/293859/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: BT678 → https://manager.line.biz/groups/293858/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: ✅ อัปเดตสถานะ 0 บัญชี → Dashboard (200)
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: ✅ ทุกไลน์ปกติ — ไม่จำเป็นต้องสับเปลี่ยน
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: ✅ CHECKER รอบนี้เสร็จสมบูรณ์
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: ⏳ รอ 60 วินาทีก่อนรอบถัดไป...
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: =======================================================
+2026-05-11 05:02:28: 🔍 CHECKER: เริ่มรอบตรวจสถานะ
+2026-05-11 05:02:28: =======================================================
+2026-05-11 05:02:28: ✅ WEBSITES: 10 รายการ
+2026-05-11 05:02:28: ✅ DATA MAP: 20 รายการ
+2026-05-11 05:02:28: ⚠️  ไม่พบ Chrome profile ที่ /root/.line-chrome-profile
+2026-05-11 05:02:28: ✅ ใช้ Chrome: /usr/bin/google-chrome
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: Jun88 → https://manager.line.biz/groups/284033/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: MK8 → https://manager.line.biz/groups/274572/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: F168 → https://manager.line.biz/groups/274574/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: PG688 → https://manager.line.biz/groups/273467/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: JL69 → https://manager.line.biz/groups/281962/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: NM9 → https://manager.line.biz/groups/282784/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: Vv72 → https://manager.line.biz/groups/291413/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: TH26 → https://manager.line.biz/groups/291757/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: K188 → https://manager.line.biz/groups/293859/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: BT678 → https://manager.line.biz/groups/293858/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: ✅ อัปเดตสถานะ 0 บัญชี → Dashboard (200)
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: ✅ ทุกไลน์ปกติ — ไม่จำเป็นต้องสับเปลี่ยน
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: ✅ CHECKER รอบนี้เสร็จสมบูรณ์
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: ⏳ รอ 60 วินาทีก่อนรอบถัดไป...
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: =======================================================
+2026-05-11 05:02:28: 🔍 CHECKER: เริ่มรอบตรวจสถานะ
+2026-05-11 05:02:28: =======================================================
+2026-05-11 05:02:28: ✅ WEBSITES: 10 รายการ
+2026-05-11 05:02:28: ✅ DATA MAP: 20 รายการ
+2026-05-11 05:02:28: ⚠️  ไม่พบ Chrome profile ที่ /root/.line-chrome-profile
+2026-05-11 05:02:28: ✅ ใช้ Chrome: /usr/bin/google-chrome
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: Jun88 → https://manager.line.biz/groups/284033/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: MK8 → https://manager.line.biz/groups/274572/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: F168 → https://manager.line.biz/groups/274574/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: PG688 → https://manager.line.biz/groups/273467/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: JL69 → https://manager.line.biz/groups/281962/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: NM9 → https://manager.line.biz/groups/282784/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: Vv72 → https://manager.line.biz/groups/291413/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: TH26 → https://manager.line.biz/groups/291757/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: K188 → https://manager.line.biz/groups/293859/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: BT678 → https://manager.line.biz/groups/293858/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: ✅ อัปเดตสถานะ 0 บัญชี → Dashboard (200)
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: ✅ ทุกไลน์ปกติ — ไม่จำเป็นต้องสับเปลี่ยน
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: ✅ CHECKER รอบนี้เสร็จสมบูรณ์
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: ⏳ รอ 60 วินาทีก่อนรอบถัดไป...
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: =======================================================
+2026-05-11 05:02:28: 🔍 CHECKER: เริ่มรอบตรวจสถานะ
+2026-05-11 05:02:28: =======================================================
+2026-05-11 05:02:28: ✅ WEBSITES: 10 รายการ
+2026-05-11 05:02:28: ✅ DATA MAP: 20 รายการ
+2026-05-11 05:02:28: ⚠️  ไม่พบ Chrome profile ที่ /root/.line-chrome-profile
+2026-05-11 05:02:28: ✅ ใช้ Chrome: /usr/bin/google-chrome
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: Jun88 → https://manager.line.biz/groups/284033/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: MK8 → https://manager.line.biz/groups/274572/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: F168 → https://manager.line.biz/groups/274574/setting
+2026-05-11 05:02:28:    พบ 0 account links
+2026-05-11 05:02:28: 
+2026-05-11 05:02:28: 🌐 เข้าเว็บ: PG688 → https://manager.line.biz/groups/273467/setting
+2026-05-11 05:03:06: {"level":30,"time":1778450586071,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 05:03:10: {"level":30,"time":1778450590690,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":889,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":12,"msg":"request completed"}
+2026-05-11 05:03:10: {"level":30,"time":1778450590699,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":890,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":6,"msg":"request completed"}
+2026-05-11 05:03:10: {"level":30,"time":1778450590740,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":891,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":33,"msg":"request completed"}
+2026-05-11 05:03:44: {"level":30,"time":1778450624513,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":892,"method":"POST","url":"/api/line-status"},"res":{"statusCode":200},"responseTime":15,"msg":"request completed"}
+2026-05-11 05:04:06: {"level":30,"time":1778450646089,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 05:04:10: {"level":30,"time":1778450650682,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":893,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":4,"msg":"request completed"}
+2026-05-11 05:04:10: {"level":30,"time":1778450650686,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":894,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 05:04:10: {"level":30,"time":1778450650691,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":895,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 05:04:26: {"level":30,"time":1778450666990,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":896,"method":"POST","url":"/api/line-status"},"res":{"statusCode":200},"responseTime":6,"msg":"request completed"}
+2026-05-11 05:05:06: {"level":30,"time":1778450706121,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 05:05:06: {"level":30,"time":1778450706121,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Backup scanner already running, skipping this tick"}
+2026-05-11 05:05:10: {"level":30,"time":1778450710693,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":897,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":11,"msg":"request completed"}
+2026-05-11 05:05:10: {"level":30,"time":1778450710710,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":898,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":8,"msg":"request completed"}
+2026-05-11 05:05:10: {"level":30,"time":1778450710726,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":899,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":15,"msg":"request completed"}
+2026-05-11 05:06:06: {"level":30,"time":1778450766148,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 05:06:10: {"level":30,"time":1778450770690,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":900,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":4,"msg":"request completed"}
+2026-05-11 05:06:10: {"level":30,"time":1778450770701,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":901,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":9,"msg":"request completed"}
+2026-05-11 05:06:10: {"level":30,"time":1778450770709,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":902,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":4,"msg":"request completed"}
+2026-05-11 05:07:06: {"level":30,"time":1778450826179,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 05:07:07: {"level":30,"time":1778450827306,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":903,"method":"POST","url":"/api/line-status"},"res":{"statusCode":200},"responseTime":19,"msg":"request completed"}
+2026-05-11 05:07:10: {"level":30,"time":1778450830683,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":904,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":4,"msg":"request completed"}
+2026-05-11 05:07:10: {"level":30,"time":1778450830690,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":905,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 05:07:10: {"level":30,"time":1778450830694,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":906,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 05:08:06: {"level":30,"time":1778450886191,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 05:08:10: {"level":30,"time":1778450890691,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":907,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":4,"msg":"request completed"}
+2026-05-11 05:08:10: {"level":30,"time":1778450890698,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":908,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 05:08:10: {"level":30,"time":1778450890702,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":909,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 05:08:43: {"level":30,"time":1778450923435,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":910,"method":"POST","url":"/api/line-status"},"res":{"statusCode":200},"responseTime":223,"msg":"request completed"}
+2026-05-11 05:08:57: {"level":30,"time":1778450937911,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":911,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":10,"msg":"request completed"}
+2026-05-11 05:08:57: {"level":30,"time":1778450937922,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":912,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":5,"msg":"request completed"}
+2026-05-11 05:08:57: {"level":30,"time":1778450937933,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":913,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 05:08:59: {"level":30,"time":1778450939734,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":914,"method":"GET","url":"/api/websites"},"res":{"statusCode":304},"responseTime":5,"msg":"request completed"}
+2026-05-11 05:08:59: {"level":30,"time":1778450939752,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":915,"method":"GET","url":"/api/backup-accounts"},"res":{"statusCode":304},"responseTime":5,"msg":"request completed"}
+2026-05-11 05:08:59: {"level":30,"time":1778450939769,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":916,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":5,"msg":"request completed"}
+2026-05-11 05:08:59: {"level":30,"time":1778450939781,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":917,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":4,"msg":"request completed"}
+2026-05-11 05:08:59: {"level":30,"time":1778450939786,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":918,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 05:09:06: {"level":30,"time":1778450946193,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 05:09:10: {"level":30,"time":1778450950699,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":919,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":13,"msg":"request completed"}
+2026-05-11 05:09:20: {"level":30,"time":1778450960691,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":920,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":7,"msg":"request completed"}
+2026-05-11 05:09:30: {"level":30,"time":1778450970684,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":921,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 05:09:30: {"level":30,"time":1778450970694,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":922,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":8,"msg":"request completed"}
+2026-05-11 05:09:30: {"level":30,"time":1778450970701,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":923,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 05:09:40: {"level":30,"time":1778450980687,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":924,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":5,"msg":"request completed"}
+2026-05-11 05:09:50: {"level":30,"time":1778450990696,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":925,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":7,"msg":"request completed"}
+2026-05-11 05:10:00: {"level":30,"time":1778451000687,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":926,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":4,"msg":"request completed"}
+2026-05-11 05:10:00: {"level":30,"time":1778451000691,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":927,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 05:10:00: {"level":30,"time":1778451000699,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":928,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":1,"msg":"request completed"}
+2026-05-11 05:10:06: {"level":30,"time":1778451006205,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 05:10:06: {"level":30,"time":1778451006219,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Backup scanner already running, skipping this tick"}
+2026-05-11 05:10:10: {"level":30,"time":1778451010691,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":929,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":6,"msg":"request completed"}
+2026-05-11 05:10:30: {"level":30,"time":1778451030693,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":930,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":5,"msg":"request completed"}
+2026-05-11 05:10:30: {"level":30,"time":1778451030699,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":931,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 05:10:36: {"level":30,"time":1778451036041,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":932,"method":"POST","url":"/api/line-status"},"res":{"statusCode":200},"responseTime":11,"msg":"request completed"}
+2026-05-11 05:11:00: {"level":30,"time":1778451060692,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":933,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":5,"msg":"request completed"}
+2026-05-11 05:11:00: {"level":30,"time":1778451060706,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":934,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":6,"msg":"request completed"}
+2026-05-11 05:11:06: {"level":30,"time":1778451066207,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 05:11:10: {"level":30,"time":1778451070692,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":935,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 05:11:21: {"level":30,"time":1778451081205,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":936,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":6,"msg":"request completed"}
+2026-05-11 05:11:23: {"level":30,"time":1778451083109,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":937,"method":"GET","url":"/api/websites"},"res":{"statusCode":304},"responseTime":4,"msg":"request completed"}
+2026-05-11 05:11:23: {"level":30,"time":1778451083116,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":938,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 05:11:23: {"level":30,"time":1778451083125,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":939,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 05:11:23: {"level":30,"time":1778451083130,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":940,"method":"GET","url":"/api/backup-accounts"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 05:11:23: {"level":30,"time":1778451083137,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":941,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 05:11:33: {"level":30,"time":1778451093695,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":942,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":7,"msg":"request completed"}
+2026-05-11 05:11:43: {"level":30,"time":1778451103105,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":943,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 05:11:53: {"level":30,"time":1778451113118,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":944,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":7,"msg":"request completed"}
+2026-05-11 05:11:53: {"level":30,"time":1778451113145,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":945,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":12,"msg":"request completed"}
+2026-05-11 05:11:53: {"level":30,"time":1778451113174,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":946,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":9,"msg":"request completed"}
+2026-05-11 05:12:03: {"level":30,"time":1778451123711,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":947,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":17,"msg":"request completed"}
+2026-05-11 05:12:06: {"level":30,"time":1778451126217,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 05:12:13: {"level":30,"time":1778451133690,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":948,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 05:12:23: {"level":30,"time":1778451143700,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":949,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":9,"msg":"request completed"}
+2026-05-11 05:12:23: {"level":30,"time":1778451143715,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":950,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":10,"msg":"request completed"}
+2026-05-11 05:12:23: {"level":30,"time":1778451143731,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":951,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":9,"msg":"request completed"}
+2026-05-11 05:12:33: {"level":30,"time":1778451153695,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":952,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":5,"msg":"request completed"}
+2026-05-11 05:12:43: {"level":30,"time":1778451163716,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":953,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":10,"msg":"request completed"}
+2026-05-11 05:12:53: {"level":30,"time":1778451173708,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":954,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":9,"msg":"request completed"}
+2026-05-11 05:12:53: {"level":30,"time":1778451173723,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":955,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":6,"msg":"request completed"}
+2026-05-11 05:12:53: {"level":30,"time":1778451173747,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":956,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":10,"msg":"request completed"}
+2026-05-11 05:13:03: {"level":30,"time":1778451183693,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":957,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":5,"msg":"request completed"}
+2026-05-11 05:13:06: {"level":30,"time":1778451186212,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 05:13:13: {"level":30,"time":1778451193698,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":958,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":7,"msg":"request completed"}
+2026-05-11 05:13:22: {"level":30,"time":1778451202728,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":959,"method":"POST","url":"/api/line-status"},"res":{"statusCode":200},"responseTime":13,"msg":"request completed"}
+2026-05-11 05:13:23: {"level":30,"time":1778451203135,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":960,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":16,"msg":"request completed"}
+2026-05-11 05:13:23: {"level":30,"time":1778451203168,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":961,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":16,"msg":"request completed"}
+2026-05-11 05:13:23: {"level":30,"time":1778451203180,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":962,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":8,"msg":"request completed"}
+2026-05-11 05:13:27: {"level":30,"time":1778451207585,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":963,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 05:13:27: {"level":30,"time":1778451207590,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":964,"method":"GET","url":"/api/websites"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 05:13:27: {"level":30,"time":1778451207594,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":965,"method":"GET","url":"/api/backup-accounts"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 05:13:27: {"level":30,"time":1778451207604,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":966,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 05:13:27: {"level":30,"time":1778451207610,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":967,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 05:13:37: {"level":30,"time":1778451217707,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":968,"method":"GET","url":"/api/line-status"},"res":{"statusCode":200},"responseTime":13,"msg":"request completed"}
+2026-05-11 05:13:47: {"level":30,"time":1778451227588,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":969,"method":"GET","url":"/api/line-status"},"res":{"statusCode":200},"responseTime":4,"msg":"request completed"}
+2026-05-11 05:13:57: {"level":30,"time":1778451237708,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":970,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":11,"msg":"request completed"}
+2026-05-11 05:13:57: {"level":30,"time":1778451237725,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":971,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":11,"msg":"request completed"}
+2026-05-11 05:13:57: {"level":30,"time":1778451237748,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":972,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":14,"msg":"request completed"}
+2026-05-11 05:14:04: {"level":30,"time":1778451244919,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":973,"method":"POST","url":"/api/line-status"},"res":{"statusCode":200},"responseTime":7,"msg":"request completed"}
+2026-05-11 05:14:06: {"level":30,"time":1778451246213,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 05:14:07: {"level":30,"time":1778451247693,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":974,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 05:14:17: {"level":30,"time":1778451257695,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":975,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 05:14:27: {"level":30,"time":1778451267691,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":976,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 05:14:27: {"level":30,"time":1778451267695,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":977,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 05:14:27: {"level":30,"time":1778451267701,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":978,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 05:14:37: {"level":30,"time":1778451277696,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":979,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 05:14:47: {"level":30,"time":1778451287705,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":980,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":6,"msg":"request completed"}
+2026-05-11 05:14:57: {"level":30,"time":1778451297695,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":981,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":4,"msg":"request completed"}
+2026-05-11 05:14:57: {"level":30,"time":1778451297702,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":982,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":5,"msg":"request completed"}
+2026-05-11 05:14:57: {"level":30,"time":1778451297710,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":983,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":4,"msg":"request completed"}
+2026-05-11 05:15:06: {"level":30,"time":1778451306215,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 05:15:06: {"level":30,"time":1778451306216,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Backup scanner already running, skipping this tick"}
+2026-05-11 05:15:07: {"level":30,"time":1778451307700,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":984,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":9,"msg":"request completed"}
+2026-05-11 05:15:17: {"level":30,"time":1778451317591,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":985,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 05:15:27: {"level":30,"time":1778451327598,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":986,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":6,"msg":"request completed"}
+2026-05-11 05:15:27: {"level":30,"time":1778451327620,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":987,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":8,"msg":"request completed"}
+2026-05-11 05:15:27: {"level":30,"time":1778451327635,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":988,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":5,"msg":"request completed"}
+2026-05-11 05:15:28: {"level":30,"time":1778451328199,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":989,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":6,"msg":"request completed"}
+2026-05-11 05:15:28: {"level":30,"time":1778451328219,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":990,"method":"GET","url":"/api/backup-accounts"},"res":{"statusCode":304},"responseTime":7,"msg":"request completed"}
+2026-05-11 05:15:28: {"level":30,"time":1778451328240,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":991,"method":"GET","url":"/api/websites"},"res":{"statusCode":304},"responseTime":7,"msg":"request completed"}
+2026-05-11 05:15:28: {"level":30,"time":1778451328263,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":992,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":14,"msg":"request completed"}
+2026-05-11 05:15:28: {"level":30,"time":1778451328285,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":993,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":7,"msg":"request completed"}
+2026-05-11 05:15:36: {"level":30,"time":1778451336406,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":994,"method":"POST","url":"/api/backup-groups"},"res":{"statusCode":201},"responseTime":47,"msg":"request completed"}
+2026-05-11 05:15:38: {"level":30,"time":1778451338200,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":995,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":7,"msg":"request completed"}
+2026-05-11 05:15:48: {"level":30,"time":1778451348211,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":996,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":15,"msg":"request completed"}
+2026-05-11 05:15:58: {"level":30,"time":1778451358194,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":997,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 05:15:58: {"level":30,"time":1778451358199,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":998,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 05:15:58: {"level":30,"time":1778451358210,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":999,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":9,"msg":"request completed"}
+2026-05-11 05:16:06: {"level":30,"time":1778451366219,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 05:16:08: {"level":30,"time":1778451368194,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1000,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":4,"msg":"request completed"}
+2026-05-11 05:16:18: {"level":30,"time":1778451378201,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1001,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":10,"msg":"request completed"}
+2026-05-11 05:16:28: {"level":30,"time":1778451388203,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1002,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":8,"msg":"request completed"}
+2026-05-11 05:16:28: {"level":30,"time":1778451388219,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1003,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":15,"msg":"request completed"}
+2026-05-11 05:16:28: {"level":30,"time":1778451388257,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1004,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":14,"msg":"request completed"}
+2026-05-11 05:16:38: {"level":30,"time":1778451398212,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1005,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":17,"msg":"request completed"}
+2026-05-11 05:16:48: {"level":30,"time":1778451408195,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1006,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 05:16:58: {"level":30,"time":1778451418204,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1007,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":7,"msg":"request completed"}
+2026-05-11 05:16:58: {"level":30,"time":1778451418237,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1008,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":21,"msg":"request completed"}
+2026-05-11 05:16:58: {"level":30,"time":1778451418264,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1009,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":19,"msg":"request completed"}
+2026-05-11 05:17:06: {"level":30,"time":1778451426223,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 05:17:08: {"level":30,"time":1778451428215,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1010,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":24,"msg":"request completed"}
+2026-05-11 05:17:18: {"level":30,"time":1778451438230,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1011,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":21,"msg":"request completed"}
+2026-05-11 05:17:28: {"level":30,"time":1778451448203,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1012,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":8,"msg":"request completed"}
+2026-05-11 05:17:28: {"level":30,"time":1778451448225,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1013,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":5,"msg":"request completed"}
+2026-05-11 05:17:28: {"level":30,"time":1778451448252,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1014,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":13,"msg":"request completed"}
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: JL69 → https://manager.line.biz/groups/281962/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: NM9 → https://manager.line.biz/groups/282784/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: Vv72 → https://manager.line.biz/groups/291413/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: TH26 → https://manager.line.biz/groups/291757/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: K188 → https://manager.line.biz/groups/293859/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: BT678 → https://manager.line.biz/groups/293858/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: ✅ อัปเดตสถานะ 0 บัญชี → Dashboard (200)
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: ✅ ทุกไลน์ปกติ — ไม่จำเป็นต้องสับเปลี่ยน
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: ✅ CHECKER รอบนี้เสร็จสมบูรณ์
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: ⏳ รอ 60 วินาทีก่อนรอบถัดไป...
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: =======================================================
+2026-05-11 05:17:35: 🔍 CHECKER: เริ่มรอบตรวจสถานะ
+2026-05-11 05:17:35: =======================================================
+2026-05-11 05:17:35: ✅ WEBSITES: 10 รายการ
+2026-05-11 05:17:35: ✅ DATA MAP: 20 รายการ
+2026-05-11 05:17:35: ⚠️  ไม่พบ Chrome profile ที่ /root/.line-chrome-profile
+2026-05-11 05:17:35: ✅ ใช้ Chrome: /usr/bin/google-chrome
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: Jun88 → https://manager.line.biz/groups/284033/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: MK8 → https://manager.line.biz/groups/274572/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: F168 → https://manager.line.biz/groups/274574/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: PG688 → https://manager.line.biz/groups/273467/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: JL69 → https://manager.line.biz/groups/281962/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: NM9 → https://manager.line.biz/groups/282784/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: Vv72 → https://manager.line.biz/groups/291413/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: TH26 → https://manager.line.biz/groups/291757/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: K188 → https://manager.line.biz/groups/293859/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: BT678 → https://manager.line.biz/groups/293858/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: ✅ อัปเดตสถานะ 0 บัญชี → Dashboard (200)
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: ✅ ทุกไลน์ปกติ — ไม่จำเป็นต้องสับเปลี่ยน
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: ✅ CHECKER รอบนี้เสร็จสมบูรณ์
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: ⏳ รอ 60 วินาทีก่อนรอบถัดไป...
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: =======================================================
+2026-05-11 05:17:35: 🔍 CHECKER: เริ่มรอบตรวจสถานะ
+2026-05-11 05:17:35: =======================================================
+2026-05-11 05:17:35: ✅ WEBSITES: 10 รายการ
+2026-05-11 05:17:35: ✅ DATA MAP: 20 รายการ
+2026-05-11 05:17:35: ⚠️  ไม่พบ Chrome profile ที่ /root/.line-chrome-profile
+2026-05-11 05:17:35: ✅ ใช้ Chrome: /usr/bin/google-chrome
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: Jun88 → https://manager.line.biz/groups/284033/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: MK8 → https://manager.line.biz/groups/274572/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: F168 → https://manager.line.biz/groups/274574/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: PG688 → https://manager.line.biz/groups/273467/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: JL69 → https://manager.line.biz/groups/281962/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: NM9 → https://manager.line.biz/groups/282784/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: Vv72 → https://manager.line.biz/groups/291413/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: TH26 → https://manager.line.biz/groups/291757/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: K188 → https://manager.line.biz/groups/293859/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: BT678 → https://manager.line.biz/groups/293858/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: ✅ อัปเดตสถานะ 0 บัญชี → Dashboard (200)
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: ✅ ทุกไลน์ปกติ — ไม่จำเป็นต้องสับเปลี่ยน
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: ✅ CHECKER รอบนี้เสร็จสมบูรณ์
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: ⏳ รอ 60 วินาทีก่อนรอบถัดไป...
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: =======================================================
+2026-05-11 05:17:35: 🔍 CHECKER: เริ่มรอบตรวจสถานะ
+2026-05-11 05:17:35: =======================================================
+2026-05-11 05:17:35: ✅ WEBSITES: 10 รายการ
+2026-05-11 05:17:35: ✅ DATA MAP: 20 รายการ
+2026-05-11 05:17:35: ⚠️  ไม่พบ Chrome profile ที่ /root/.line-chrome-profile
+2026-05-11 05:17:35: ✅ ใช้ Chrome: /usr/bin/google-chrome
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: Jun88 → https://manager.line.biz/groups/284033/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: MK8 → https://manager.line.biz/groups/274572/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: F168 → https://manager.line.biz/groups/274574/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: PG688 → https://manager.line.biz/groups/273467/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: JL69 → https://manager.line.biz/groups/281962/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: NM9 → https://manager.line.biz/groups/282784/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: Vv72 → https://manager.line.biz/groups/291413/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: TH26 → https://manager.line.biz/groups/291757/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: K188 → https://manager.line.biz/groups/293859/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: BT678 → https://manager.line.biz/groups/293858/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: ✅ อัปเดตสถานะ 0 บัญชี → Dashboard (200)
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: ✅ ทุกไลน์ปกติ — ไม่จำเป็นต้องสับเปลี่ยน
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: ✅ CHECKER รอบนี้เสร็จสมบูรณ์
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: ⏳ รอ 60 วินาทีก่อนรอบถัดไป...
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: =======================================================
+2026-05-11 05:17:35: 🔍 CHECKER: เริ่มรอบตรวจสถานะ
+2026-05-11 05:17:35: =======================================================
+2026-05-11 05:17:35: ✅ WEBSITES: 10 รายการ
+2026-05-11 05:17:35: ✅ DATA MAP: 20 รายการ
+2026-05-11 05:17:35: ⚠️  ไม่พบ Chrome profile ที่ /root/.line-chrome-profile
+2026-05-11 05:17:35: ✅ ใช้ Chrome: /usr/bin/google-chrome
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: Jun88 → https://manager.line.biz/groups/284033/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: MK8 → https://manager.line.biz/groups/274572/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: F168 → https://manager.line.biz/groups/274574/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: PG688 → https://manager.line.biz/groups/273467/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: JL69 → https://manager.line.biz/groups/281962/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: NM9 → https://manager.line.biz/groups/282784/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: Vv72 → https://manager.line.biz/groups/291413/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: TH26 → https://manager.line.biz/groups/291757/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: K188 → https://manager.line.biz/groups/293859/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: 🌐 เข้าเว็บ: BT678 → https://manager.line.biz/groups/293858/setting
+2026-05-11 05:17:35:    พบ 0 account links
+2026-05-11 05:17:35: 
+2026-05-11 05:17:35: ✅ อัปเดตสถานะ 0 บัญชี → Dashboard (200)
+2026-05-11 05:17:35: {"level":30,"time":1778451455257,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1015,"method":"POST","url":"/api/line-status"},"res":{"statusCode":200},"responseTime":12,"msg":"request completed"}
+2026-05-11 05:17:38: {"level":30,"time":1778451458195,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1016,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 05:17:47: {"level":30,"time":1778451467666,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1017,"method":"POST","url":"/api/line-status"},"res":{"statusCode":200},"responseTime":7,"msg":"request completed"}
+2026-05-11 05:17:48: {"level":30,"time":1778451468195,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1018,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 05:17:58: {"level":30,"time":1778451478196,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1019,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 05:17:58: {"level":30,"time":1778451478207,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1020,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 05:17:58: {"level":30,"time":1778451478212,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1021,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":4,"msg":"request completed"}
+2026-05-11 05:18:06: {"level":30,"time":1778451486225,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 05:18:08: {"level":30,"time":1778451488195,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1022,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 05:18:18: {"level":30,"time":1778451498196,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1023,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 05:18:28: {"level":30,"time":1778451508195,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1024,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 05:18:28: {"level":30,"time":1778451508204,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1025,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 05:18:28: {"level":30,"time":1778451508208,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1026,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 05:18:38: {"level":30,"time":1778451518196,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1027,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 05:18:48: {"level":30,"time":1778451528196,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1028,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 05:18:58: {"level":30,"time":1778451538199,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1029,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":5,"msg":"request completed"}
+2026-05-11 05:18:58: {"level":30,"time":1778451538205,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1030,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 05:18:58: {"level":30,"time":1778451538209,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1031,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 05:19:06: {"level":30,"time":1778451546228,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 05:19:08: {"level":30,"time":1778451548222,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1032,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":25,"msg":"request completed"}
+2026-05-11 05:19:18: {"level":30,"time":1778451558232,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1033,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":15,"msg":"request completed"}
+2026-05-11 05:19:28: {"level":30,"time":1778451568218,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1034,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":13,"msg":"request completed"}
+2026-05-11 05:19:28: {"level":30,"time":1778451568242,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1035,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":14,"msg":"request completed"}
+2026-05-11 05:19:28: {"level":30,"time":1778451568283,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1036,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":29,"msg":"request completed"}
+2026-05-11 05:19:38: {"level":30,"time":1778451578215,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1037,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":17,"msg":"request completed"}
+2026-05-11 05:19:48: {"level":30,"time":1778451588209,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1038,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":9,"msg":"request completed"}
+2026-05-11 05:19:58: {"level":30,"time":1778451598199,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1039,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":4,"msg":"request completed"}
+2026-05-11 05:19:58: {"level":30,"time":1778451598205,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1040,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 05:19:58: {"level":30,"time":1778451598216,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1041,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":6,"msg":"request completed"}
+2026-05-11 05:20:06: {"level":30,"time":1778451606236,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 05:20:06: {"level":30,"time":1778451606236,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Backup scanner already running, skipping this tick"}
+2026-05-11 05:20:08: {"level":30,"time":1778451608211,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1042,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":10,"msg":"request completed"}
+2026-05-11 05:20:18: {"level":30,"time":1778451618228,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1043,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":20,"msg":"request completed"}
+2026-05-11 05:20:28: {"level":30,"time":1778451628197,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1044,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 05:20:28: {"level":30,"time":1778451628203,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1045,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 05:20:28: {"level":30,"time":1778451628208,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1046,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 05:20:38: {"level":30,"time":1778451638721,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1047,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":8,"msg":"request completed"}
+2026-05-11 05:20:48: {"level":30,"time":1778451648708,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":1048,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":5,"msg":"request completed"}

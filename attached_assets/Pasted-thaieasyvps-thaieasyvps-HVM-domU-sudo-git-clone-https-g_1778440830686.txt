@@ -1,0 +1,280 @@
+thaieasyvps@thaieasyvps-HVM-domU:~$ sudo git clone https://github.com/4669za123-boop/Line-Dshbord /app
+cd /app
+sudo bash setup-vps.sh
+[sudo] password for thaieasyvps: 
+Cloning into '/app'...
+remote: Enumerating objects: 1532, done.
+remote: Counting objects: 100% (1532/1532), done.
+remote: Compressing objects: 100% (639/639), done.
+remote: Total 1532 (delta 946), reused 1439 (delta 853), pack-reused 0 (from 0)
+Receiving objects: 100% (1532/1532), 13.10 MiB | 13.14 MiB/s, done.
+Resolving deltas: 100% (946/946), done.
+🚀 เริ่มติดตั้ง LINE Dashboard บน VPS...
+📦 อัปเดต packages...
+Hit:1 http://dl.google.com/linux/chrome/deb stable InRelease
+Hit:2 https://dl.google.com/linux/chrome-stable/deb stable InRelease                                                                                          
+Hit:3 https://deb.nodesource.com/node_20.x nodistro InRelease                                                                                                 
+Get:4 http://security.ubuntu.com/ubuntu jammy-security InRelease [129 kB]                                        
+Hit:5 http://th.archive.ubuntu.com/ubuntu jammy InRelease                                
+Get:6 http://th.archive.ubuntu.com/ubuntu jammy-updates InRelease [128 kB]
+Get:7 http://security.ubuntu.com/ubuntu jammy-security/main amd64 DEP-11 Metadata [54.6 kB]
+Get:8 http://security.ubuntu.com/ubuntu jammy-security/universe amd64 DEP-11 Metadata [126 kB]
+Get:9 http://th.archive.ubuntu.com/ubuntu jammy-backports InRelease [127 kB]                              
+Get:10 http://th.archive.ubuntu.com/ubuntu jammy-updates/main amd64 DEP-11 Metadata [114 kB]
+Get:11 http://th.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 DEP-11 Metadata [360 kB]
+Get:12 http://th.archive.ubuntu.com/ubuntu jammy-updates/multiverse amd64 DEP-11 Metadata [940 B]
+Get:13 http://th.archive.ubuntu.com/ubuntu jammy-backports/main amd64 DEP-11 Metadata [5,772 B]
+Get:14 http://th.archive.ubuntu.com/ubuntu jammy-backports/universe amd64 DEP-11 Metadata [12.4 kB]
+Fetched 1,058 kB in 5s (235 kB/s)                                            
+Reading package lists... Done
+W: http://dl.google.com/linux/chrome/deb/dists/stable/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.
+N: Skipping acquire of configured file 'main/binary-i386/Packages' as repository 'https://dl.google.com/linux/chrome-stable/deb stable InRelease' doesn't support architecture 'i386'
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+Calculating upgrade... Done
+The following packages have been kept back:
+  libnetplan0 netplan.io
+0 upgraded, 0 newly installed, 0 to remove and 2 not upgraded.
+📦 ติดตั้ง Node.js 20...
+2026-05-11 02:15:47 - Installing pre-requisites
+Hit:1 http://dl.google.com/linux/chrome/deb stable InRelease
+Hit:2 http://security.ubuntu.com/ubuntu jammy-security InRelease                                                                                                                 
+Hit:3 http://th.archive.ubuntu.com/ubuntu jammy InRelease                                                                                                                        
+Hit:4 https://deb.nodesource.com/node_20.x nodistro InRelease                                                             
+Hit:5 https://dl.google.com/linux/chrome-stable/deb stable InRelease   
+Hit:6 http://th.archive.ubuntu.com/ubuntu jammy-updates InRelease
+Hit:7 http://th.archive.ubuntu.com/ubuntu jammy-backports InRelease
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+2 packages can be upgraded. Run 'apt list --upgradable' to see them.
+W: http://dl.google.com/linux/chrome/deb/dists/stable/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.
+N: Skipping acquire of configured file 'main/binary-i386/Packages' as repository 'https://dl.google.com/linux/chrome-stable/deb stable InRelease' doesn't support architecture 'i386'
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+ca-certificates is already the newest version (20240203~22.04.1).
+curl is already the newest version (7.81.0-1ubuntu1.24).
+gnupg is already the newest version (2.2.27-3ubuntu2.5).
+apt-transport-https is already the newest version (2.4.14).
+0 upgraded, 0 newly installed, 0 to remove and 2 not upgraded.
+Hit:1 http://dl.google.com/linux/chrome/deb stable InRelease
+Hit:2 https://deb.nodesource.com/node_20.x nodistro InRelease                                                                                                                   
+Hit:3 https://dl.google.com/linux/chrome-stable/deb stable InRelease                                                                                                            
+Hit:4 http://th.archive.ubuntu.com/ubuntu jammy InRelease           
+Hit:5 http://security.ubuntu.com/ubuntu jammy-security InRelease
+Hit:6 http://th.archive.ubuntu.com/ubuntu jammy-updates InRelease
+Hit:7 http://th.archive.ubuntu.com/ubuntu jammy-backports InRelease
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+2 packages can be upgraded. Run 'apt list --upgradable' to see them.
+W: http://dl.google.com/linux/chrome/deb/dists/stable/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.
+N: Skipping acquire of configured file 'main/binary-i386/Packages' as repository 'https://dl.google.com/linux/chrome-stable/deb stable InRelease' doesn't support architecture 'i386'
+2026-05-11 02:16:15 - Repository configured successfully.
+2026-05-11 02:16:15 - To install Node.js, run: apt install nodejs -y
+2026-05-11 02:16:15 - You can use N|solid Runtime as a node.js alternative
+2026-05-11 02:16:15 - To install N|solid Runtime, run: apt install nsolid -y 
+
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+nodejs is already the newest version (20.20.2-1nodesource1).
+0 upgraded, 0 newly installed, 0 to remove and 2 not upgraded.
+📦 ติดตั้ง pnpm...
+
+changed 1 package in 7s
+
+1 package is looking for funding
+  run `npm fund` for details
+📦 ติดตั้ง PM2...
+
+changed 90 packages in 24s
+
+8 packages are looking for funding
+  run `npm fund` for details
+📦 ติดตั้ง Python...
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+python3 is already the newest version (3.10.6-1~22.04.1).
+python3-pip is already the newest version (22.0.2+dfsg-1ubuntu0.7).
+0 upgraded, 0 newly installed, 0 to remove and 2 not upgraded.
+📦 ติดตั้ง Python packages...
+Requirement already satisfied: selenium in /usr/local/lib/python3.10/dist-packages (4.43.0)
+Requirement already satisfied: webdriver-manager in /usr/local/lib/python3.10/dist-packages (4.0.2)
+Requirement already satisfied: requests in /usr/lib/python3/dist-packages (2.25.1)
+Requirement already satisfied: urllib3[socks]<3.0,>=2.6.3 in /usr/local/lib/python3.10/dist-packages (from selenium) (2.7.0)
+Requirement already satisfied: trio<1.0,>=0.31.0 in /usr/local/lib/python3.10/dist-packages (from selenium) (0.33.0)
+Requirement already satisfied: certifi>=2026.1.4 in /usr/local/lib/python3.10/dist-packages (from selenium) (2026.4.22)
+Requirement already satisfied: trio-websocket<1.0,>=0.12.2 in /usr/local/lib/python3.10/dist-packages (from selenium) (0.12.2)
+Requirement already satisfied: typing_extensions<5.0,>=4.15.0 in /usr/local/lib/python3.10/dist-packages (from selenium) (4.15.0)
+Requirement already satisfied: websocket-client<2.0,>=1.8.0 in /usr/local/lib/python3.10/dist-packages (from selenium) (1.9.0)
+Requirement already satisfied: packaging in /usr/local/lib/python3.10/dist-packages (from webdriver-manager) (26.2)
+Requirement already satisfied: python-dotenv in /usr/local/lib/python3.10/dist-packages (from webdriver-manager) (1.2.2)
+Requirement already satisfied: attrs>=23.2.0 in /usr/local/lib/python3.10/dist-packages (from trio<1.0,>=0.31.0->selenium) (26.1.0)
+Requirement already satisfied: idna in /usr/lib/python3/dist-packages (from trio<1.0,>=0.31.0->selenium) (3.3)
+Requirement already satisfied: outcome in /usr/local/lib/python3.10/dist-packages (from trio<1.0,>=0.31.0->selenium) (1.3.0.post0)
+Requirement already satisfied: sortedcontainers in /usr/local/lib/python3.10/dist-packages (from trio<1.0,>=0.31.0->selenium) (2.4.0)
+Requirement already satisfied: sniffio>=1.3.0 in /usr/local/lib/python3.10/dist-packages (from trio<1.0,>=0.31.0->selenium) (1.3.1)
+Requirement already satisfied: exceptiongroup in /usr/local/lib/python3.10/dist-packages (from trio<1.0,>=0.31.0->selenium) (1.3.1)
+Requirement already satisfied: wsproto>=0.14 in /usr/local/lib/python3.10/dist-packages (from trio-websocket<1.0,>=0.12.2->selenium) (1.3.2)
+Requirement already satisfied: pysocks!=1.5.7,<2.0,>=1.5.6 in /usr/local/lib/python3.10/dist-packages (from urllib3[socks]<3.0,>=2.6.3->selenium) (1.7.1)
+Requirement already satisfied: h11<1,>=0.16.0 in /usr/local/lib/python3.10/dist-packages (from wsproto>=0.14->trio-websocket<1.0,>=0.12.2->selenium) (0.16.0)
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+📦 ติดตั้ง Chrome...
+Warning: apt-key is deprecated. Manage keyring files in trusted.gpg.d instead (see apt-key(8)).
+OK
+Hit:1 http://dl.google.com/linux/chrome/deb stable InRelease
+Hit:2 https://deb.nodesource.com/node_20.x nodistro InRelease                                                                                                  
+Hit:3 https://dl.google.com/linux/chrome-stable/deb stable InRelease                                                                                           
+Hit:4 http://security.ubuntu.com/ubuntu jammy-security InRelease                                                            
+Hit:5 http://th.archive.ubuntu.com/ubuntu jammy InRelease                    
+Hit:6 http://th.archive.ubuntu.com/ubuntu jammy-updates InRelease
+Hit:7 http://th.archive.ubuntu.com/ubuntu jammy-backports InRelease
+Reading package lists... Done
+W: http://dl.google.com/linux/chrome/deb/dists/stable/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.
+N: Skipping acquire of configured file 'main/binary-i386/Packages' as repository 'https://dl.google.com/linux/chrome-stable/deb stable InRelease' doesn't support architecture 'i386'
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+google-chrome-stable is already the newest version (148.0.7778.96-1).
+0 upgraded, 0 newly installed, 0 to remove and 2 not upgraded.
+📦 ติดตั้ง Xvfb + VNC...
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+x11vnc is already the newest version (0.9.16-8).
+xvfb is already the newest version (2:21.1.4-2ubuntu1.7~22.04.16).
+0 upgraded, 0 newly installed, 0 to remove and 2 not upgraded.
+📦 ติดตั้ง Nginx...
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+nginx is already the newest version (1.18.0-6ubuntu14.10).
+0 upgraded, 0 newly installed, 0 to remove and 2 not upgraded.
+📥 Clone โปรเจกต์...
+   โฟลเดอร์ /app มีอยู่แล้ว — pull โค้ดล่าสุด
+Already up to date.
+🔨 ติดตั้ง dependencies...
+Scope: all 10 workspace projects
+Lockfile is up to date, resolution step is skipped
+Packages: +486
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+   ╭─────────────────────────────────────────╮
+   │                                         │
+   │   Update available! 10.33.4 → 11.0.9.   │
+   │   Changelog: https://pnpm.io/v/11.0.9   │
+   │    To update, run: pnpm add -g pnpm     │
+   │                                         │
+   ╰─────────────────────────────────────────╯
+
+Progress: resolved 486, reused 486, downloaded 0, added 486, done
+
+devDependencies:
++ prettier 3.8.1
++ typescript 5.9.3
+
+. preinstall$ sh -c 'rm -f package-lock.json yarn.lock; case "$npm_config_user_agent" in pnpm/*) ;; *) echo "Use pnpm instead" >&2; exit 1 ;; esac'
+└─ Done in 53ms
+Done in 25.1s using pnpm v10.33.4
+🔨 Build API Server...
+
+> @workspace/api-server@0.0.0 build /app/artifacts/api-server
+> node ./build.mjs
+
+
+  dist/index.mjs                       1.4mb ⚠️
+  dist/pino-worker.mjs               153.4kb
+  dist/pino-file.mjs                 142.0kb
+  dist/pino-pretty.mjs               114.6kb
+  dist/thread-stream-worker.mjs        7.3kb
+  dist/index.mjs.map                   2.2mb
+  dist/pino-worker.mjs.map           256.9kb
+  dist/pino-file.mjs.map             229.0kb
+  dist/pino-pretty.mjs.map           203.9kb
+  dist/thread-stream-worker.mjs.map   12.0kb
+
+⚡ Done in 963ms
+🔨 Build Frontend Dashboard...
+
+> @workspace/line-dashboard@0.0.0 build /app/artifacts/line-dashboard
+> vite build --config vite.config.ts
+
+vite v7.3.2 building client environment for production...
+src/components/ui/dialog.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+src/components/ui/select.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+✓ 1758 modules transformed.
+dist/public/index.html                   1.12 kB │ gzip:   0.59 kB
+dist/public/assets/index-BQzq2Od_.css  136.30 kB │ gzip:  20.41 kB
+dist/public/assets/index-CQfMT3Ck.js   354.96 kB │ gzip: 111.73 kB
+✓ built in 19.22s
+⚙️  ตั้งค่า Nginx...
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+Synchronizing state of nginx.service with SysV service script with /lib/systemd/systemd-sysv-install.
+Executing: /lib/systemd/systemd-sysv-install enable nginx
+⚙️  ตั้งค่า PM2...
+[PM2] Starting /usr/bin/bash in fork_mode (1 instance)
+[PM2] Done.
+┌────┬───────────────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name                  │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼───────────────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ line-dashboard-api    │ default     │ N/A     │ fork    │ 166459   │ 0s     │ 0    │ online    │ 0%       │ 16.3mb   │ root     │ disabled │
+└────┴───────────────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+[PM2] Init System found: systemd
+Platform systemd
+Template
+[Unit]
+Description=PM2 process manager
+Documentation=https://pm2.keymetrics.io/
+After=network.target
+
+[Service]
+Type=forking
+User=root
+LimitNOFILE=infinity
+LimitNPROC=infinity
+LimitCORE=infinity
+Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin
+Environment=PM2_HOME=/root/.pm2
+PIDFile=/root/.pm2/pm2.pid
+Restart=on-failure
+
+ExecStart=/usr/lib/node_modules/pm2/bin/pm2 resurrect
+ExecReload=/usr/lib/node_modules/pm2/bin/pm2 reload all
+ExecStop=/usr/lib/node_modules/pm2/bin/pm2 kill
+
+[Install]
+WantedBy=multi-user.target
+
+Target path
+/etc/systemd/system/pm2-root.service
+Command list
+[ 'systemctl enable pm2-root' ]
+[PM2] Writing init configuration in /etc/systemd/system/pm2-root.service
+[PM2] Making script booting at startup...
+[PM2] [-] Executing: systemctl enable pm2-root...
+[PM2] [v] Command successfully executed.
++---------------------------------------+
+[PM2] Freeze a process list on reboot via:
+$ pm2 save
+
+[PM2] Remove init script via:
+$ pm2 unstartup systemd
+[PM2] Saving current process list...
+[PM2] Successfully saved in /root/.pm2/dump.pm2
+
+✅ ติดตั้งเสร็จแล้ว!
+
+📋 ขั้นตอนต่อไป (ทำครั้งเดียว):
+   1. ล็อกอิน LINE OA ครั้งแรก → รัน: bash /app/login-line.sh
+      (ดูวิธีเชื่อม VNC ด้านล่าง)
+   2. หลังล็อกอินเสร็จ → restart bot: pm2 restart line-dashboard-api
+
+🌐 Dashboard: http://103.82.249.176
+🔌 API:       http://103.82.249.176/api/health
+📊 PM2:       pm2 status
+📝 Logs:      pm2 logs line-dashboard-api

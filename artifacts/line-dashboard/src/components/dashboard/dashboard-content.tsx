@@ -1,6 +1,6 @@
 
 import { useMemo, useState } from "react"
-import { Globe, Sparkles, Users, Wifi, WifiOff } from "lucide-react"
+import { Globe, LayoutDashboard, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -57,10 +57,13 @@ export function DashboardContent({
       <div className="p-6 lg:p-10">
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <h1 className="text-2xl lg:text-3xl font-bold text-foreground">
+            <h1 className="text-2xl lg:text-3xl font-bold text-foreground flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/15 ring-1 ring-primary/25">
+                <LayoutDashboard className="h-5 w-5 text-primary" />
+              </span>
               สถานะไลน์
             </h1>
-            <p className="text-muted-foreground mt-1">
+            <p className="text-muted-foreground mt-1 ml-1">
               จัดการและตรวจสอบบัญชีไลน์ของคุณ
             </p>
           </div>
@@ -205,15 +208,32 @@ export function DashboardContent({
           )
         })()}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {websiteRows.map((summary) => (
-            <LineCard
-              key={summary.websiteId}
-              summary={summary}
-              onRemove={onRemoveWebsite}
-            />
-          ))}
-        </div>
+        {websiteRows.length > 0 && (
+          <div className="flex items-center gap-3 mb-4">
+            <Globe className="h-4 w-4 text-muted-foreground" />
+            <p className="text-sm font-medium text-muted-foreground">เว็บไซต์ทั้งหมด</p>
+            <div className="flex-1 h-px bg-border" />
+            <span className="text-xs text-muted-foreground">{websiteRows.length} เว็บ</span>
+          </div>
+        )}
+
+        {websiteRows.length === 0 ? (
+          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border py-14 text-center">
+            <Globe className="h-10 w-10 text-muted-foreground/30 mb-3" />
+            <p className="text-sm text-muted-foreground">ยังไม่มีเว็บไซต์</p>
+            <p className="text-xs text-muted-foreground/60 mt-1">กดปุ่ม "เพิ่มเว็บไซต์" มุมบนขวาเพื่อเริ่มต้น</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            {websiteRows.map((summary) => (
+              <LineCard
+                key={summary.websiteId}
+                summary={summary}
+                onRemove={onRemoveWebsite}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </main>
   )

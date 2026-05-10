@@ -337,7 +337,7 @@ export function BackupPoolPage({
         {/* Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <div className="bg-card border border-border rounded-xl p-4">
-            <p className="text-xs text-muted-foreground mb-1">สำรองทั้งหมด</p>
+            <p className="text-xs text-muted-foreground mb-1">กลุ่มสำรองทั้งหมด</p>
             <p className={cn("text-2xl font-bold", backupLines.length > 0 ? "text-foreground" : "text-muted-foreground")}>
               {backupLines.length}
             </p>
@@ -389,50 +389,46 @@ export function BackupPoolPage({
           </div>
         )}
 
-        {/* Section 2: Tab bar */}
-        {backupLines.length > 0 && (
-          <>
-            <div className="inline-flex rounded-xl border border-border bg-card p-1 gap-1 mb-6">
-              {tabs.map((tab) => {
-                const isActive = activeTab === tab.key
-                return (
-                  <button
-                    key={tab.key}
-                    type="button"
-                    onClick={() => setActiveTab(tab.key)}
-                    className={cn(
-                      "flex items-center gap-1.5 whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-semibold transition-all",
-                      isActive
-                        ? tab.color === "amber"
-                          ? "bg-amber-500/15 text-amber-400 ring-1 ring-amber-500/25"
-                          : tab.color === "blue"
-                          ? "bg-blue-500/15 text-blue-400 ring-1 ring-blue-500/25"
-                          : "bg-purple-500/15 text-purple-400 ring-1 ring-purple-500/25"
-                        : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
-                    )}
-                  >
-                    {tab.label}
-                    <span className={cn(
-                      "inline-flex items-center justify-center h-4 min-w-4 px-1 rounded-full text-[10px] font-bold",
-                      isActive
-                        ? tab.color === "amber"
-                          ? "bg-amber-500/20 text-amber-300"
-                          : tab.color === "blue"
-                          ? "bg-blue-500/20 text-blue-300"
-                          : "bg-purple-500/20 text-purple-300"
-                        : "bg-muted text-muted-foreground"
-                    )}>
-                      {tab.count}
-                    </span>
-                  </button>
-                )
-              })}
-            </div>
+        {/* Section 2: Tab bar — แสดงเสมอ */}
+        <div className="inline-flex rounded-xl border border-border bg-card p-1 gap-1 mb-6">
+          {tabs.map((tab) => {
+            const isActive = activeTab === tab.key
+            return (
+              <button
+                key={tab.key}
+                type="button"
+                onClick={() => setActiveTab(tab.key)}
+                className={cn(
+                  "flex items-center gap-1.5 whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-semibold transition-all",
+                  isActive
+                    ? tab.color === "amber"
+                      ? "bg-amber-500/15 text-amber-400 ring-1 ring-amber-500/25"
+                      : tab.color === "blue"
+                      ? "bg-blue-500/15 text-blue-400 ring-1 ring-blue-500/25"
+                      : "bg-purple-500/15 text-purple-400 ring-1 ring-purple-500/25"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+                )}
+              >
+                {tab.label}
+                <span className={cn(
+                  "inline-flex items-center justify-center h-4 min-w-4 px-1 rounded-full text-[10px] font-bold",
+                  isActive
+                    ? tab.color === "amber"
+                      ? "bg-amber-500/20 text-amber-300"
+                      : tab.color === "blue"
+                      ? "bg-blue-500/20 text-blue-300"
+                      : "bg-purple-500/20 text-purple-300"
+                    : "bg-muted text-muted-foreground"
+                )}>
+                  {tab.count}
+                </span>
+              </button>
+            )
+          })}
+        </div>
 
-            {/* Section 3: ไลน์ในกลุ่มตาม Tab */}
-            {renderTabContent()}
-          </>
-        )}
+        {/* Section 3: ไลน์ในกลุ่มตาม Tab */}
+        {renderTabContent()}
       </div>
 
       {/* Add Backup Dialog */}

@@ -285,6 +285,7 @@ export default function App() {
         return (
           <AddLinePage
             websites={websites}
+            accounts={accounts}
             onAddLine={handleAddLine}
             onNavigateDashboard={() => setActivePage("dashboard")}
           />

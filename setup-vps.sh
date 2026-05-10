@@ -88,7 +88,7 @@ server {
     server_name _;
 
     # Serve frontend (React build)
-    root /app/artifacts/line-dashboard/dist;
+    root /app/artifacts/line-dashboard/dist/public;
     index index.html;
 
     location / {

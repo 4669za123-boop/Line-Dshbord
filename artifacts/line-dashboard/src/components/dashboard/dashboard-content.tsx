@@ -208,15 +208,6 @@ export function DashboardContent({
           )
         })()}
 
-        {websiteRows.length > 0 && (
-          <div className="flex items-center gap-3 mb-4">
-            <Globe className="h-4 w-4 text-muted-foreground" />
-            <p className="text-sm font-medium text-muted-foreground">เว็บไซต์ทั้งหมด</p>
-            <div className="flex-1 h-px bg-border" />
-            <span className="text-xs text-muted-foreground">{websiteRows.length} เว็บ</span>
-          </div>
-        )}
-
         {websiteRows.length === 0 ? (
           <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border py-14 text-center">
             <Globe className="h-10 w-10 text-muted-foreground/30 mb-3" />

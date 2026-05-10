@@ -343,13 +343,13 @@ export function BackupPoolPage({
 
         {/* Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <div className="bg-card border border-border rounded-xl p-4">
+          <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]">
             <p className="text-xs text-muted-foreground mb-1">กลุ่มสำรองทั้งหมด</p>
             <p className={cn("text-2xl font-bold", backupLines.length > 0 ? "text-foreground" : "text-muted-foreground")}>
               {backupLines.length}
             </p>
           </div>
-          <div className="bg-card border border-border rounded-xl p-4">
+          <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]">
             <div className="flex items-center gap-2 mb-1">
               <span className="h-3 w-3 rounded-full bg-blue-400/60" />
               <p className="text-xs text-muted-foreground">ไลน์หลัก</p>
@@ -358,7 +358,7 @@ export function BackupPoolPage({
               {mainCount}
             </p>
           </div>
-          <div className="bg-card border border-border rounded-xl p-4">
+          <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]">
             <div className="flex items-center gap-2 mb-1">
               <span className="h-3 w-3 rounded-full bg-purple-400/60" />
               <p className="text-xs text-muted-foreground">ไลน์ฝากถอน</p>
@@ -368,7 +368,7 @@ export function BackupPoolPage({
             </p>
           </div>
           <div className={cn(
-            "border rounded-xl p-4 transition-colors",
+            "border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]",
             pending.length > 0 ? "bg-amber-500/5 border-amber-500/25" : "bg-card border-border"
           )}>
             <div className="flex items-center gap-2 mb-1">

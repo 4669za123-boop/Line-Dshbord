@@ -81,7 +81,6 @@ export function DashboardContent({
                 <Globe className="h-4 w-4" />
               </span>
               เพิ่มเว็บไซต์
-              <Sparkles className="h-4 w-4 text-primary opacity-70" />
             </span>
           </button>
         </div>

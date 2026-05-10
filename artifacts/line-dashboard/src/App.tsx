@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { Sidebar, type PageType } from "@/components/dashboard/sidebar";
 import { DashboardContent } from "@/components/dashboard/dashboard-content";
-import { AddLinePage } from "@/components/dashboard/add-line-page";
 import { NotificationSettingsPage } from "@/components/dashboard/notification-settings-page";
 import { BackupPoolPage, type BackupLine, type BackupLineRole } from "@/components/dashboard/backup-pool-page";
-import type { Website, AddLineFormPayload } from "@/components/dashboard/types";
+import type { Website } from "@/components/dashboard/types";
 import type { LineAccount } from "@/components/dashboard/line-card";
 
 const BACKUP_STORAGE_KEY = "line-mgmt-backup-pool";
@@ -202,45 +201,6 @@ export default function App() {
     setAccounts((prev) => prev.filter((a) => a.websiteId !== id));
   };
 
-  const handleAddLine = async (p: AddLineFormPayload) => {
-    const trimmed = p.lineIdentifier.trim();
-    if (!trimmed) return;
-
-    const site = websites.find((w) => w.id === p.websiteId);
-    if (!site) return;
-
-    try {
-      await fetch("/api/add-line", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          url: trimmed,
-          type: p.role === "main" ? "หลัก" : "ฝากถอน",
-          site: site.name,
-        }),
-      });
-    } catch (err) {
-      console.log("API ERROR:", err);
-    }
-
-    const next: LineAccount = {
-      id: crypto.randomUUID(),
-      name: trimmed,
-      websiteId: site.id,
-      websiteName: site.name,
-      lineRole: p.role,
-      mainStatus: p.role === "main" ? "normal" : "inactive",
-      depositStatus: p.role === "deposit" ? "normal" : "inactive",
-    };
-
-    setAccounts((prev) => {
-      const rest = prev.filter(
-        (a) => !(a.websiteId === site.id && a.lineRole === p.role),
-      );
-      return [...rest, next];
-    });
-  };
-
   const handleAddBackup = (lineId: string, role: BackupLineRole, note?: string) => {
     const newBackup: BackupLine = {
       id: crypto.randomUUID(),
@@ -281,15 +241,6 @@ export default function App() {
     switch (activePage) {
       case "dashboard":
         return dashboard;
-      case "add-line":
-        return (
-          <AddLinePage
-            websites={websites}
-            accounts={accounts}
-            onAddLine={handleAddLine}
-            onNavigateDashboard={() => setActivePage("dashboard")}
-          />
-        );
       case "backup-pool":
         return (
           <BackupPoolPage

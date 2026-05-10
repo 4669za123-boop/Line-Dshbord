@@ -2,7 +2,6 @@
 import { cn } from "@/lib/utils"
 import {
   LayoutDashboard,
-  MessageSquarePlus,
   Bell,
   Menu,
   X,
@@ -11,11 +10,10 @@ import {
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 
-export type PageType = "dashboard" | "add-line" | "notification-settings" | "backup-pool"
+export type PageType = "dashboard" | "notification-settings" | "backup-pool"
 
 const menuItems: { icon: typeof LayoutDashboard; label: string; page: PageType; badge?: number }[] = [
   { icon: LayoutDashboard, label: "แดชบอร์ด", page: "dashboard" },
-  { icon: MessageSquarePlus, label: "เพิ่ม LINE", page: "add-line" },
   { icon: Archive, label: "ไลน์สำรอง", page: "backup-pool" },
   { icon: Bell, label: "ตั้งค่าแจ้งเตือน", page: "notification-settings" },
 ]

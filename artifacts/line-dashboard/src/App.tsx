@@ -4,7 +4,7 @@ import { DashboardContent } from "@/components/dashboard/dashboard-content";
 import { NotificationSettingsPage } from "@/components/dashboard/notification-settings-page";
 import { BackupPoolPage, type BackupLine, type BackupLineRole, type BackupAccount } from "@/components/dashboard/backup-pool-page";
 import type { Website } from "@/components/dashboard/types";
-import type { LineAccount } from "@/components/dashboard/line-card";
+import type { LineAccount, FailoverEntry } from "@/components/dashboard/line-card";
 
 const BACKUP_STORAGE_KEY = "line-mgmt-backup-pool";
 const ACCOUNTS_STORAGE_KEY = "line-mgmt-accounts";
@@ -97,6 +97,7 @@ export default function App() {
   const [backupAccountsMain, setBackupAccountsMain] = useState<BackupAccount[]>([]);
   const [backupAccountsDeposit, setBackupAccountsDeposit] = useState<BackupAccount[]>([]);
   const [backupAccountsPending, setBackupAccountsPending] = useState<BackupAccount[]>([]);
+  const [failoverLog, setFailoverLog] = useState<FailoverEntry[]>([]);
   const [persistReady, setPersistReady] = useState(false);
 
   useEffect(() => {
@@ -183,6 +184,47 @@ export default function App() {
 
     poll();
     const id = setInterval(poll, 10_000);
+    return () => {
+      cancelled = true;
+      clearInterval(id);
+    };
+  }, []);
+
+  // รีเฟรช LINE IDs ทุก 30 วินาที เพื่อรับ ID ใหม่หลัง auto-failover
+  useEffect(() => {
+    let cancelled = false;
+
+    const refreshLines = () => {
+      fetch("/api/lines")
+        .then((r) => r.json())
+        .then((data: LineAccount[]) => {
+          if (!cancelled && data.length > 0) setAccounts(data);
+        })
+        .catch(() => {});
+    };
+
+    const id = setInterval(refreshLines, 30_000);
+    return () => {
+      cancelled = true;
+      clearInterval(id);
+    };
+  }, []);
+
+  // ดึง failover log ทุก 30 วินาที เพื่อแสดง badge "สับเปลี่ยนแล้ว"
+  useEffect(() => {
+    let cancelled = false;
+
+    const fetchLog = () => {
+      fetch("/api/failover-log")
+        .then((r) => r.json())
+        .then((data: FailoverEntry[]) => {
+          if (!cancelled) setFailoverLog(data ?? []);
+        })
+        .catch(() => {});
+    };
+
+    fetchLog();
+    const id = setInterval(fetchLog, 30_000);
     return () => {
       cancelled = true;
       clearInterval(id);
@@ -325,6 +367,7 @@ export default function App() {
     <DashboardContent
       websites={websites}
       accounts={accounts}
+      failoverLog={failoverLog}
       onAddWebsite={handleAddWebsite}
       onRemoveWebsite={handleRemoveWebsite}
       onReorderWebsites={handleReorderWebsites}

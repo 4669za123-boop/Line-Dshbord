@@ -15,20 +15,22 @@ import {
   LineCard,
   mergeWebsitesWithLineStatus,
   type LineAccount,
-  type WebsiteSummary,
+  type FailoverEntry,
+  type WebsiteLineSummary,
 } from "./line-card";
 import type { Website } from "./types";
 
 export type DashboardContentProps = {
   websites: Website[];
   accounts: LineAccount[];
+  failoverLog?: FailoverEntry[];
   onAddWebsite: (name: string, url: string) => void;
   onRemoveWebsite: (id: string) => void;
   onReorderWebsites: (orderedIds: string[]) => void;
 };
 
 type SortableCardProps = {
-  summary: WebsiteSummary;
+  summary: WebsiteLineSummary;
   onRemove: (id: string) => void;
   onDragStart: (id: string) => void;
   onDragEnter: (id: string) => void;
@@ -84,6 +86,7 @@ function SortableCard({
 export function DashboardContent({
   websites,
   accounts,
+  failoverLog = [],
   onAddWebsite,
   onRemoveWebsite,
   onReorderWebsites,
@@ -95,8 +98,8 @@ export function DashboardContent({
   const [overId, setOverId] = useState<string | null>(null);
 
   const websiteRows = useMemo(
-    () => mergeWebsitesWithLineStatus(websites, accounts),
-    [websites, accounts],
+    () => mergeWebsitesWithLineStatus(websites, accounts, failoverLog),
+    [websites, accounts, failoverLog],
   );
 
   const handleDragEnd = () => {

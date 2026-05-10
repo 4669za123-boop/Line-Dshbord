@@ -2493,3 +2493,238 @@
 2026-05-11 04:29:00: {"level":30,"time":1778448540681,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":734,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":11,"msg":"request completed"}
 2026-05-11 04:29:00: {"level":30,"time":1778448540724,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":735,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":18,"msg":"request completed"}
 2026-05-11 04:29:00: {"level":30,"time":1778448540753,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":736,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":5,"msg":"request completed"}
+2026-05-11 04:29:05: {"level":30,"time":1778448545418,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 04:29:09: {"level":30,"time":1778448549019,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":737,"method":"POST","url":"/api/line-status"},"res":{"statusCode":200},"responseTime":10,"msg":"request completed"}
+2026-05-11 04:29:10: {"level":30,"time":1778448550662,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":738,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 04:29:20: {"level":30,"time":1778448560669,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":739,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":4,"msg":"request completed"}
+2026-05-11 04:29:30: {"level":30,"time":1778448570662,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":740,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 04:29:30: {"level":30,"time":1778448570671,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":741,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 04:29:30: {"level":30,"time":1778448570674,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":742,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 04:29:40: {"level":30,"time":1778448580663,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":743,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 04:29:42: {"level":30,"time":1778448582401,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":744,"method":"POST","url":"/api/line-status"},"res":{"statusCode":200},"responseTime":4,"msg":"request completed"}
+2026-05-11 04:29:50: {"level":30,"time":1778448590665,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":745,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 04:30:00: {"level":30,"time":1778448600664,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":746,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 04:30:00: {"level":30,"time":1778448600671,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":747,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":5,"msg":"request completed"}
+2026-05-11 04:30:00: {"level":30,"time":1778448600675,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":748,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 04:30:05: {"level":30,"time":1778448605422,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 04:30:05: {"level":30,"time":1778448605422,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Backup scanner already running, skipping this tick"}
+2026-05-11 04:30:10: {"level":30,"time":1778448610666,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":749,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 04:30:20: {"level":30,"time":1778448620664,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":750,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 04:30:30: {"level":30,"time":1778448630664,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":751,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 04:30:30: {"level":30,"time":1778448630668,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":752,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 04:30:30: {"level":30,"time":1778448630672,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":753,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 04:30:40: {"level":30,"time":1778448640665,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":754,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 04:30:50: {"level":30,"time":1778448650676,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":755,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":7,"msg":"request completed"}
+2026-05-11 04:31:00: {"level":30,"time":1778448660665,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":756,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 04:31:00: {"level":30,"time":1778448660673,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":757,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":4,"msg":"request completed"}
+2026-05-11 04:31:00: {"level":30,"time":1778448660677,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":758,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+2026-05-11 04:31:05: {"level":30,"time":1778448665429,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 04:31:10: {"level":30,"time":1778448670680,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":759,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":13,"msg":"request completed"}
+2026-05-11 04:32:05: {"level":30,"time":1778448725451,"pid":177075,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+2026-05-11 04:32:10: {"level":30,"time":1778448730670,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":760,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 04:32:10: {"level":30,"time":1778448730677,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":761,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":5,"msg":"request completed"}
+2026-05-11 04:32:10: {"level":30,"time":1778448730685,"pid":177075,"hostname":"thaieasyvps-HVM-domU","req":{"id":762,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+2026-05-11 04:32:18: ✅ DATA MAP: 20 รายการ
+2026-05-11 04:32:18: ⚠️  ไม่พบ Chrome profile ที่ /root/.line-chrome-profile
+2026-05-11 04:32:18: ✅ ใช้ Chrome: /usr/bin/google-chrome
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: Jun88 → https://manager.line.biz/groups/284033/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: MK8 → https://manager.line.biz/groups/274572/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: F168 → https://manager.line.biz/groups/274574/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: PG688 → https://manager.line.biz/groups/273467/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: JL69 → https://manager.line.biz/groups/281962/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: NM9 → https://manager.line.biz/groups/282784/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: Vv72 → https://manager.line.biz/groups/291413/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: TH26 → https://manager.line.biz/groups/291757/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: K188 → https://manager.line.biz/groups/293859/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: BT678 → https://manager.line.biz/groups/293858/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: ✅ อัปเดตสถานะ 0 บัญชี → Dashboard (200)
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: ✅ ทุกไลน์ปกติ — ไม่จำเป็นต้องสับเปลี่ยน
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: ✅ CHECKER รอบนี้เสร็จสมบูรณ์
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: ⏳ รอ 60 วินาทีก่อนรอบถัดไป...
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: =======================================================
+2026-05-11 04:32:18: 🔍 CHECKER: เริ่มรอบตรวจสถานะ
+2026-05-11 04:32:18: =======================================================
+2026-05-11 04:32:18: ✅ WEBSITES: 10 รายการ
+2026-05-11 04:32:18: ✅ DATA MAP: 20 รายการ
+2026-05-11 04:32:18: ⚠️  ไม่พบ Chrome profile ที่ /root/.line-chrome-profile
+2026-05-11 04:32:18: ✅ ใช้ Chrome: /usr/bin/google-chrome
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: Jun88 → https://manager.line.biz/groups/284033/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: MK8 → https://manager.line.biz/groups/274572/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: F168 → https://manager.line.biz/groups/274574/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: PG688 → https://manager.line.biz/groups/273467/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: JL69 → https://manager.line.biz/groups/281962/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: NM9 → https://manager.line.biz/groups/282784/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: Vv72 → https://manager.line.biz/groups/291413/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: TH26 → https://manager.line.biz/groups/291757/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: K188 → https://manager.line.biz/groups/293859/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: BT678 → https://manager.line.biz/groups/293858/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: ✅ อัปเดตสถานะ 0 บัญชี → Dashboard (200)
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: ✅ ทุกไลน์ปกติ — ไม่จำเป็นต้องสับเปลี่ยน
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: ✅ CHECKER รอบนี้เสร็จสมบูรณ์
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: ⏳ รอ 60 วินาทีก่อนรอบถัดไป...
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: =======================================================
+2026-05-11 04:32:18: 🔍 CHECKER: เริ่มรอบตรวจสถานะ
+2026-05-11 04:32:18: =======================================================
+2026-05-11 04:32:18: ✅ WEBSITES: 10 รายการ
+2026-05-11 04:32:18: ✅ DATA MAP: 20 รายการ
+2026-05-11 04:32:18: ⚠️  ไม่พบ Chrome profile ที่ /root/.line-chrome-profile
+2026-05-11 04:32:18: ✅ ใช้ Chrome: /usr/bin/google-chrome
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: Jun88 → https://manager.line.biz/groups/284033/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: MK8 → https://manager.line.biz/groups/274572/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: F168 → https://manager.line.biz/groups/274574/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: PG688 → https://manager.line.biz/groups/273467/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: JL69 → https://manager.line.biz/groups/281962/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: NM9 → https://manager.line.biz/groups/282784/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: Vv72 → https://manager.line.biz/groups/291413/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: TH26 → https://manager.line.biz/groups/291757/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: K188 → https://manager.line.biz/groups/293859/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: BT678 → https://manager.line.biz/groups/293858/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: ✅ อัปเดตสถานะ 0 บัญชี → Dashboard (200)
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: ✅ ทุกไลน์ปกติ — ไม่จำเป็นต้องสับเปลี่ยน
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: ✅ CHECKER รอบนี้เสร็จสมบูรณ์
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: ⏳ รอ 60 วินาทีก่อนรอบถัดไป...
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: =======================================================
+2026-05-11 04:32:18: 🔍 CHECKER: เริ่มรอบตรวจสถานะ
+2026-05-11 04:32:18: =======================================================
+2026-05-11 04:32:18: ✅ WEBSITES: 10 รายการ
+2026-05-11 04:32:18: ✅ DATA MAP: 20 รายการ
+2026-05-11 04:32:18: ⚠️  ไม่พบ Chrome profile ที่ /root/.line-chrome-profile
+2026-05-11 04:32:18: ✅ ใช้ Chrome: /usr/bin/google-chrome
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: Jun88 → https://manager.line.biz/groups/284033/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: MK8 → https://manager.line.biz/groups/274572/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: F168 → https://manager.line.biz/groups/274574/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: PG688 → https://manager.line.biz/groups/273467/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: JL69 → https://manager.line.biz/groups/281962/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: NM9 → https://manager.line.biz/groups/282784/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: Vv72 → https://manager.line.biz/groups/291413/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: TH26 → https://manager.line.biz/groups/291757/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: K188 → https://manager.line.biz/groups/293859/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: BT678 → https://manager.line.biz/groups/293858/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: ✅ อัปเดตสถานะ 0 บัญชี → Dashboard (200)
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: ✅ ทุกไลน์ปกติ — ไม่จำเป็นต้องสับเปลี่ยน
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: ✅ CHECKER รอบนี้เสร็จสมบูรณ์
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: ⏳ รอ 60 วินาทีก่อนรอบถัดไป...
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: =======================================================
+2026-05-11 04:32:18: 🔍 CHECKER: เริ่มรอบตรวจสถานะ
+2026-05-11 04:32:18: =======================================================
+2026-05-11 04:32:18: ✅ WEBSITES: 10 รายการ
+2026-05-11 04:32:18: ✅ DATA MAP: 20 รายการ
+2026-05-11 04:32:18: ⚠️  ไม่พบ Chrome profile ที่ /root/.line-chrome-profile
+2026-05-11 04:32:18: ✅ ใช้ Chrome: /usr/bin/google-chrome
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: Jun88 → https://manager.line.biz/groups/284033/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: MK8 → https://manager.line.biz/groups/274572/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: F168 → https://manager.line.biz/groups/274574/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: PG688 → https://manager.line.biz/groups/273467/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: JL69 → https://manager.line.biz/groups/281962/setting
+2026-05-11 04:32:18:    พบ 0 account links
+2026-05-11 04:32:18: 
+2026-05-11 04:32:18: 🌐 เข้าเว็บ: NM9 → https://manager.line.biz/groups/282784/setting

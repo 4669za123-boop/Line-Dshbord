@@ -2,12 +2,11 @@ import { useEffect, useState } from "react";
 import { Sidebar, type PageType } from "@/components/dashboard/sidebar";
 import { DashboardContent } from "@/components/dashboard/dashboard-content";
 import { NotificationSettingsPage } from "@/components/dashboard/notification-settings-page";
-import { BackupPoolPage, type BackupLine, type BackupLineRole } from "@/components/dashboard/backup-pool-page";
+import { BackupPoolPage, type BackupLine, type BackupLineRole, type BackupAccount } from "@/components/dashboard/backup-pool-page";
 import type { Website } from "@/components/dashboard/types";
 import type { LineAccount } from "@/components/dashboard/line-card";
 
 const BACKUP_STORAGE_KEY = "line-mgmt-backup-pool";
-
 const ACCOUNTS_STORAGE_KEY = "line-mgmt-accounts";
 
 function isLineChannelStatus(x: unknown): x is LineAccount["mainStatus"] {
@@ -95,6 +94,7 @@ export default function App() {
   const [websites, setWebsites] = useState<Website[]>([]);
   const [accounts, setAccounts] = useState<LineAccount[]>([]);
   const [backupLines, setBackupLines] = useState<BackupLine[]>([]);
+  const [backupAccounts, setBackupAccounts] = useState<BackupAccount[]>([]);
   const [persistReady, setPersistReady] = useState(false);
 
   useEffect(() => {
@@ -113,6 +113,11 @@ export default function App() {
         }
       })
       .catch(() => setAccounts(loadAccountsFromStorage()));
+
+    fetch("/api/backup-accounts")
+      .then((r) => r.json())
+      .then((data: BackupAccount[]) => setBackupAccounts(data))
+      .catch(() => setBackupAccounts([]));
 
     setBackupLines(loadBackupFromStorage());
     setPersistReady(true);
@@ -140,9 +145,8 @@ export default function App() {
 
         if (!isLineChannelStatus(rawStatus)) return acc;
 
-        // เทียบ type จาก lines.json กับ lineRole ใน localStorage
-        const isMain    = lineType === "หลัก"      || (lineType === "" && acc.lineRole === "main");
-        const isDeposit = lineType === "ฝากถอน"    || (lineType === "" && acc.lineRole === "deposit");
+        const isMain    = lineType === "หลัก"   || (lineType === "" && acc.lineRole === "main");
+        const isDeposit = lineType === "ฝากถอน" || (lineType === "" && acc.lineRole === "deposit");
 
         if (isMain && acc.lineRole === "main") {
           return { ...acc, mainStatus: rawStatus };
@@ -219,7 +223,7 @@ export default function App() {
     }
   };
 
-  const handleAddBackup = (lineId: string, role: BackupLineRole, note?: string) => {
+  const handleAddBackup = async (lineId: string, role: BackupLineRole, note?: string) => {
     const newBackup: BackupLine = {
       id: crypto.randomUUID(),
       lineId,
@@ -230,10 +234,34 @@ export default function App() {
       note: note?.trim() || undefined,
     };
     setBackupLines((prev) => [...prev, newBackup]);
+    // ซิงค์กลุ่มไปยัง server เพื่อให้ backup_scanner.py อ่านได้
+    try {
+      await fetch("/api/backup-groups", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: lineId, role }),
+      });
+    } catch (err) {
+      console.log("SYNC BACKUP GROUP ERROR:", err);
+    }
   };
 
-  const handleRemoveBackup = (id: string) => {
+  const handleRemoveBackup = async (id: string) => {
+    const group = backupLines.find((b) => b.id === id);
     setBackupLines((prev) => prev.filter((b) => b.id !== id));
+    if (group) {
+      try {
+        // หา server-side group id จาก url ตรงกัน
+        const res = await fetch("/api/backup-groups");
+        const groups = await res.json() as { id: string; url: string }[];
+        const serverGroup = groups.find((g) => g.url === group.lineId);
+        if (serverGroup) {
+          await fetch(`/api/backup-groups/${serverGroup.id}`, { method: "DELETE" });
+        }
+      } catch (err) {
+        console.log("REMOVE BACKUP GROUP ERROR:", err);
+      }
+    }
   };
 
   const handleConfirmBackup = (id: string, websiteId: string, websiteName: string) => {
@@ -244,7 +272,33 @@ export default function App() {
     );
   };
 
-  const pendingBackupCount = backupLines.filter((b) => !b.confirmed).length;
+  const handleRemoveBackupAccount = async (id: string) => {
+    setBackupAccounts((prev) => prev.filter((a) => a.id !== id));
+    try {
+      await fetch(`/api/backup-accounts/${id}`, { method: "DELETE" });
+    } catch (err) {
+      console.log("REMOVE BACKUP ACCOUNT ERROR:", err);
+    }
+  };
+
+  const handleConfirmBackupAccount = async (id: string, websiteId: string, websiteName: string) => {
+    setBackupAccounts((prev) =>
+      prev.map((a) => a.id === id ? { ...a, websiteId, websiteName, confirmed: true } : a)
+    );
+    try {
+      await fetch(`/api/backup-accounts/${id}/confirm`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ websiteId, websiteName }),
+      });
+    } catch (err) {
+      console.log("CONFIRM BACKUP ACCOUNT ERROR:", err);
+    }
+  };
+
+  const pendingBackupCount =
+    backupLines.filter((b) => !b.confirmed).length +
+    backupAccounts.filter((a) => !a.confirmed).length;
 
   const dashboard = (
     <DashboardContent
@@ -265,9 +319,12 @@ export default function App() {
           <BackupPoolPage
             websites={websites}
             backupLines={backupLines}
+            backupAccounts={backupAccounts}
             onAddBackup={handleAddBackup}
             onRemoveBackup={handleRemoveBackup}
             onConfirmBackup={handleConfirmBackup}
+            onRemoveBackupAccount={handleRemoveBackupAccount}
+            onConfirmBackupAccount={handleConfirmBackupAccount}
           />
         );
       case "notification-settings":

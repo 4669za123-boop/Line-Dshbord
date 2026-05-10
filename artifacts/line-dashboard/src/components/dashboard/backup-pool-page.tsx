@@ -6,8 +6,6 @@ import {
   Archive,
   ArrowRight,
   ExternalLink,
-  StickyNote,
-  Users,
   Users2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -43,12 +41,29 @@ export interface BackupLine {
   note?: string;
 }
 
+export interface BackupAccount {
+  id: string;
+  groupId: string;
+  groupUrl: string;
+  lineName: string;
+  lineAccountId: string;
+  lineAccountUrl: string;
+  role: "main" | "deposit";
+  websiteId: string | null;
+  websiteName: string | null;
+  confirmed: boolean;
+  scannedAt: string;
+}
+
 interface BackupPoolPageProps {
   websites: Website[];
   backupLines: BackupLine[];
+  backupAccounts: BackupAccount[];
   onAddBackup: (lineId: string, role: BackupLineRole, note?: string) => void;
   onRemoveBackup: (id: string) => void;
   onConfirmBackup: (id: string, websiteId: string, websiteName: string) => void;
+  onRemoveBackupAccount: (id: string) => void;
+  onConfirmBackupAccount: (id: string, websiteId: string, websiteName: string) => void;
 }
 
 function RoleBadge({ role }: { role: BackupLineRole }) {
@@ -75,7 +90,59 @@ function ReadyBadge() {
   );
 }
 
-/** แถวแสดงกลุ่มสำรองแบบ compact */
+/** การ์ดแสดงบัญชี LINE ที่ scanner ดึงมา */
+function AccountCard({
+  account,
+  onRemove,
+  onReassign,
+}: {
+  account: BackupAccount;
+  onRemove: (id: string) => void;
+  onReassign: (acc: BackupAccount) => void;
+}) {
+  return (
+    <div className="relative bg-card border border-border rounded-2xl p-4 transition-all duration-300 hover:border-primary/40 hover:shadow-[0_0_20px_rgba(0,185,0,0.07)] group">
+      <button
+        type="button"
+        className="absolute top-3 right-3 h-8 w-8 flex items-center justify-center rounded-lg text-destructive/50 hover:text-red-500 hover:bg-zinc-800 hover:shadow-[0_0_12px_rgba(239,68,68,0.25)] transition-all duration-200"
+        onClick={() => onRemove(account.id)}
+      >
+        <Trash2 className="h-4 w-4" />
+      </button>
+
+      <div className="pr-10 space-y-2">
+        <div className="flex items-center gap-2 flex-wrap">
+          <RoleBadge role={account.role} />
+          {account.websiteName && (
+            <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-muted/60 text-muted-foreground ring-1 ring-border">
+              {account.websiteName}
+            </span>
+          )}
+          <ReadyBadge />
+        </div>
+
+        {/* ชื่อไลน์ — คลิกได้เปิด URL บัญชี */}
+        <div className="flex items-center gap-1.5 min-w-0">
+          <a
+            href={account.lineAccountUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-semibold text-foreground truncate hover:text-primary transition-colors duration-200"
+            title={account.lineAccountUrl}
+          >
+            {account.lineName}
+          </a>
+          <ExternalLink className="h-3 w-3 text-muted-foreground shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
+        </div>
+
+        {/* LINE ID */}
+        <p className="text-xs font-mono text-muted-foreground">{account.lineAccountId}</p>
+      </div>
+    </div>
+  );
+}
+
+/** แถวแสดงกลุ่มสำรอง (section บน) */
 function GroupRow({
   line,
   onRemove,
@@ -83,13 +150,10 @@ function GroupRow({
   line: BackupLine;
   onRemove: (id: string) => void;
 }) {
-  const groupName =
-    line.note ||
-    `กลุ่มสำรอง${line.role === "main" ? "ไลน์หลัก" : "ไลน์ฝากถอน"}`;
-  const isMain = line.role === "main";
+  const groupName = line.note || (line.role === "main" ? "กลุ่มไลน์หลัก" : "กลุ่มไลน์ฝากถอน");
   return (
     <div className="flex items-center gap-3 bg-card border border-border rounded-2xl px-4 py-3 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)] group">
-      <Users className="h-4 w-4 text-muted-foreground group-hover:text-primary shrink-0 transition-colors duration-300" />
+      <Users2 className="h-4 w-4 text-muted-foreground group-hover:text-primary shrink-0 transition-colors duration-300" />
       <div className="flex-1 min-w-0 flex items-center gap-2">
         <a
           href={line.lineId}
@@ -119,66 +183,15 @@ function GroupRow({
   );
 }
 
-/** การ์ดแสดงไลน์ที่ confirmed */
-function LineDetailCard({
-  line,
-  onRemove,
-  onReassign,
-}: {
-  line: BackupLine;
-  onRemove: (id: string) => void;
-  onReassign: (line: BackupLine) => void;
-}) {
-  return (
-    <div className="relative bg-card border border-border rounded-2xl p-4 transition-all duration-300 hover:border-primary/40 hover:shadow-[0_0_20px_rgba(0,185,0,0.07)] group">
-      {/* Trash — absolute top-right */}
-      <button
-        type="button"
-        className="absolute top-3 right-3 h-8 w-8 flex items-center justify-center rounded-lg text-destructive/50 hover:text-red-500 hover:bg-zinc-800 hover:shadow-[0_0_12px_rgba(239,68,68,0.25)] transition-all duration-200"
-        onClick={() => onRemove(line.id)}
-      >
-        <Trash2 className="h-4 w-4" />
-      </button>
-
-      <div className="pr-10 space-y-2">
-        <div className="flex items-center gap-2 flex-wrap">
-          <RoleBadge role={line.role} />
-          {line.websiteName && (
-            <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-muted/60 text-muted-foreground ring-1 ring-border">
-              {line.websiteName}
-            </span>
-          )}
-          <ReadyBadge />
-        </div>
-        <div className="flex items-center gap-1.5 min-w-0">
-          <a
-            href={line.lineId}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-foreground truncate hover:text-primary transition-colors font-mono"
-            title={line.lineId}
-          >
-            {line.lineId}
-          </a>
-          <ExternalLink className="h-3 w-3 text-muted-foreground shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
-        </div>
-        {line.note && (
-          <p className="text-xs text-muted-foreground flex items-center gap-1.5">
-            <StickyNote className="h-3 w-3 shrink-0" />
-            {line.note}
-          </p>
-        )}
-      </div>
-    </div>
-  );
-}
-
 export function BackupPoolPage({
   websites,
   backupLines,
+  backupAccounts,
   onAddBackup,
   onRemoveBackup,
   onConfirmBackup,
+  onRemoveBackupAccount,
+  onConfirmBackupAccount,
 }: BackupPoolPageProps) {
   const [activeTab, setActiveTab] = useState<TabType>("main");
   const [groupTab, setGroupTab] = useState<"main" | "deposit">("main");
@@ -189,91 +202,80 @@ export function BackupPoolPage({
   const [newNote, setNewNote] = useState("");
 
   const [assignOpen, setAssignOpen] = useState(false);
-  const [assigningLine, setAssigningLine] = useState<BackupLine | null>(null);
+  const [assigningAccount, setAssigningAccount] = useState<BackupAccount | null>(null);
   const [assignWebsiteId, setAssignWebsiteId] = useState<string>("");
 
-  const pending = useMemo(
-    () => backupLines.filter((b) => !b.confirmed),
-    [backupLines],
+  const pendingAccounts = useMemo(
+    () => backupAccounts.filter((a) => !a.confirmed),
+    [backupAccounts],
   );
-  const confirmed = useMemo(
-    () => backupLines.filter((b) => b.confirmed),
-    [backupLines],
+  const confirmedAccounts = useMemo(
+    () => backupAccounts.filter((a) => a.confirmed),
+    [backupAccounts],
   );
   const mainCount = useMemo(
-    () => confirmed.filter((b) => b.role === "main").length,
-    [confirmed],
+    () => confirmedAccounts.filter((a) => a.role === "main").length,
+    [confirmedAccounts],
   );
   const depositCount = useMemo(
-    () => confirmed.filter((b) => b.role === "deposit").length,
-    [confirmed],
+    () => confirmedAccounts.filter((a) => a.role === "deposit").length,
+    [confirmedAccounts],
   );
 
-  const tabs: { key: TabType; label: string; count: number; color: string }[] =
-    [
-      { key: "main", label: "ไลน์หลัก", count: mainCount, color: "blue" },
-      { key: "deposit", label: "ฝากถอน", count: depositCount, color: "purple" },
-      {
-        key: "pending",
-        label: "รอการยืนยัน",
-        count: pending.length,
-        color: "amber",
-      },
-    ];
+  const tabs: { key: TabType; label: string; count: number; color: string }[] = [
+    { key: "main",    label: "ไลน์หลัก",    count: mainCount,           color: "blue"  },
+    { key: "deposit", label: "ฝากถอน",       count: depositCount,        color: "purple"},
+    { key: "pending", label: "รอการยืนยัน", count: pendingAccounts.length, color: "amber" },
+  ];
 
   const handleAdd = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newLineId.trim() || !newRole) return;
-    onAddBackup(newLineId.trim(), newRole as BackupLineRole, newNote);
+    onAddBackup(newLineId.trim(), newRole as BackupLineRole, newNote || undefined);
     setNewLineId("");
     setNewRole("");
     setNewNote("");
     setAddOpen(false);
-    setActiveTab("pending");
   };
 
-  const openAssign = (line: BackupLine) => {
-    setAssigningLine(line);
-    setAssignWebsiteId(line.websiteId ?? websites[0]?.id ?? "");
+  const openAssign = (acc: BackupAccount) => {
+    setAssigningAccount(acc);
+    setAssignWebsiteId(acc.websiteId ?? websites[0]?.id ?? "");
     setAssignOpen(true);
   };
 
   const handleAssign = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!assigningLine || !assignWebsiteId) return;
+    if (!assigningAccount || !assignWebsiteId) return;
     const ws = websites.find((w) => w.id === assignWebsiteId);
     if (!ws) return;
-    onConfirmBackup(assigningLine.id, ws.id, ws.name);
+    onConfirmBackupAccount(assigningAccount.id, ws.id, ws.name);
     setAssignOpen(false);
-    setAssigningLine(null);
+    setAssigningAccount(null);
   };
 
   const renderTabContent = () => {
     if (activeTab === "pending") {
-      if (pending.length === 0) {
+      if (pendingAccounts.length === 0) {
         return (
           <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border py-12 text-center">
             <Archive className="h-9 w-9 text-muted-foreground/40 mb-3" />
-            <p className="text-sm text-muted-foreground">
-              ไม่มีรายการที่รอการยืนยัน
-            </p>
-            <p className="text-xs text-muted-foreground/60 mt-1">
-              ทุกกลุ่มได้รับการกำหนดเว็บแล้ว
-            </p>
+            <p className="text-sm text-muted-foreground">ไม่มีรายการที่รอการยืนยัน</p>
+            <p className="text-xs text-muted-foreground/60 mt-1">ทุกบัญชีได้รับการกำหนดเว็บแล้ว</p>
           </div>
         );
       }
       return (
         <div className="space-y-2">
-          {pending.map((line) => (
+          {pendingAccounts.map((acc) => (
             <div
-              key={line.id}
-              className="relative bg-amber-500/5 border border-amber-500/20 rounded-2xl p-4 transition-all duration-300 hover:border-amber-500/40"
+              key={acc.id}
+              className="relative bg-amber-500/5 border border-amber-500/20 rounded-2xl p-4 transition-all duration-300 hover:border-amber-500/40 group"
             >
               <div className="absolute top-3 right-3 flex items-center gap-1.5">
                 <Button
                   size="sm"
-                  onClick={() => openAssign(line)}
+                  onClick={() => openAssign(acc)}
                   className="rounded-lg bg-amber-500/15 text-amber-400 hover:bg-amber-500/25 border border-amber-500/20 gap-1.5 h-8 text-xs px-3"
                   variant="ghost"
                 >
@@ -283,30 +285,32 @@ export function BackupPoolPage({
                 <button
                   type="button"
                   className="h-8 w-8 flex items-center justify-center rounded-lg text-destructive/50 hover:text-red-500 hover:bg-zinc-800 hover:shadow-[0_0_12px_rgba(239,68,68,0.25)] transition-all duration-200"
-                  onClick={() => onRemoveBackup(line.id)}
+                  onClick={() => onRemoveBackupAccount(acc.id)}
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
               </div>
               <div className="pr-40 space-y-2">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <RoleBadge role={line.role} />
+                  <RoleBadge role={acc.role} />
                   <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-amber-500/10 text-amber-400 ring-1 ring-amber-500/25">
                     ยังไม่กำหนดเว็บ
                   </span>
                 </div>
-                <p
-                  className="text-sm font-mono text-foreground truncate"
-                  title={line.lineId}
-                >
-                  {line.lineId}
-                </p>
-                {line.note && (
-                  <p className="text-xs text-muted-foreground flex items-center gap-1">
-                    <StickyNote className="h-3 w-3 shrink-0" />
-                    {line.note}
-                  </p>
-                )}
+                {/* ชื่อไลน์ — คลิกได้ */}
+                <div className="flex items-center gap-1.5 min-w-0">
+                  <a
+                    href={acc.lineAccountUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm font-semibold text-foreground truncate hover:text-primary transition-colors"
+                    title={acc.lineAccountUrl}
+                  >
+                    {acc.lineName}
+                  </a>
+                  <ExternalLink className="h-3 w-3 text-muted-foreground shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
+                <p className="text-xs font-mono text-muted-foreground">{acc.lineAccountId}</p>
               </div>
             </div>
           ))}
@@ -314,27 +318,27 @@ export function BackupPoolPage({
       );
     }
 
-    const items = confirmed.filter(
-      (b) => b.role === (activeTab === "main" ? "main" : "deposit"),
+    const items = confirmedAccounts.filter(
+      (a) => a.role === (activeTab === "main" ? "main" : "deposit"),
     );
     if (items.length === 0) {
       return (
         <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border py-12 text-center">
           <Archive className="h-9 w-9 text-muted-foreground/40 mb-3" />
-          <p className="text-sm text-muted-foreground">ยังไม่มีไลน์ในหมวดนี้</p>
+          <p className="text-sm text-muted-foreground">ยังไม่มีบัญชีไลน์สำรองในหมวดนี้</p>
           <p className="text-xs text-muted-foreground/60 mt-1">
-            เพิ่มกลุ่มแล้วกำหนดเว็บให้ครบ
+            รอ scanner สแกนกลุ่มและกำหนดเว็บ
           </p>
         </div>
       );
     }
     return (
       <div className="space-y-3">
-        {items.map((line) => (
-          <LineDetailCard
-            key={line.id}
-            line={line}
-            onRemove={onRemoveBackup}
+        {items.map((acc) => (
+          <AccountCard
+            key={acc.id}
+            account={acc}
+            onRemove={onRemoveBackupAccount}
             onReassign={openAssign}
           />
         ))}
@@ -369,7 +373,7 @@ export function BackupPoolPage({
             />
             <span className="relative flex w-full items-center justify-center gap-2 rounded-2xl bg-background/95 px-5 py-3 text-sm font-semibold text-foreground shadow-[0_0_24px_-4px_rgba(0,185,0,0.35)] backdrop-blur-sm transition-colors group-hover:bg-background dark:bg-background/90">
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/15 text-primary ring-1 ring-primary/25">
-                <Users2 className="h-4 w-4" />
+                <Plus className="h-4 w-4" />
               </span>
               เพิ่มกลุ่มไลน์สำรอง
             </span>
@@ -380,224 +384,91 @@ export function BackupPoolPage({
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]">
             <div className="flex items-center gap-2 mb-3">
-              <span
-                className={cn(
-                  "h-3 w-3 rounded-full transition-colors",
-                  backupLines.length > 0
-                    ? "bg-foreground/70"
-                    : "bg-foreground/20",
-                )}
-              />
-              <p
-                className={cn(
-                  "text-sm transition-colors",
-                  backupLines.length > 0
-                    ? "text-foreground/80"
-                    : "text-muted-foreground",
-                )}
-              >
-                กลุ่มสำรองทั้งหมด
-              </p>
+              <span className={cn("h-3 w-3 rounded-full", backupLines.length > 0 ? "bg-foreground/70" : "bg-foreground/20")} />
+              <p className={cn("text-sm", backupLines.length > 0 ? "text-foreground/80" : "text-muted-foreground")}>กลุ่มสำรองทั้งหมด</p>
             </div>
-            <p
-              className={cn(
-                "text-2xl font-bold",
-                backupLines.length > 0
-                  ? "text-foreground"
-                  : "text-muted-foreground",
-              )}
-            >
-              {backupLines.length}
-            </p>
+            <p className={cn("text-2xl font-bold", backupLines.length > 0 ? "text-foreground" : "text-muted-foreground")}>{backupLines.length}</p>
           </div>
-          <div
-            className={cn(
-              "border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]",
-              mainCount > 0
-                ? "bg-blue-500/5 border-blue-500/25"
-                : "bg-card border-border",
-            )}
-          >
+          <div className={cn("border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]", mainCount > 0 ? "bg-blue-500/5 border-blue-500/25" : "bg-card border-border")}>
             <div className="flex items-center gap-2 mb-3">
-              <span
-                className={cn(
-                  "h-3 w-3 rounded-full transition-colors",
-                  mainCount > 0 ? "bg-blue-400" : "bg-blue-400/30",
-                )}
-              />
-              <p
-                className={cn(
-                  "text-sm transition-colors",
-                  mainCount > 0 ? "text-blue-400" : "text-muted-foreground",
-                )}
-              >
-                ไลน์หลัก
-              </p>
+              <span className={cn("h-3 w-3 rounded-full", mainCount > 0 ? "bg-blue-400" : "bg-blue-400/30")} />
+              <p className={cn("text-sm", mainCount > 0 ? "text-blue-400" : "text-muted-foreground")}>ไลน์หลัก</p>
             </div>
-            <p
-              className={cn(
-                "text-2xl font-bold",
-                mainCount > 0 ? "text-blue-400" : "text-muted-foreground",
-              )}
-            >
-              {mainCount}
-            </p>
+            <p className={cn("text-2xl font-bold", mainCount > 0 ? "text-blue-400" : "text-muted-foreground")}>{mainCount}</p>
           </div>
-          <div
-            className={cn(
-              "border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]",
-              depositCount > 0
-                ? "bg-purple-500/5 border-purple-500/25"
-                : "bg-card border-border",
-            )}
-          >
+          <div className={cn("border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]", depositCount > 0 ? "bg-purple-500/5 border-purple-500/25" : "bg-card border-border")}>
             <div className="flex items-center gap-2 mb-3">
-              <span
-                className={cn(
-                  "h-3 w-3 rounded-full transition-colors",
-                  depositCount > 0 ? "bg-purple-400" : "bg-purple-400/30",
-                )}
-              />
-              <p
-                className={cn(
-                  "text-sm transition-colors",
-                  depositCount > 0
-                    ? "text-purple-400"
-                    : "text-muted-foreground",
-                )}
-              >
-                ไลน์ฝากถอน
-              </p>
+              <span className={cn("h-3 w-3 rounded-full", depositCount > 0 ? "bg-purple-400" : "bg-purple-400/30")} />
+              <p className={cn("text-sm", depositCount > 0 ? "text-purple-400" : "text-muted-foreground")}>ไลน์ฝากถอน</p>
             </div>
-            <p
-              className={cn(
-                "text-2xl font-bold",
-                depositCount > 0 ? "text-purple-400" : "text-muted-foreground",
-              )}
-            >
-              {depositCount}
-            </p>
+            <p className={cn("text-2xl font-bold", depositCount > 0 ? "text-purple-400" : "text-muted-foreground")}>{depositCount}</p>
           </div>
-          <div
-            className={cn(
-              "border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]",
-              pending.length > 0
-                ? "bg-amber-500/5 border-amber-500/25"
-                : "bg-card border-border",
-            )}
-          >
+          <div className={cn("border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]", pendingAccounts.length > 0 ? "bg-amber-500/5 border-amber-500/25" : "bg-card border-border")}>
             <div className="flex items-center gap-2 mb-3">
-              <span
-                className={cn(
-                  "h-3 w-3 rounded-full transition-colors",
-                  pending.length > 0 ? "bg-amber-400" : "bg-amber-400/30",
-                )}
-              />
-              <p
-                className={cn(
-                  "text-sm transition-colors",
-                  pending.length > 0
-                    ? "text-amber-400"
-                    : "text-muted-foreground",
-                )}
-              >
-                รอการยืนยัน
-              </p>
+              <span className={cn("h-3 w-3 rounded-full", pendingAccounts.length > 0 ? "bg-amber-400" : "bg-amber-400/30")} />
+              <p className={cn("text-sm", pendingAccounts.length > 0 ? "text-amber-400" : "text-muted-foreground")}>รอการยืนยัน</p>
             </div>
-            <p
-              className={cn(
-                "text-2xl font-bold",
-                pending.length > 0 ? "text-amber-400" : "text-muted-foreground",
-              )}
-            >
-              {pending.length}
-            </p>
+            <p className={cn("text-2xl font-bold", pendingAccounts.length > 0 ? "text-amber-400" : "text-muted-foreground")}>{pendingAccounts.length}</p>
           </div>
         </div>
 
-        {/* Section 1: รายการกลุ่มที่เพิ่มไว้ */}
-        {backupLines.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border py-14 text-center mb-8">
-            <Archive className="h-10 w-10 text-muted-foreground/30 mb-3" />
-            <p className="text-sm text-muted-foreground">
-              ยังไม่มีกลุ่มไลน์สำรอง
-            </p>
-            <p className="text-xs text-muted-foreground/60 mt-1">
-              กดปุ่ม "เพิ่มกลุ่มไลน์สำรอง" เพื่อเริ่มต้น
-            </p>
+        {/* Section 1: กลุ่มที่เพิ่ม — tab ALWAYS visible */}
+        <div className="mb-8">
+          <div className="inline-flex rounded-xl border border-border bg-card p-1 gap-1 mb-4">
+            {(["main", "deposit"] as const).map((key) => {
+              const isActive = groupTab === key;
+              const label = key === "main" ? "กลุ่มไลน์หลัก" : "กลุ่มไลน์ฝากถอน";
+              const count = backupLines.filter((l) => l.role === key).length;
+              const color = key === "main" ? "blue" : "violet";
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setGroupTab(key)}
+                  className={cn(
+                    "flex items-center gap-1.5 whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-semibold transition-all",
+                    isActive
+                      ? color === "blue"
+                        ? "bg-blue-500/15 text-blue-400 ring-1 ring-blue-500/25"
+                        : "bg-violet-500/15 text-violet-400 ring-1 ring-violet-500/25"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/40",
+                  )}
+                >
+                  {label}
+                  <span className={cn(
+                    "inline-flex items-center justify-center h-4 min-w-4 px-1 rounded-full text-[10px] font-bold",
+                    isActive
+                      ? color === "blue" ? "bg-blue-500/20 text-blue-300" : "bg-violet-500/20 text-violet-300"
+                      : "bg-muted text-muted-foreground",
+                  )}>
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
           </div>
-        ) : (
-          <div className="mb-6">
-            {/* Group tab bar */}
-            <div className="inline-flex rounded-xl border border-border bg-card p-1 gap-1 mb-4">
-              {[
-                {
-                  key: "main" as const,
-                  label: "กลุ่มไลน์หลัก",
-                  count: backupLines.filter((l) => l.role === "main").length,
-                  color: "blue",
-                },
-                {
-                  key: "deposit" as const,
-                  label: "กลุ่มไลน์ฝากถอน",
-                  count: backupLines.filter((l) => l.role === "deposit").length,
-                  color: "purple",
-                },
-              ].map((t) => {
-                const isActive = groupTab === t.key;
-                return (
-                  <button
-                    key={t.key}
-                    type="button"
-                    onClick={() => setGroupTab(t.key)}
-                    className={cn(
-                      "flex items-center gap-1.5 whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-semibold transition-all",
-                      isActive
-                        ? t.color === "blue"
-                          ? "bg-blue-500/15 text-blue-400 ring-1 ring-blue-500/25"
-                          : "bg-violet-500/15 text-violet-400 ring-1 ring-violet-500/25"
-                        : "text-muted-foreground hover:text-foreground hover:bg-muted/40",
-                    )}
-                  >
-                    {t.label}
-                    <span
-                      className={cn(
-                        "inline-flex items-center justify-center h-4 min-w-4 px-1 rounded-full text-[10px] font-bold",
-                        isActive
-                          ? t.color === "blue"
-                            ? "bg-blue-500/20 text-blue-300"
-                            : "bg-violet-500/20 text-violet-300"
-                          : "bg-muted text-muted-foreground",
-                      )}
-                    >
-                      {t.count}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-            {/* Filtered group rows */}
-            <div className="space-y-2">
-              {backupLines
-                .filter((l) => l.role === groupTab)
-                .map((line) => (
-                  <GroupRow
-                    key={line.id}
-                    line={line}
-                    onRemove={onRemoveBackup}
-                  />
-                ))}
-              {backupLines.filter((l) => l.role === groupTab).length === 0 && (
-                <p className="text-sm text-muted-foreground text-center py-6">
-                  ยังไม่มี
-                  {groupTab === "main" ? "กลุ่มไลน์หลัก" : "กลุ่มไลน์ฝากถอน"}
-                </p>
-              )}
-            </div>
-          </div>
-        )}
 
-        {/* Section 2: Tab bar — แสดงเสมอ */}
+          {/* Group rows */}
+          {backupLines.filter((l) => l.role === groupTab).length === 0 ? (
+            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border py-10 text-center">
+              <Users2 className="h-9 w-9 text-muted-foreground/30 mb-3" />
+              <p className="text-sm text-muted-foreground">
+                ยังไม่มี{groupTab === "main" ? "กลุ่มไลน์หลัก" : "กลุ่มไลน์ฝากถอน"}
+              </p>
+              <p className="text-xs text-muted-foreground/60 mt-1">
+                กดปุ่ม "เพิ่มกลุ่มไลน์สำรอง" มุมบนขวา
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {backupLines.filter((l) => l.role === groupTab).map((line) => (
+                <GroupRow key={line.id} line={line} onRemove={onRemoveBackup} />
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Section 2: บัญชีไลน์สำรองที่ scanner ดึงมา */}
         <div className="inline-flex rounded-xl border border-border bg-card p-1 gap-1 mb-6">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.key;
@@ -609,177 +480,118 @@ export function BackupPoolPage({
                 className={cn(
                   "flex items-center gap-1.5 whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-semibold transition-all",
                   isActive
-                    ? tab.color === "amber"
-                      ? "bg-amber-500/15 text-amber-400 ring-1 ring-amber-500/25"
-                      : tab.color === "blue"
-                        ? "bg-blue-500/15 text-blue-400 ring-1 ring-blue-500/25"
-                        : "bg-purple-500/15 text-purple-400 ring-1 ring-purple-500/25"
+                    ? tab.color === "blue"   ? "bg-blue-500/15 text-blue-400 ring-1 ring-blue-500/25"
+                    : tab.color === "purple" ? "bg-purple-500/15 text-purple-400 ring-1 ring-purple-500/25"
+                                             : "bg-amber-500/15 text-amber-400 ring-1 ring-amber-500/25"
                     : "text-muted-foreground hover:text-foreground hover:bg-muted/40",
                 )}
               >
                 {tab.label}
-                <span
-                  className={cn(
-                    "inline-flex items-center justify-center h-4 min-w-4 px-1 rounded-full text-[10px] font-bold",
-                    isActive
-                      ? tab.color === "amber"
-                        ? "bg-amber-500/20 text-amber-300"
-                        : tab.color === "blue"
-                          ? "bg-blue-500/20 text-blue-300"
-                          : "bg-purple-500/20 text-purple-300"
-                      : "bg-muted text-muted-foreground",
-                  )}
-                >
+                <span className={cn(
+                  "inline-flex items-center justify-center h-4 min-w-4 px-1 rounded-full text-[10px] font-bold",
+                  isActive
+                    ? tab.color === "blue"   ? "bg-blue-500/20 text-blue-300"
+                    : tab.color === "purple" ? "bg-purple-500/20 text-purple-300"
+                                             : "bg-amber-500/20 text-amber-300"
+                    : "bg-muted text-muted-foreground",
+                )}>
                   {tab.count}
                 </span>
               </button>
             );
           })}
         </div>
-
-        {/* Section 3: ไลน์ในกลุ่มตาม Tab */}
         {renderTabContent()}
-      </div>
 
-      {/* Add Backup Dialog */}
-      <Dialog open={addOpen} onOpenChange={setAddOpen}>
-        <DialogContent className="overflow-hidden border-border bg-background p-0 sm:max-w-md">
-          <div className="relative overflow-hidden bg-gradient-to-br from-primary/20 via-background to-background px-6 pb-2 pt-10">
-            <div className="pointer-events-none absolute -right-8 -top-8 h-36 w-36 rounded-full bg-primary/20 blur-3xl" />
-            <DialogHeader className="relative space-y-3 text-center sm:text-left">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/15 text-primary shadow-inner ring-1 ring-primary/25 sm:mx-0">
-                <Archive className="h-7 w-7" />
-              </div>
-              <DialogTitle className="text-xl">เพิ่มกลุ่มไลน์สำรอง</DialogTitle>
-            </DialogHeader>
-          </div>
-          <form onSubmit={handleAdd} className="space-y-4 px-6 pb-6 pt-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">
-                URL กลุ่มไลน์สำรอง <span className="text-destructive">*</span>
-              </label>
-              <Input
-                autoFocus
-                value={newLineId}
-                onChange={(e) => setNewLineId(e.target.value)}
-                placeholder="https://manager.line.biz/groups/..."
-                className="h-11 border-border bg-input font-mono text-sm"
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">
-                ประเภทไลน์ในกลุ่มนี้ <span className="text-destructive">*</span>
-              </label>
-              <Select
-                value={newRole}
-                onValueChange={(v) => setNewRole(v as BackupLineRole)}
-              >
-                <SelectTrigger className="h-11 border-border bg-input">
-                  <SelectValue placeholder="เลือกว่ากลุ่มนี้เป็นไลน์อะไร" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="main">ไลน์หลัก</SelectItem>
-                  <SelectItem value="deposit">ไลน์ฝากถอน</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <DialogFooter className="gap-2 sm:gap-3 pt-2">
-              <DialogClose asChild>
-                <Button type="button" variant="outline" className="rounded-xl">
-                  ยกเลิก
-                </Button>
-              </DialogClose>
-              <Button
-                type="submit"
-                disabled={!newLineId.trim() || !newRole}
-                className="rounded-xl bg-primary text-primary-foreground shadow-[0_0_20px_-4px_rgba(0,185,0,0.45)] hover:bg-primary/90 disabled:opacity-50"
-              >
-                เพิ่ม
-              </Button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
-
-      {/* Assign Website Dialog */}
-      <Dialog open={assignOpen} onOpenChange={setAssignOpen}>
-        <DialogContent className="border-border bg-background sm:max-w-sm">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <span className="h-4 w-4 rounded-full bg-amber-400/80 shrink-0" />
-              {assigningLine?.websiteId
-                ? "เปลี่ยนเว็บ"
-                : "กำหนดเว็บให้กลุ่มนี้"}
-            </DialogTitle>
-          </DialogHeader>
-          <form onSubmit={handleAssign} className="space-y-4 pt-2">
-            {assigningLine && (
-              <div className="rounded-xl bg-muted/30 px-4 py-3 space-y-2 text-sm">
-                <div className="flex items-center gap-2">
-                  <RoleBadge role={assigningLine.role} />
-                  {assigningLine.websiteName && (
-                    <span className="text-xs text-muted-foreground">
-                      เดิม: {assigningLine.websiteName}
-                    </span>
-                  )}
+        {/* Dialog เพิ่มกลุ่ม */}
+        <Dialog open={addOpen} onOpenChange={setAddOpen}>
+          <DialogContent className="overflow-hidden border-border bg-background p-0 sm:max-w-md">
+            <div className="relative overflow-hidden bg-gradient-to-br from-primary/25 via-background to-background px-6 pb-2 pt-10">
+              <div className="pointer-events-none absolute -right-8 -top-8 h-36 w-36 rounded-full bg-primary/20 blur-3xl" />
+              <DialogHeader className="relative space-y-3">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/15 text-primary shadow-inner ring-1 ring-primary/25">
+                  <Plus className="h-7 w-7" />
                 </div>
-                <p
-                  className="font-mono text-xs text-foreground truncate"
-                  title={assigningLine.lineId}
-                >
-                  {assigningLine.lineId}
-                </p>
-                {assigningLine.note && (
-                  <p className="text-xs text-muted-foreground flex items-center gap-1">
-                    <StickyNote className="h-3 w-3" />
-                    {assigningLine.note}
-                  </p>
-                )}
-              </div>
-            )}
-            {websites.length === 0 ? (
-              <div className="rounded-xl bg-amber-500/5 border border-amber-500/20 px-4 py-3 text-sm text-amber-400">
-                ยังไม่มีเว็บในระบบ — ไปเพิ่มเว็บที่หน้าแดชบอร์ดก่อน
-              </div>
-            ) : (
+                <DialogTitle className="text-xl">เพิ่มกลุ่มไลน์สำรอง</DialogTitle>
+              </DialogHeader>
+            </div>
+            <form onSubmit={handleAdd} className="space-y-5 px-6 pb-6 pt-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground">
-                  เลือกเว็บปลายทาง
-                </label>
-                <Select
-                  value={assignWebsiteId}
-                  onValueChange={setAssignWebsiteId}
-                >
-                  <SelectTrigger className="h-11 border-border bg-input">
-                    <SelectValue placeholder="เลือกเว็บ..." />
+                <label className="text-sm font-medium text-foreground">ลิ้งค์กลุ่ม LINE</label>
+                <Input
+                  autoFocus
+                  value={newLineId}
+                  onChange={(e) => setNewLineId(e.target.value)}
+                  placeholder="https://line.me/..."
+                  className="h-11 border-border bg-input text-foreground placeholder:text-muted-foreground"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-foreground">ประเภท</label>
+                <Select value={newRole} onValueChange={(v) => setNewRole(v as BackupLineRole)}>
+                  <SelectTrigger className="h-11 border-border bg-input text-foreground">
+                    <SelectValue placeholder="เลือกประเภท..." />
                   </SelectTrigger>
                   <SelectContent>
-                    {websites.map((w) => (
-                      <SelectItem key={w.id} value={w.id}>
-                        {w.name}
-                      </SelectItem>
-                    ))}
+                    <SelectItem value="main">ไลน์หลัก</SelectItem>
+                    <SelectItem value="deposit">ไลน์ฝากถอน</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
-            )}
-            <DialogFooter className="gap-2">
-              <DialogClose asChild>
-                <Button type="button" variant="outline" className="rounded-xl">
-                  ยกเลิก
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-foreground">ชื่อกลุ่ม (ไม่บังคับ)</label>
+                <Input
+                  value={newNote}
+                  onChange={(e) => setNewNote(e.target.value)}
+                  placeholder="เช่น กลุ่มสำรอง Jun88"
+                  className="h-11 border-border bg-input text-foreground placeholder:text-muted-foreground"
+                />
+              </div>
+              <div className="flex gap-2 pt-1">
+                <DialogClose asChild>
+                  <Button type="button" variant="outline" className="flex-1 rounded-xl">ยกเลิก</Button>
+                </DialogClose>
+                <Button
+                  type="submit"
+                  disabled={!newLineId.trim() || !newRole}
+                  className="flex-1 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
+                >
+                  เพิ่มกลุ่ม
                 </Button>
-              </DialogClose>
-              <Button
-                type="submit"
-                disabled={!assignWebsiteId || websites.length === 0}
-                className="rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
-              >
-                ยืนยัน
-              </Button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
+              </div>
+            </form>
+          </DialogContent>
+        </Dialog>
+
+        {/* Dialog กำหนดเว็บ */}
+        <Dialog open={assignOpen} onOpenChange={setAssignOpen}>
+          <DialogContent className="border-border bg-background sm:max-w-sm">
+            <DialogHeader>
+              <DialogTitle>กำหนดเว็บสำหรับ {assigningAccount?.lineName}</DialogTitle>
+            </DialogHeader>
+            <form onSubmit={handleAssign} className="space-y-4 pt-2">
+              <Select value={assignWebsiteId} onValueChange={setAssignWebsiteId}>
+                <SelectTrigger className="h-11 border-border bg-input text-foreground">
+                  <SelectValue placeholder="เลือกเว็บไซต์..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {websites.map((w) => (
+                    <SelectItem key={w.id} value={w.id}>{w.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <DialogFooter className="gap-2">
+                <DialogClose asChild>
+                  <Button type="button" variant="outline" className="rounded-xl">ยกเลิก</Button>
+                </DialogClose>
+                <Button type="submit" disabled={!assignWebsiteId} className="rounded-xl bg-primary text-primary-foreground hover:bg-primary/90">
+                  ยืนยัน
+                </Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
+      </div>
     </main>
   );
 }

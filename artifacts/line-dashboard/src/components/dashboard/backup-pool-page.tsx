@@ -343,7 +343,7 @@ export function BackupPoolPage({
             <span className="absolute inset-0 bg-gradient-to-r from-primary via-emerald-400/80 to-primary opacity-80 transition-opacity group-hover:opacity-100" aria-hidden />
             <span className="relative flex w-full items-center justify-center gap-2 rounded-2xl bg-background/95 px-5 py-3 text-sm font-semibold text-foreground shadow-[0_0_24px_-4px_rgba(0,185,0,0.35)] backdrop-blur-sm transition-colors group-hover:bg-background dark:bg-background/90">
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/15 text-primary ring-1 ring-primary/25">
-                <Plus className="h-4 w-4" />
+                <Users2 className="h-4 w-4" />
               </span>
               เพิ่มกลุ่มไลน์สำรอง
             </span>
@@ -479,7 +479,7 @@ export function BackupPoolPage({
               <div className="pointer-events-none absolute -right-8 -top-8 h-36 w-36 rounded-full bg-primary/20 blur-3xl" />
               <DialogHeader className="relative space-y-3">
                 <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/15 text-primary shadow-inner ring-1 ring-primary/25">
-                  <Plus className="h-7 w-7" />
+                  <Users2 className="h-7 w-7" />
                 </div>
                 <DialogTitle className="text-xl">เพิ่มกลุ่มไลน์สำรอง</DialogTitle>
               </DialogHeader>

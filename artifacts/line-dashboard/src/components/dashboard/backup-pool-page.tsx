@@ -650,9 +650,6 @@ export function BackupPoolPage({
                 <Archive className="h-7 w-7" />
               </div>
               <DialogTitle className="text-xl">เพิ่มกลุ่มไลน์สำรอง</DialogTitle>
-              <p className="text-sm text-muted-foreground">
-                หลังเพิ่มแล้ว ระบบจะขอให้คุณกำหนดว่ากลุ่มนี้ใช้กับเว็บไหน
-              </p>
             </DialogHeader>
           </div>
           <form onSubmit={handleAdd} className="space-y-4 px-6 pb-6 pt-4">
@@ -684,24 +681,6 @@ export function BackupPoolPage({
                   <SelectItem value="deposit">ไลน์ฝากถอน</SelectItem>
                 </SelectContent>
               </Select>
-              <p className="text-xs text-muted-foreground">
-                กลุ่มนี้เก็บไลน์ประเภทไหน — ระบบจะจำแนกหมวดหมู่จากตรงนี้
-              </p>
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground flex items-center gap-1.5">
-                <StickyNote className="h-3.5 w-3.5 text-muted-foreground" />
-                ชื่อกลุ่ม / หมายเหตุ
-                <span className="text-xs text-muted-foreground font-normal">
-                  (ไม่บังคับ)
-                </span>
-              </label>
-              <Input
-                value={newNote}
-                onChange={(e) => setNewNote(e.target.value)}
-                placeholder="เช่น กลุ่มสำรองไลน์หลัก, สำรองแบรนด์ A"
-                className="h-11 border-border bg-input text-sm"
-              />
             </div>
             <DialogFooter className="gap-2 sm:gap-3 pt-2">
               <DialogClose asChild>

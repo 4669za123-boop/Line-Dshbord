@@ -161,7 +161,7 @@ export function LineCard({ summary, onRemove }: LineCardProps) {
         <Button
           variant="ghost"
           size="sm"
-          className="h-8 w-8 shrink-0 px-0 text-destructive hover:text-destructive hover:bg-destructive/10"
+          className="h-8 w-8 shrink-0 px-0 text-destructive/60 hover:text-red-500 hover:bg-zinc-800 hover:shadow-[0_0_12px_rgba(239,68,68,0.25)] transition-all duration-200"
           onClick={() => onRemove(summary.websiteId)}
         >
           <Trash2 className="h-4 w-4" />

@@ -235,7 +235,7 @@ export function NotificationSettingsPage() {
                             size="sm"
                             onClick={() => removeTime(index)}
                             disabled={times.length <= 1}
-                            className="h-8 w-8 px-0 text-destructive hover:text-destructive hover:bg-destructive/10"
+                            className="h-8 w-8 px-0 text-destructive/60 hover:text-red-500 hover:bg-zinc-800 hover:shadow-[0_0_12px_rgba(239,68,68,0.25)] transition-all duration-200"
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>

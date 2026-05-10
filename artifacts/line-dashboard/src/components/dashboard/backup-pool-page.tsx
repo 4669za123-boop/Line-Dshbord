@@ -107,10 +107,10 @@ function GroupRow({
       <button
         type="button"
         onClick={() => onRemove(line.id)}
-        className="shrink-0 h-7 w-7 flex items-center justify-center rounded-lg text-destructive hover:bg-destructive/10 transition-colors"
+        className="shrink-0 h-8 w-8 flex items-center justify-center rounded-lg text-destructive/60 hover:text-red-500 hover:bg-zinc-800 hover:shadow-[0_0_12px_rgba(239,68,68,0.25)] transition-all duration-200"
         title="ลบกลุ่มนี้"
       >
-        <Trash2 className="h-3.5 w-3.5" />
+        <Trash2 className="h-4 w-4" />
       </button>
     </div>
   )
@@ -162,7 +162,7 @@ function LineDetailCard({
           <Button
             variant="ghost"
             size="sm"
-            className="h-8 shrink-0 px-3 text-destructive hover:text-destructive hover:bg-destructive/10"
+            className="h-8 w-8 shrink-0 px-0 text-destructive/60 hover:text-red-500 hover:bg-zinc-800 hover:shadow-[0_0_12px_rgba(239,68,68,0.25)] transition-all duration-200"
             onClick={() => onRemove(line.id)}
           >
             <Trash2 className="h-4 w-4" />
@@ -275,7 +275,7 @@ export function BackupPoolPage({
               <Button
                 variant="ghost"
                 size="sm"
-                className="shrink-0 h-8 px-3 text-destructive hover:text-destructive hover:bg-destructive/10"
+                className="shrink-0 h-8 w-8 px-0 text-destructive/60 hover:text-red-500 hover:bg-zinc-800 hover:shadow-[0_0_12px_rgba(239,68,68,0.25)] transition-all duration-200"
                 onClick={() => onRemoveBackup(line.id)}
               >
                 <Trash2 className="h-4 w-4" />

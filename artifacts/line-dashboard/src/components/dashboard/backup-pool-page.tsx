@@ -99,14 +99,6 @@ function GroupRow({
         >
           {groupName}
         </a>
-        <span className={cn(
-          "shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-full border",
-          isMain
-            ? "bg-blue-500/10 text-blue-400 border-blue-500/20"
-            : "bg-violet-500/10 text-violet-400 border-violet-500/20"
-        )}>
-          {isMain ? "ไลน์หลัก" : "ฝากถอน"}
-        </span>
         {line.websiteName && (
           <span className="shrink-0 text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
             {line.websiteName}
@@ -396,10 +388,30 @@ export function BackupPoolPage({
             <p className="text-xs text-muted-foreground/60 mt-1">กดปุ่ม "เพิ่มกลุ่มไลน์สำรอง" เพื่อเริ่มต้น</p>
           </div>
         ) : (
-          <div className="space-y-2 mb-6">
-            {backupLines.map((line) => (
-              <GroupRow key={line.id} line={line} onRemove={onRemoveBackup} />
-            ))}
+          <div className="space-y-4 mb-6">
+            {(["main", "deposit"] as const).map((role) => {
+              const group = backupLines.filter((l) => l.role === role)
+              if (group.length === 0) return null
+              return (
+                <div key={role}>
+                  <p className={cn(
+                    "text-xs font-semibold uppercase tracking-widest mb-2 flex items-center gap-1.5",
+                    role === "main" ? "text-blue-400" : "text-violet-400"
+                  )}>
+                    <span className={cn(
+                      "inline-block w-1.5 h-1.5 rounded-full",
+                      role === "main" ? "bg-blue-400" : "bg-violet-400"
+                    )} />
+                    {role === "main" ? "กลุ่มไลน์หลัก" : "กลุ่มไลน์ฝากถอน"}
+                  </p>
+                  <div className="space-y-2">
+                    {group.map((line) => (
+                      <GroupRow key={line.id} line={line} onRemove={onRemoveBackup} />
+                    ))}
+                  </div>
+                </div>
+              )
+            })}
           </div>
         )}
 

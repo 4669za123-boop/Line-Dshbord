@@ -327,7 +327,7 @@ export function BackupPoolPage({
           <div>
             <h1 className="text-2xl lg:text-3xl font-bold text-foreground flex items-center gap-3">
               <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/15 ring-1 ring-primary/25">
-                <Users2 className="h-5 w-5 text-primary" />
+                <Archive className="h-5 w-5 text-primary" />
               </span>
               ไลน์สำรอง
             </h1>

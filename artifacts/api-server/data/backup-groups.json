@@ -1,8 +1,14 @@
 [
   {
-    "id": "194accec-cf62-4d2f-822e-7080c01ab4f2",
+    "id": "04f475eb-9754-4284-9bee-4d6cbcb37017",
     "url": "https://manager.line.biz/groups/294265/setting",
+    "role": "deposit",
+    "addedAt": "2026-05-10T22:21:34.145Z"
+  },
+  {
+    "id": "ab88b337-aeb7-4700-881b-915d83ead88f",
+    "url": "https://manager.line.biz/groups/284342/setting",
     "role": "main",
-    "addedAt": "2026-05-10T22:15:36.385Z"
+    "addedAt": "2026-05-10T22:22:06.459Z"
   }
 ]

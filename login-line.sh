@@ -4,7 +4,7 @@
 # รันครั้งเดียว แล้วบอทจะใช้ session นั้นได้ตลอด
 # ====================================================
 
-PROFILE_DIR="/root/.line-chrome-profile"
+PROFILE_DIR="/home/thaieasyvps/.line-chrome-profile"
 VNC_PORT=5900
 DISPLAY_NUM=99
 

@@ -12,7 +12,7 @@ module.exports = {
       env: {
         NODE_ENV: "production",
         PORT: "8080",
-        CHROME_PROFILE_DIR: "/home/thaieasyvps/.config/google-chrome",
+        CHROME_PROFILE_DIR: "/home/thaieasyvps/.line-chrome-profile",
         DISCORD_WEBHOOK_URL: process.env.DISCORD_WEBHOOK_URL || "",
         CHECK_INTERVAL: "60",
         BACKUP_SCAN_INTERVAL: "300",

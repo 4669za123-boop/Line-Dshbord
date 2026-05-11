@@ -1,0 +1,62 @@
+thaieasyvps@thaieasyvps-HVM-domU:/app/artifacts/api-server$ cd /app && git pull && cd artifacts/api-server && CHROME_PROFILE_DIR=/home/thaieasyvps/.line-chrome-profile-new API_BASE=http://localhost:8080/api python3 checker.py
+Already up to date.
+/usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+  warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+🔍 CHECKER START (ตรวจทุก 60 วินาที)
+
+=======================================================
+🔍 CHECKER: เริ่มรอบตรวจสถานะกลุ่มหลัก
+=======================================================
+✅ WEBSITES: 1 รายการ
+✅ ใช้ Chrome profile: /home/thaieasyvps/.line-chrome-profile-new
+✅ ใช้ Chrome: /usr/bin/google-chrome
+/usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+  warnings.warn(
+⚠️  webdriver_manager ไม่ได้: Message: session not created: Chrome instance exited. Examine ChromeDriver verbose log to determine the cause.; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#sessionnotcreatedexception
+Stacktrace:
+#0 0x5d14b51198aa <unknown>
+#1 0x5d14b4b148a9 <unknown>
+#2 0x5d14b4b52e5b <unknown>
+#3 0x5d14b4b4db29 <unknown>
+#4 0x5d14b4b9d316 <unknown>
+#5 0x5d14b4b9c9fc <unknown>
+#6 0x5d14b4b5c4cf <unknown>
+#7 0x5d14b4b5d291 <unknown>
+#8 0x5d14b50df76b <unknown>
+#9 0x5d14b50e267d <unknown>
+#10 0x5d14b50cc6c8 <unknown>
+#11 0x5d14b50e3210 <unknown>
+#12 0x5d14b50b3170 <unknown>
+#13 0x5d14b51067b8 <unknown>
+#14 0x5d14b5106955 <unknown>
+#15 0x5d14b511830e <unknown>
+#16 0x7a817a894ac3 <unknown>
+ — ลอง default
+❌ run_check error: Message: session not created: Chrome instance exited. Examine ChromeDriver verbose log to determine the cause.; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#sessionnotcreatedexception
+Stacktrace:
+#0 0x5724cc8708aa <unknown>
+#1 0x5724cc26b8a9 <unknown>
+#2 0x5724cc2a9e5b <unknown>
+#3 0x5724cc2a4b29 <unknown>
+#4 0x5724cc2f4316 <unknown>
+#5 0x5724cc2f39fc <unknown>
+#6 0x5724cc2b34cf <unknown>
+#7 0x5724cc2b4291 <unknown>
+#8 0x5724cc83676b <unknown>
+#9 0x5724cc83967d <unknown>
+#10 0x5724cc8236c8 <unknown>
+#11 0x5724cc83a210 <unknown>
+#12 0x5724cc80a170 <unknown>
+#13 0x5724cc85d7b8 <unknown>
+#14 0x5724cc85d955 <unknown>
+#15 0x5724cc86f30e <unknown>
+#16 0x71909b694ac3 <unknown>
+
+
+⏳ รอ 60 วินาทีก่อนรอบถัดไป...
+^CTraceback (most recent call last):
+  File "/app/artifacts/api-server/checker.py", line 226, in <module>
+    main()
+  File "/app/artifacts/api-server/checker.py", line 222, in main
+    time.sleep(CHECK_INTERVAL)
+KeyboardInterrupt

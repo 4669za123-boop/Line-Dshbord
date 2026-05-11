@@ -78,11 +78,13 @@ function LineRow({
   onRemove?: (id: string) => void
 }) {
   return (
-    <div className="flex items-center justify-between gap-2 py-1.5 group/row">
+    <div className="flex items-center justify-between gap-3 py-2.5 group/row">
       <div className="min-w-0 flex-1">
-        <p className="text-sm font-medium text-foreground truncate">{line.name}</p>
-        <p className="text-[11px] text-muted-foreground/60 font-mono truncate">
-          ID: @{line.id}
+        <p className="text-[15px] font-semibold tracking-wide text-white leading-tight truncate">
+          {line.name}
+        </p>
+        <p className="text-[11px] text-muted-foreground/50 tracking-widest mt-0.5 truncate">
+          @{line.id}
         </p>
       </div>
       <div className="flex items-center gap-1.5 shrink-0">
@@ -91,17 +93,15 @@ function LineRow({
             <button
               type="button"
               onClick={() => onAssign(line.id, "main")}
-              className="flex items-center gap-1 px-2 py-1 text-[11px] font-semibold rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
+              className="px-2.5 py-1 text-[11px] font-semibold rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
             >
-              <UserCheck className="h-3 w-3" />
               หลัก
             </button>
             <button
               type="button"
               onClick={() => onAssign(line.id, "deposit")}
-              className="flex items-center gap-1 px-2 py-1 text-[11px] font-semibold rounded-lg bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 transition-colors"
+              className="px-2.5 py-1 text-[11px] font-semibold rounded-md bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 transition-colors"
             >
-              <Wallet className="h-3 w-3" />
               ฝากถอน
             </button>
           </>
@@ -138,35 +138,34 @@ export function LineCard({ summary, onRemoveWebsite, onAssignRole, onRemoveLine 
   const hasDepositSection = summary.depositLines.length > 0
 
   return (
-    <div className="relative bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]">
-      <button
-        type="button"
-        className="absolute top-3 right-3 h-8 w-8 flex items-center justify-center rounded-lg text-destructive/40 hover:text-red-500 hover:bg-zinc-800 transition-all duration-200"
-        onClick={() => onRemoveWebsite(summary.websiteId)}
-        title="ลบกลุ่มนี้"
-      >
-        <Trash2 className="h-4 w-4" />
-      </button>
-
-      {/* ชื่อกลุ่ม */}
-      <div className="mb-4 pr-10 min-w-0">
+    <div className="relative bg-card border border-border rounded-2xl px-5 pt-4 pb-5 transition-all duration-300 hover:border-primary/30 hover:shadow-[0_0_30px_rgba(0,185,0,0.08)]">
+      {/* header: ชื่อเว็บ + ปุ่มลบ */}
+      <div className="flex items-center justify-between gap-2 mb-1 min-w-0">
         {summary.websiteUrl ? (
           <a
             href={summary.websiteUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-lg font-bold text-foreground truncate block hover:text-primary transition-colors"
+            className="text-base font-bold text-white truncate hover:text-primary transition-colors"
             title={summary.websiteUrl}
           >
             {summary.websiteName}
           </a>
         ) : (
-          <h3 className="text-lg font-bold text-foreground truncate">{summary.websiteName}</h3>
+          <h3 className="text-base font-bold text-white truncate">{summary.websiteName}</h3>
         )}
+        <button
+          type="button"
+          className="shrink-0 flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-medium text-destructive/50 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200"
+          onClick={() => onRemoveWebsite(summary.websiteId)}
+        >
+          <Trash2 className="h-3 w-3" />
+          ลบ
+        </button>
       </div>
 
       {!hasAny && (
-        <p className="text-xs text-muted-foreground/50 italic">
+        <p className="text-xs text-muted-foreground/40 italic mt-3">
           ยังไม่พบไลน์ในกลุ่มนี้ รอ checker สแกน...
         </p>
       )}
@@ -174,16 +173,14 @@ export function LineCard({ summary, onRemoveWebsite, onAssignRole, onRemoveLine 
       {/* ไลน์หลัก */}
       {hasMainSection && (
         <>
-          <div className="border-t border-border/50 my-3" />
-          <div className="mb-1">
-            <p className="text-xs font-semibold text-muted-foreground mb-2 tracking-wide">
-              ไลน์หลัก
-            </p>
-            <div className="divide-y divide-border/30">
-              {summary.mainLines.map((l) => (
-                <LineRow key={l.id} line={l} />
-              ))}
-            </div>
+          <div className="border-t border-white/8 mt-3 mb-2" />
+          <p className="text-[10px] font-semibold text-muted-foreground/60 uppercase tracking-[0.12em] mb-0.5">
+            ไลน์หลัก
+          </p>
+          <div className="divide-y divide-white/5">
+            {summary.mainLines.map((l) => (
+              <LineRow key={l.id} line={l} />
+            ))}
           </div>
         </>
       )}
@@ -191,16 +188,14 @@ export function LineCard({ summary, onRemoveWebsite, onAssignRole, onRemoveLine 
       {/* ไลน์ฝากถอน */}
       {hasDepositSection && (
         <>
-          <div className="border-t border-border/50 my-3" />
-          <div className="mb-1">
-            <p className="text-xs font-semibold text-muted-foreground mb-2 tracking-wide">
-              ไลน์ฝากถอน
-            </p>
-            <div className="divide-y divide-border/30">
-              {summary.depositLines.map((l) => (
-                <LineRow key={l.id} line={l} />
-              ))}
-            </div>
+          <div className="border-t border-white/8 mt-3 mb-2" />
+          <p className="text-[10px] font-semibold text-muted-foreground/60 uppercase tracking-[0.12em] mb-0.5">
+            ไลน์ฝากถอน
+          </p>
+          <div className="divide-y divide-white/5">
+            {summary.depositLines.map((l) => (
+              <LineRow key={l.id} line={l} />
+            ))}
           </div>
         </>
       )}
@@ -208,21 +203,19 @@ export function LineCard({ summary, onRemoveWebsite, onAssignRole, onRemoveLine 
       {/* รอกำหนดหน้าที่ */}
       {summary.unassignedLines.length > 0 && (
         <>
-          <div className="border-t border-border/50 my-3" />
-          <div>
-            <p className="text-xs font-semibold text-amber-400/80 mb-2 tracking-wide">
-              รอกำหนดหน้าที่
-            </p>
-            <div className="space-y-1">
-              {summary.unassignedLines.map((l) => (
-                <LineRow
-                  key={l.id}
-                  line={l}
-                  onAssign={onAssignRole}
-                  onRemove={onRemoveLine}
-                />
-              ))}
-            </div>
+          <div className="border-t border-white/8 mt-3 mb-2" />
+          <p className="text-[10px] font-semibold text-amber-400/70 uppercase tracking-[0.12em] mb-0.5">
+            รอกำหนดหน้าที่
+          </p>
+          <div className="space-y-0.5">
+            {summary.unassignedLines.map((l) => (
+              <LineRow
+                key={l.id}
+                line={l}
+                onAssign={onAssignRole}
+                onRemove={onRemoveLine}
+              />
+            ))}
           </div>
         </>
       )}

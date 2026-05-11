@@ -1,0 +1,38 @@
+thaieasyvps@thaieasyvps-HVM-domU:/app/artifacts/api-server$ python3 -c "
+import os, time
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+
+profile = '/home/thaieasyvps/.line-chrome-profile-new'
+for f in ['SingletonLock','SingletonSocket','SingletonCookie']:
+    p = os.path.join(profile, f)
+    if os.path.exists(p): os.remove(p)
+
+options = webdriver.ChromeOptions()
+options.add_argument('--headless=new')
+options.add_argument('--no-sandbox')
+options.add_argument('--disable-dev-shm-usage')
+options.add_argument('--disable-gpu')
+options.add_argument('--remote-debugging-port=0')
+options.add_argument(f'--user-data-dir={profile}')
+options.binary_location = '/usr/bin/google-chrome'
+service = Service('/tmp/chromedriver-linux64/chromedriver')
+driver = webdriver.Chrome(service=service, options=options)
+driver.get('https://manager.line.biz/groups/284033/setting')
+time.sleep(5)
+print('URL:', driver.current_url)
+links = driver.find_elements(By.TAG_NAME, 'a')
+print(f'Links ทั้งหมด: {len(links)}')
+for l in links[:25]:
+"river.quit()(' ', href)' in href or 'account' in href:
+URL: https://account.line.biz/login?redirectUri=https%3A%2F%2Faccount.line.biz%2Foauth2%2Fcallback%3Fclient_id%3D10%26code_challenge%3DclBsAA4f04N8hb7QLJVktUFhUfRtvthyVgoYHVfDvTQ%26code_challenge_method%3DS256%26redirect_uri%3Dhttps%253A%252F%252Fmanager.line.biz%252Fapi%252Foauth2%252FbizId%252Fcallback%26response_type%3Dcode%26state%3DwmMR8JX9goluGbOAqPwGsNPwGjqR2uyU
+Links ทั้งหมด: 10
+  https://account.line.biz/login/email/password/reset
+  https://account.line.biz/login/yahoo
+  https://account.line.biz/login/yahoo-otp
+  https://account.line.biz/signup
+  https://account.line.biz/login?redirectUri=https%3A%2F%2Faccount.line.biz%2Foauth2%2Fcallback%3Fclient_id%3D10%26code_challenge%3DclBsAA4f04N8hb7QLJVktUFhUfRtvthyVgoYHVfDvTQ%26code_challenge_method%3DS256%26redirect_uri%3Dhttps%253A%252F%252Fmanager.line.biz%252Fapi%252Foauth2%252FbizId%252Fcallback%26response_type%3Dcode%26state%3DwmMR8JX9goluGbOAqPwGsNPwGjqR2uyU&layout=default
+  https://account.line.biz/login?redirectUri=https%3A%2F%2Faccount.line.biz%2Foauth2%2Fcallback%3Fclient_id%3D10%26code_challenge%3DclBsAA4f04N8hb7QLJVktUFhUfRtvthyVgoYHVfDvTQ%26code_challenge_method%3DS256%26redirect_uri%3Dhttps%253A%252F%252Fmanager.line.biz%252Fapi%252Foauth2%252FbizId%252Fcallback%26response_type%3Dcode%26state%3DwmMR8JX9goluGbOAqPwGsNPwGjqR2uyU##
+  https://account.line.biz/login?redirectUri=https%3A%2F%2Faccount.line.biz%2Foauth2%2Fcallback%3Fclient_id%3D10%26code_challenge%3DclBsAA4f04N8hb7QLJVktUFhUfRtvthyVgoYHVfDvTQ%26code_challenge_method%3DS256%26redirect_uri%3Dhttps%253A%252F%252Fmanager.line.biz%252Fapi%252Foauth2%252FbizId%252Fcallback%26response_type%3Dcode%26state%3DwmMR8JX9goluGbOAqPwGsNPwGjqR2uyU##
+  https://account.line.biz/login?redirectUri=https%3A%2F%2Faccount.line.biz%2Foauth2%2Fcallback%3Fclient_id%3D10%26code_challenge%3DclBsAA4f04N8hb7QLJVktUFhUfRtvthyVgoYHVfDvTQ%26code_challenge_method%3DS256%26redirect_uri%3Dhttps%253A%252F%252Fmanager.line.biz%252Fapi%252Foauth2%252FbizId%252Fcallback%26response_type%3Dcode%26state%3DwmMR8JX9goluGbOAqPwGsNPwGjqR2uyU##

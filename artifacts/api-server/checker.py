@@ -18,7 +18,7 @@ import auto_failover
 
 WEBSITES_FILE = "data/websites.json"
 DATA_FILE = "data/lines.json"
-API_URL = os.environ.get("API_URL", "http://localhost:8080/api/line-status")
+API_URL = os.environ.get("API_URL", "http://localhost:3000/api/line-status")
 CHROME_PROFILE_DIR = os.environ.get("CHROME_PROFILE_DIR", "/home/thaieasyvps/.line-chrome-profile")
 CHECK_INTERVAL = int(os.environ.get("CHECK_INTERVAL", "60"))  # วินาที
 

@@ -19,7 +19,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 GROUPS_FILE  = "data/backup-groups.json"
 WEBSITES_FILE = "data/websites.json"
-API_BASE     = os.environ.get("API_URL", "http://localhost:8080/api")
+API_BASE     = os.environ.get("API_URL", "http://localhost:3000/api")
 CHROME_PROFILE_DIR = os.environ.get("CHROME_PROFILE_DIR", "/root/.line-chrome-profile")
 SCAN_INTERVAL_SECONDS = int(os.environ.get("BACKUP_SCAN_INTERVAL", "300"))  # 5 นาที
 

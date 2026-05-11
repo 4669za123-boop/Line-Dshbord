@@ -1,0 +1,62 @@
+thaieasyvps@thaieasyvps-HVM-domU:/app/artifacts/api-server$ python3 - << 'EOF'
+import time
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+
+options = Options()
+options.add_argument("--headless=new")
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-dev-shm-usage")
+options.add_argument("--user-data-dir=/home/thaieasyvps/.line-chrome-profile")
+options.binary_location = "/usr/bin/google-chrome"
+
+driver = webdriver.Chrome(options=options)
+driver.get("https://manager.line.biz/groups/284033/setting")
+time.sleep(5)
+
+print("URL:", driver.current_url)
+print("Title:", driver.title)
+
+# ดู links ทั้งหมด
+links = driver.find_elements(By.TAG_NAME, "a")
+print(f"\nLinks ทั้งหมด: {len(links)} รายการ")
+for l in links[:30]:
+    href = l.get_attribute("href")
+    if href:
+EOFver.quit()(" ", href)
+Traceback (most recent call last):
+  File "<stdin>", line 13, in <module>
+  File "/usr/local/lib/python3.10/dist-packages/selenium/webdriver/chrome/webdriver.py", line 45, in __init__
+    super().__init__(
+  File "/usr/local/lib/python3.10/dist-packages/selenium/webdriver/chromium/webdriver.py", line 66, in __init__
+    super().__init__(command_executor=executor, options=self.options)
+  File "/usr/local/lib/python3.10/dist-packages/selenium/webdriver/common/webdriver.py", line 25, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/selenium/webdriver/remote/webdriver.py", line 274, in __init__
+    self.start_session(capabilities)
+  File "/usr/local/lib/python3.10/dist-packages/selenium/webdriver/remote/webdriver.py", line 370, in start_session
+    response = self.execute(Command.NEW_SESSION, caps)["value"]
+  File "/usr/local/lib/python3.10/dist-packages/selenium/webdriver/remote/webdriver.py", line 450, in execute
+    self.error_handler.check_response(response)
+  File "/usr/local/lib/python3.10/dist-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.SessionNotCreatedException: Message: session not created: Chrome instance exited. Examine ChromeDriver verbose log to determine the cause.; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#sessionnotcreatedexception
+Stacktrace:
+#0 0x56e70a1608aa <unknown>
+#1 0x56e709b5b8a9 <unknown>
+#2 0x56e709b99e5b <unknown>
+#3 0x56e709b94b29 <unknown>
+#4 0x56e709be4316 <unknown>
+#5 0x56e709be39fc <unknown>
+#6 0x56e709ba34cf <unknown>
+#7 0x56e709ba4291 <unknown>
+#8 0x56e70a12676b <unknown>
+#9 0x56e70a12967d <unknown>
+#10 0x56e70a1136c8 <unknown>
+#11 0x56e70a12a210 <unknown>
+#12 0x56e70a0fa170 <unknown>
+#13 0x56e70a14d7b8 <unknown>
+#14 0x56e70a14d955 <unknown>
+#15 0x56e70a15f30e <unknown>
+#16 0x7ef6d8894ac3 <unknown>

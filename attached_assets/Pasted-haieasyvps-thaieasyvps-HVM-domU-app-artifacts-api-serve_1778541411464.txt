@@ -1,0 +1,35 @@
+haieasyvps@thaieasyvps-HVM-domU:/app/artifacts/api-server$ python3 << 'PATCH'
+with open('/app/artifacts/api-server/checker.py', 'r') as f:
+    c = f.read()
+
+# 1. เพิ่ม singleton lock removal + password-store + anti-detection ใน connect()
+old = '''    if os.path.exists(CHROME_PROFILE_DIR):
+        options.add_argument(f"--user-data-dir={CHROME_PROFILE_DIR}")
+        print(f"✅ ใช้ Chrome profile: {CHROME_PROFILE_DIR}")
+    else:
+        print(f"⚠️  ไม่พบ Chrome profile ที่ {CHROME_PROFILE_DIR}")'''
+
+new = '''    options.add_argument("--password-store=basic")
+    options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    options.add_experimental_option("useAutomationExtension", False)
+
+    if os.path.exists(CHROME_PROFILE_DIR):
+        for lock_file in ["SingletonLock", "SingletonSocket", "SingletonCookie"]:
+            lock_path = os.path.join(CHROME_PROFILE_DIR, lock_file)
+            if os.path.exists(lock_path):
+                try: os.remove(lock_path)
+                except: pass
+        options.add_argument(f"--user-data-dir={CHROME_PROFILE_DIR}")
+        print(f"✅ ใช้ Chrome profile: {CHROME_PROFILE_DIR}")
+    else:
+        print(f"⚠️  ไม่พบ Chrome profile ที่ {CHROME_PROFILE_DIR}")'''
+
+grep -n "password-store\|execute_script\|profile-v2\|SingletonLock" /app/artifacts/api-server/checker.pyed})")/local
+Patched OK
+20:CHROME_PROFILE_DIR = os.environ.get("CHROME_PROFILE_DIR", "/home/thaieasyvps/.line-chrome-profile-v2")
+45:    options.add_argument("--password-store=basic")
+50:        for lock_file in ["SingletonLock", "SingletonSocket", "SingletonCookie"]:
+79:                driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+88:        driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+93:        driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+100:        driver.execute_script("window.scrollBy(0, 800);")

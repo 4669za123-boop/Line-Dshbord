@@ -17,7 +17,7 @@ from selenium.webdriver.support import expected_conditions as EC
 WEBSITES_FILE  = "data/websites.json"
 API_BASE       = os.environ.get("API_BASE", "http://localhost:3000/api")
 LINE_STATUS_URL = f"{API_BASE}/line-status"
-CHROME_PROFILE_DIR = os.environ.get("CHROME_PROFILE_DIR", "/home/thaieasyvps/.line-chrome-profile")
+CHROME_PROFILE_DIR = os.environ.get("CHROME_PROFILE_DIR", "/home/thaieasyvps/.line-chrome-profile-v2")
 CHECK_INTERVAL = int(os.environ.get("CHECK_INTERVAL", "60"))
 
 
@@ -42,6 +42,9 @@ def connect():
     options.add_argument("--window-size=1920,1080")
     options.add_argument("--disable-blink-features=AutomationControlled")
     options.add_argument("--remote-debugging-port=0")
+    options.add_argument("--password-store=basic")
+    options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    options.add_experimental_option("useAutomationExtension", False)
 
     if os.path.exists(CHROME_PROFILE_DIR):
         # ลบ singleton lock ก่อนเสมอ เพื่อไม่ให้ชนกับ Chrome อื่น
@@ -83,6 +86,7 @@ def connect():
             try:
                 service = Service(cd_path)
                 driver = webdriver.Chrome(service=service, options=options)
+                driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
                 print(f"✅ ใช้ chromedriver: {cd_path}")
                 return driver
             except Exception as e:
@@ -91,10 +95,14 @@ def connect():
     try:
         from webdriver_manager.chrome import ChromeDriverManager
         service = Service(ChromeDriverManager().install())
-        return webdriver.Chrome(service=service, options=options)
+        driver = webdriver.Chrome(service=service, options=options)
+        driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+        return driver
     except Exception as e:
         print(f"⚠️  webdriver_manager ไม่ได้: {e} — ลอง default")
-        return webdriver.Chrome(options=options)
+        driver = webdriver.Chrome(options=options)
+        driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+        return driver
 
 
 def get_accounts(driver):

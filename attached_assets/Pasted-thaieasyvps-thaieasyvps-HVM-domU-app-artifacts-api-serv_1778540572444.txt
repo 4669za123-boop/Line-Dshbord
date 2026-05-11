@@ -1,0 +1,159 @@
+thaieasyvps@thaieasyvps-HVM-domU:/app/artifacts/api-server$ rm -f /home/thaieasyvps/.line-chrome-profile-new/Singleton*
+Xvfb :98 -screen 0 1920x1080x24 &
+sleep 1
+x11vnc -display :98 -nopw -listen localhost -rfbport 5901 -xkb -forever &
+sleep 1
+DISPLAY=:98 google-chrome \
+  --user-data-dir="/home/thaieasyvps/.line-chrome-profile-new" \
+  --no-first-run --no-sandbox --disable-dev-shm-usage --disable-gpu \
+  https://manager.line.biz/groups/284033/setting &
+echo "เชื่อม VNC localhost:5901 → login LINE → รอให้หน้า manager โหลดครบ → ปิด Chrome ด้วยปุ่ม X → กด Enter"
+read
+[3] 310256
+(EE) 
+Fatal server error:
+(EE) Server is already active for display 98
+        If this server is no longer running, remove /tmp/.X98-lock
+        and start again.
+(EE) 
+[3]+  Exit 1                  Xvfb :98 -screen 0 1920x1080x24
+[3] 310261
+12/05/2026 05:56:02 passing arg to libvncserver: -listen
+12/05/2026 05:56:02 passing arg to libvncserver: localhost
+12/05/2026 05:56:02 passing arg to libvncserver: -rfbport
+12/05/2026 05:56:02 passing arg to libvncserver: 5901
+12/05/2026 05:56:02 x11vnc version: 0.9.16 lastmod: 2019-01-05  pid: 310261
+12/05/2026 05:56:02 Using X display :98
+12/05/2026 05:56:02 rootwin: 0x50d reswin: 0xc00001 dpy: 0x9554a6f0
+12/05/2026 05:56:02 
+12/05/2026 05:56:02 ------------------ USEFUL INFORMATION ------------------
+12/05/2026 05:56:02 X DAMAGE available on display, using it for polling hints.
+12/05/2026 05:56:02   To disable this behavior use: '-noxdamage'
+12/05/2026 05:56:02 
+12/05/2026 05:56:02   Most compositing window managers like 'compiz' or 'beryl'
+12/05/2026 05:56:02   cause X DAMAGE to fail, and so you may not see any screen
+12/05/2026 05:56:02   updates via VNC.  Either disable 'compiz' (recommended) or
+12/05/2026 05:56:02   supply the x11vnc '-noxdamage' command line option.
+12/05/2026 05:56:02 
+12/05/2026 05:56:02 Wireframing: -wireframe mode is in effect for window moves.
+12/05/2026 05:56:02   If this yields undesired behavior (poor response, painting
+12/05/2026 05:56:02   errors, etc) it may be disabled:
+12/05/2026 05:56:02    - use '-nowf' to disable wireframing completely.
+12/05/2026 05:56:02    - use '-nowcr' to disable the Copy Rectangle after the
+12/05/2026 05:56:02      moved window is released in the new position.
+12/05/2026 05:56:02   Also see the -help entry for tuning parameters.
+12/05/2026 05:56:02   You can press 3 Alt_L's (Left "Alt" key) in a row to 
+12/05/2026 05:56:02   repaint the screen, also see the -fixscreen option for
+12/05/2026 05:56:02   periodic repaints.
+12/05/2026 05:56:02 
+12/05/2026 05:56:02 XFIXES available on display, resetting cursor mode
+12/05/2026 05:56:02   to: '-cursor most'.
+12/05/2026 05:56:02   to disable this behavior use: '-cursor arrow'
+12/05/2026 05:56:02   or '-noxfixes'.
+12/05/2026 05:56:02 using XFIXES for cursor drawing.
+12/05/2026 05:56:02 GrabServer control via XTEST.
+12/05/2026 05:56:02 
+12/05/2026 05:56:02 Scroll Detection: -scrollcopyrect mode is in effect to
+12/05/2026 05:56:02   use RECORD extension to try to detect scrolling windows
+12/05/2026 05:56:02   (induced by either user keystroke or mouse input).
+12/05/2026 05:56:02   If this yields undesired behavior (poor response, painting
+12/05/2026 05:56:02   errors, etc) it may be disabled via: '-noscr'
+12/05/2026 05:56:02   Also see the -help entry for tuning parameters.
+12/05/2026 05:56:02   You can press 3 Alt_L's (Left "Alt" key) in a row to 
+12/05/2026 05:56:02   repaint the screen, also see the -fixscreen option for
+12/05/2026 05:56:02   periodic repaints.
+12/05/2026 05:56:02 X FBPM extension not supported.
+Xlib:  extension "DPMS" missing on display ":98".
+12/05/2026 05:56:02 X display is not capable of DPMS.
+12/05/2026 05:56:02 --------------------------------------------------------
+12/05/2026 05:56:02 
+12/05/2026 05:56:02 Default visual ID: 0x21
+12/05/2026 05:56:03 Read initial data from X display into framebuffer.
+12/05/2026 05:56:03 initialize_screen: fb_depth/fb_bpp/fb_Bpl 24/32/7680
+12/05/2026 05:56:03 
+12/05/2026 05:56:03 X display :98 is 32bpp depth=24 true color
+12/05/2026 05:56:03 
+12/05/2026 05:56:03 ListenOnTCPPort: Address already in use
+12/05/2026 05:56:03 listen6: bind: Address already in use
+12/05/2026 05:56:03 Not listening on IPv6 interface.
+12/05/2026 05:56:03 
+12/05/2026 05:56:03 Xinerama is present and active (e.g. multi-head).
+12/05/2026 05:56:03 Xinerama: number of sub-screens: 1
+12/05/2026 05:56:03 Xinerama: no blackouts needed (only one sub-screen)
+12/05/2026 05:56:03 
+12/05/2026 05:56:03 fb read rate: 265 MB/sec
+12/05/2026 05:56:03 fast read: reset -wait  ms to: 10
+12/05/2026 05:56:03 fast read: reset -defer ms to: 10
+12/05/2026 05:56:03 The X server says there are 10 mouse buttons.
+12/05/2026 05:56:03 Error: could not obtain listening port.
+12/05/2026 05:56:03 deleted 60 tile_row polling images.
+[3]+  Exit 1                  x11vnc -display :98 -nopw -listen localhost -rfbport 5901 -xkb -forever
+[3] 310273
+เชื่อม VNC localhost:5901 → login LINE → รอให้หน้า manager โหลดครบ → ปิด Chrome ด้วยปุ่ม X → กด Enter
+Created TensorFlow Lite XNNPACK delegate for CPU.
+[310273:310306:0512/055616.812032:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT
+[310273:310306:0512/055643.143457:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT
+[310273:310306:0512/055740.060063:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT
+12/05/2026 05:58:05 Got connection from client 127.0.0.1
+12/05/2026 05:58:05   0 other clients
+12/05/2026 05:58:05 Normal socket connection
+12/05/2026 05:58:05 Disabled X server key autorepeat.
+12/05/2026 05:58:05   to force back on run: 'xset r on' (3 times)
+12/05/2026 05:58:05 incr accepted_client=2 for 127.0.0.1:48174  sock=11
+12/05/2026 05:58:05 Client Protocol Version 3.8
+12/05/2026 05:58:05 Protocol version sent 3.8, using 3.8
+12/05/2026 05:58:05 rfbProcessClientSecurityType: executing handler for type 1
+12/05/2026 05:58:05 rfbProcessClientSecurityType: returning securityResult for client rfb version >= 3.8
+12/05/2026 05:58:05 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0x00000018)
+12/05/2026 05:58:05 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0x00000016)
+12/05/2026 05:58:05 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0x00000015)
+12/05/2026 05:58:05 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0x0000000F)
+12/05/2026 05:58:05 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0xFFFFFEC6)
+12/05/2026 05:58:05 Enabling full-color cursor updates for client 127.0.0.1
+12/05/2026 05:58:05 Enabling NewFBSize protocol extension for client 127.0.0.1
+12/05/2026 05:58:05 Using ZRLE encoding for client 127.0.0.1
+12/05/2026 05:58:06 Pixel format for client 127.0.0.1:
+12/05/2026 05:58:06   8 bpp, depth 6
+12/05/2026 05:58:06   true colour: max r 3 g 3 b 3, shift r 4 g 2 b 0
+12/05/2026 05:58:06 client_set_net: 127.0.0.1  0.0002
+12/05/2026 05:58:06 created   xdamage object: 0x200042
+12/05/2026 05:58:06 Pixel format for client 127.0.0.1:
+12/05/2026 05:58:06   32 bpp, depth 24, little endian
+12/05/2026 05:58:06   true colour: max r 255 g 255 b 255, shift r 16 g 8 b 0
+12/05/2026 05:58:06 no translation needed
+12/05/2026 05:58:06 client 2 network rate 337.2 KB/sec (91118.3 eff KB/sec)
+12/05/2026 05:58:06 client 2 latency:  17.9 ms
+12/05/2026 05:58:06 dt1: 0.0211, dt2: 0.0789 dt3: 0.0179 bytes: 30697
+12/05/2026 05:58:06 link_rate: LR_UNKNOWN - 17 ms, 337 KB/s
+12/05/2026 05:58:38 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0x00000018)
+12/05/2026 05:58:38 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0x0000000F)
+12/05/2026 05:58:38 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0x00000016)
+12/05/2026 05:58:38 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0x00000015)
+12/05/2026 05:58:38 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0xFFFFFEC6)
+12/05/2026 05:58:38 Enabling full-color cursor updates for client 127.0.0.1
+12/05/2026 05:58:38 Enabling NewFBSize protocol extension for client 127.0.0.1
+12/05/2026 05:58:38 Switching from ZRLE to hextile Encoding for client 127.0.0.1
+[310273:310306:0512/055918.860005:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT
+
+[3]+  Done                    DISPLAY=:98 google-chrome --user-data-dir="/home/thaieasyvps/.line-chrome-profile-new" --no-first-run --no-sandbox --disable-dev-shm-usage --disable-gpu https://manager.line.biz/groups/2840thaieasyvps@thaieasyvps-HVM-domU:/app/artifacts/api-server$ cd /app/artifacts/api-server && CHROME_PROFILE_DIR=/home/thaieasyvps/.line-chrome-profile-new API_BASE=http://localhost:8080/api python3 checker.py
+/usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+  warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+🔍 CHECKER START (ตรวจทุก 60 วินาที)
+
+=======================================================
+🔍 CHECKER: เริ่มรอบตรวจสถานะกลุ่มหลัก
+=======================================================
+✅ WEBSITES: 1 รายการ
+✅ ใช้ Chrome profile: /home/thaieasyvps/.line-chrome-profile-new
+✅ ใช้ Chrome: /usr/bin/google-chrome
+
+🌐 เข้ากลุ่ม: Jun88 → https://manager.line.biz/groups/284033/setting
+   พบ 0 account links
+/usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+  warnings.warn(
+
+✅ อัปเดต 0 บัญชี (200) — active=0, suspended=0
+
+✅ CHECKER รอบนี้เสร็จสมบูรณ์
+
+⏳ รอ 60 วินาทีก่อนรอบถัดไป...

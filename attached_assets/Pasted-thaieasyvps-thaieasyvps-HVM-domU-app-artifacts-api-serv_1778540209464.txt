@@ -1,0 +1,94 @@
+thaieasyvps@thaieasyvps-HVM-domU:/app/artifacts/api-server$ rm -f /home/thaieasyvps/.line-chrome-profile-new/Singleton*
+Xvfb :98 -screen 0 1920x1080x24 &
+sleep 1
+x11vnc -display :98 -nopw -listen localhost -rfbport 5901 -xkb -forever &
+sleep 1
+DISPLAY=:98 google-chrome \
+  --user-data-dir="/home/thaieasyvps/.line-chrome-profile-new" \
+  --no-first-run --no-sandbox --disable-dev-shm-usage --disable-gpu \
+  https://manager.line.biz/groups/284033/setting &
+echo "เชื่อม VNC localhost:5901 → login LINE → รอให้หน้า manager โหลดครบ → ปิด Chrome ด้วยปุ่ม X → กด Enter"
+read
+[3] 310256
+(EE) 
+Fatal server error:
+(EE) Server is already active for display 98
+        If this server is no longer running, remove /tmp/.X98-lock
+        and start again.
+(EE) 
+[3]+  Exit 1                  Xvfb :98 -screen 0 1920x1080x24
+[3] 310261
+12/05/2026 05:56:02 passing arg to libvncserver: -listen
+12/05/2026 05:56:02 passing arg to libvncserver: localhost
+12/05/2026 05:56:02 passing arg to libvncserver: -rfbport
+12/05/2026 05:56:02 passing arg to libvncserver: 5901
+12/05/2026 05:56:02 x11vnc version: 0.9.16 lastmod: 2019-01-05  pid: 310261
+12/05/2026 05:56:02 Using X display :98
+12/05/2026 05:56:02 rootwin: 0x50d reswin: 0xc00001 dpy: 0x9554a6f0
+12/05/2026 05:56:02 
+12/05/2026 05:56:02 ------------------ USEFUL INFORMATION ------------------
+12/05/2026 05:56:02 X DAMAGE available on display, using it for polling hints.
+12/05/2026 05:56:02   To disable this behavior use: '-noxdamage'
+12/05/2026 05:56:02 
+12/05/2026 05:56:02   Most compositing window managers like 'compiz' or 'beryl'
+12/05/2026 05:56:02   cause X DAMAGE to fail, and so you may not see any screen
+12/05/2026 05:56:02   updates via VNC.  Either disable 'compiz' (recommended) or
+12/05/2026 05:56:02   supply the x11vnc '-noxdamage' command line option.
+12/05/2026 05:56:02 
+12/05/2026 05:56:02 Wireframing: -wireframe mode is in effect for window moves.
+12/05/2026 05:56:02   If this yields undesired behavior (poor response, painting
+12/05/2026 05:56:02   errors, etc) it may be disabled:
+12/05/2026 05:56:02    - use '-nowf' to disable wireframing completely.
+12/05/2026 05:56:02    - use '-nowcr' to disable the Copy Rectangle after the
+12/05/2026 05:56:02      moved window is released in the new position.
+12/05/2026 05:56:02   Also see the -help entry for tuning parameters.
+12/05/2026 05:56:02   You can press 3 Alt_L's (Left "Alt" key) in a row to 
+12/05/2026 05:56:02   repaint the screen, also see the -fixscreen option for
+12/05/2026 05:56:02   periodic repaints.
+12/05/2026 05:56:02 
+12/05/2026 05:56:02 XFIXES available on display, resetting cursor mode
+12/05/2026 05:56:02   to: '-cursor most'.
+12/05/2026 05:56:02   to disable this behavior use: '-cursor arrow'
+12/05/2026 05:56:02   or '-noxfixes'.
+12/05/2026 05:56:02 using XFIXES for cursor drawing.
+12/05/2026 05:56:02 GrabServer control via XTEST.
+12/05/2026 05:56:02 
+12/05/2026 05:56:02 Scroll Detection: -scrollcopyrect mode is in effect to
+12/05/2026 05:56:02   use RECORD extension to try to detect scrolling windows
+12/05/2026 05:56:02   (induced by either user keystroke or mouse input).
+12/05/2026 05:56:02   If this yields undesired behavior (poor response, painting
+12/05/2026 05:56:02   errors, etc) it may be disabled via: '-noscr'
+12/05/2026 05:56:02   Also see the -help entry for tuning parameters.
+12/05/2026 05:56:02   You can press 3 Alt_L's (Left "Alt" key) in a row to 
+12/05/2026 05:56:02   repaint the screen, also see the -fixscreen option for
+12/05/2026 05:56:02   periodic repaints.
+12/05/2026 05:56:02 X FBPM extension not supported.
+Xlib:  extension "DPMS" missing on display ":98".
+12/05/2026 05:56:02 X display is not capable of DPMS.
+12/05/2026 05:56:02 --------------------------------------------------------
+12/05/2026 05:56:02 
+12/05/2026 05:56:02 Default visual ID: 0x21
+12/05/2026 05:56:03 Read initial data from X display into framebuffer.
+12/05/2026 05:56:03 initialize_screen: fb_depth/fb_bpp/fb_Bpl 24/32/7680
+12/05/2026 05:56:03 
+12/05/2026 05:56:03 X display :98 is 32bpp depth=24 true color
+12/05/2026 05:56:03 
+12/05/2026 05:56:03 ListenOnTCPPort: Address already in use
+12/05/2026 05:56:03 listen6: bind: Address already in use
+12/05/2026 05:56:03 Not listening on IPv6 interface.
+12/05/2026 05:56:03 
+12/05/2026 05:56:03 Xinerama is present and active (e.g. multi-head).
+12/05/2026 05:56:03 Xinerama: number of sub-screens: 1
+12/05/2026 05:56:03 Xinerama: no blackouts needed (only one sub-screen)
+12/05/2026 05:56:03 
+12/05/2026 05:56:03 fb read rate: 265 MB/sec
+12/05/2026 05:56:03 fast read: reset -wait  ms to: 10
+12/05/2026 05:56:03 fast read: reset -defer ms to: 10
+12/05/2026 05:56:03 The X server says there are 10 mouse buttons.
+12/05/2026 05:56:03 Error: could not obtain listening port.
+12/05/2026 05:56:03 deleted 60 tile_row polling images.
+[3]+  Exit 1                  x11vnc -display :98 -nopw -listen localhost -rfbport 5901 -xkb -forever
+[3] 310273
+เชื่อม VNC localhost:5901 → login LINE → รอให้หน้า manager โหลดครบ → ปิด Chrome ด้วยปุ่ม X → กด Enter
+Created TensorFlow Lite XNNPACK delegate for CPU.
+[310273:310306:0512/055616.812032:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT

@@ -1,7 +1,11 @@
 """
 backup-scanner.py — สแกนกลุ่มไลน์สำรองโดยเฉพาะ
-อ่าน backup-groups.json → สแกนแต่ละกลุ่ม (รองรับหลายหน้า) → POST /api/backup-accounts
+อ่าน backup-groups.json → สแกนแต่ละกลุ่ม (รองรับ N หน้า ไม่จำกัด) → POST /api/backup-accounts
 ทำงานแยกจาก checker.py เพื่อไม่ให้ blocking กัน
+
+กลยุทธ์ pagination (เรียงตามความน่าเชื่อถือ):
+  1. คลิก next ›  ไปเรื่อยๆ จนไม่มีหรือ disabled  ← หลัก, ใช้ได้กับทุกจำนวนหน้า
+  2. URL ?page=N ถ้า page 2 โหลดได้และมี account  ← ใช้เสริมยืนยัน
 """
 import time
 import json
@@ -25,22 +29,25 @@ API_BASE            = os.environ.get("API_BASE", "http://localhost:3000/api")
 BACKUP_ACCOUNTS_URL = f"{API_BASE}/backup-accounts"
 CHROME_PROFILE_DIR  = os.environ.get("CHROME_PROFILE_DIR", "/home/thaieasyvps/.line-chrome-profile")
 SCAN_INTERVAL       = int(os.environ.get("BACKUP_SCAN_INTERVAL", "120"))  # ทุก 2 นาที
+MAX_PAGES           = int(os.environ.get("MAX_PAGES", "200"))              # safety cap
 
-# XPath ที่ใช้ค้นหา pagination ของหน้า LINE OA Manager
-_NEXT_BTN_XPATHS = [
-    # ลูกศร ">" / "›" / "Next"
-    "//button[contains(@aria-label,'next') or contains(@aria-label,'Next')]",
-    "//a[contains(@aria-label,'next') or contains(@aria-label,'Next')]",
-    "//*[contains(@class,'pagination')]//*[contains(text(),'>') or contains(text(),'›') or contains(text(),'»')]",
-    "//*[contains(@class,'next') and not(@disabled)]",
-    "//*[contains(@class,'pager-next') and not(@disabled)]",
+# XPath ค้นหาปุ่ม Next  (ไม่ disabled)
+_NEXT_XPATHS = [
+    "//button[not(@disabled)][contains(@aria-label,'next') or contains(@aria-label,'Next')]",
+    "//a[not(@disabled)][contains(@aria-label,'next') or contains(@aria-label,'Next')]",
+    "//*[contains(@class,'pagination')]//button[not(@disabled)][normalize-space(text())='>' or normalize-space(text())='›' or normalize-space(text())='»' or normalize-space(text())='Next']",
+    "//*[contains(@class,'pagination')]//a[not(@disabled)][normalize-space(text())='>' or normalize-space(text())='›' or normalize-space(text())='»' or normalize-space(text())='Next']",
+    "//*[contains(@class,'pager-next') and not(contains(@class,'disabled'))]",
+    "//*[contains(@class,'next-page') and not(contains(@class,'disabled'))]",
+    # ลูกศร SVG ห่อด้วย button ที่ไม่ disabled
+    "//button[not(@disabled)][.//*[local-name()='svg'] and (contains(@class,'next') or contains(@class,'forward'))]",
 ]
 
-_PAGE_NUM_XPATHS = [
-    "//*[contains(@class,'pagination')]//button[not(@disabled)][normalize-space(text())]",
-    "//*[contains(@class,'pagination')]//a[not(@disabled)][normalize-space(text())]",
-    "//*[contains(@class,'pager')]//button[not(@disabled)][normalize-space(text())]",
-    "//*[contains(@class,'pager')]//a[not(@disabled)][normalize-space(text())]",
+# XPath ตรวจว่าปุ่ม Next ถูก disabled แล้ว (หมดหน้าแล้ว)
+_NEXT_DISABLED_XPATHS = [
+    "//*[contains(@class,'pagination')]//button[@disabled][normalize-space(text())='>' or normalize-space(text())='›' or normalize-space(text())='»']",
+    "//*[contains(@class,'pager-next') and contains(@class,'disabled')]",
+    "//*[contains(@class,'next-page') and contains(@class,'disabled')]",
 ]
 
 
@@ -99,180 +106,138 @@ def connect():
         return webdriver.Chrome(options=options)
 
 
-# ─── Pagination helpers ───────────────────────────────────────────────────────
-
-def _detect_total_pages(driver):
-    """พยายามหาจำนวนหน้าทั้งหมดจาก pagination element"""
-    for xpath in _PAGE_NUM_XPATHS:
-        try:
-            btns = driver.find_elements(By.XPATH, xpath)
-            nums = []
-            for b in btns:
-                t = b.text.strip()
-                if t.isdigit():
-                    nums.append(int(t))
-            if nums:
-                return max(nums)
-        except Exception:
-            pass
-
-    # ลองดูจาก URL parameter ?page=N หรือ text "หน้า X / Y"
-    try:
-        body = driver.find_element(By.TAG_NAME, "body").text
-        import re
-        m = re.search(r"(\d+)\s*/\s*(\d+)", body)
-        if m:
-            return int(m.group(2))
-    except Exception:
-        pass
-
-    return 1  # ไม่พบ pagination → หน้าเดียว
-
-
-def _get_page_urls(group_url, total_pages):
-    """
-    สร้าง URL ของแต่ละหน้า
-    รองรับทั้ง ?page=N และ &page=N
-    """
-    urls = [group_url]
-    if total_pages <= 1:
-        return urls
-
-    base = group_url.split("?")[0]
-    qs   = group_url.split("?")[1] if "?" in group_url else ""
-
-    import re, urllib.parse as up
-    params = dict(p.split("=", 1) for p in qs.split("&") if "=" in p) if qs else {}
-
-    for p in range(2, total_pages + 1):
-        params["page"] = str(p)
-        qs_new = "&".join(f"{k}={v}" for k, v in params.items())
-        urls.append(f"{base}?{qs_new}")
-
-    return urls
-
-
-def _click_page_button(driver, wait, page_num):
-    """คลิกปุ่มหมายเลขหน้า page_num ใน pagination"""
-    for xpath in _PAGE_NUM_XPATHS:
-        try:
-            btns = driver.find_elements(By.XPATH, xpath)
-            for btn in btns:
-                if btn.text.strip() == str(page_num):
-                    driver.execute_script("arguments[0].scrollIntoView({block:'center'});", btn)
-                    time.sleep(0.3)
-                    btn.click()
-                    time.sleep(2)
-                    return True
-        except (StaleElementReferenceException, ElementClickInterceptedException):
-            pass
-    return False
-
-
-def _click_next_button(driver):
-    """คลิกปุ่ม Next / ›  — คืน True ถ้าสำเร็จ"""
-    for xpath in _NEXT_BTN_XPATHS:
-        try:
-            btns = driver.find_elements(By.XPATH, xpath)
-            for btn in btns:
-                if btn.is_enabled() and btn.is_displayed():
-                    driver.execute_script("arguments[0].scrollIntoView({block:'center'});", btn)
-                    time.sleep(0.3)
-                    btn.click()
-                    time.sleep(2)
-                    return True
-        except (StaleElementReferenceException, ElementClickInterceptedException,
-                NoSuchElementException):
-            pass
-    return False
-
-
-# ─── Collect account links from current page ─────────────────────────────────
+# ─── Pagination ───────────────────────────────────────────────────────────────
 
 def _collect_accounts_on_page(driver):
-    """Scroll หน้าปัจจุบัน แล้วเก็บ account URL ทั้งหมด"""
+    """Scroll + เก็บ account URL บนหน้าปัจจุบัน"""
     accounts = set()
-    last_height = 0
-    for _ in range(8):
+    last_h   = 0
+    for _ in range(10):
         driver.execute_script("window.scrollBy(0, 600);")
-        time.sleep(0.8)
+        time.sleep(0.7)
         links = driver.find_elements(By.XPATH, "//a[contains(@href,'/account/')]")
         for l in links:
             href = l.get_attribute("href")
             if href:
                 accounts.add(href.split("?")[0])
-        new_height = driver.execute_script("return document.body.scrollHeight")
-        if new_height == last_height:
+        new_h = driver.execute_script("return document.body.scrollHeight")
+        if new_h == last_h:
             break
-        last_height = new_height
+        last_h = new_h
     return accounts
+
+
+def _is_next_disabled(driver):
+    """คืน True ถ้าพบปุ่ม Next ที่ disabled อยู่"""
+    for xpath in _NEXT_DISABLED_XPATHS:
+        try:
+            els = driver.find_elements(By.XPATH, xpath)
+            if els:
+                return True
+        except Exception:
+            pass
+    return False
+
+
+def _click_next(driver):
+    """
+    คลิกปุ่ม Next ›
+    คืน True ถ้าคลิกสำเร็จ, False ถ้าไม่พบหรือ disabled
+    """
+    # ถ้า next disabled แน่นอนแล้ว → หยุดเลย
+    if _is_next_disabled(driver):
+        return False
+
+    for xpath in _NEXT_XPATHS:
+        try:
+            els = driver.find_elements(By.XPATH, xpath)
+            for el in els:
+                if el.is_displayed():
+                    driver.execute_script(
+                        "arguments[0].scrollIntoView({block:'nearest'});", el
+                    )
+                    time.sleep(0.3)
+                    try:
+                        el.click()
+                    except ElementClickInterceptedException:
+                        driver.execute_script("arguments[0].click();", el)
+                    time.sleep(2)
+                    return True
+        except (StaleElementReferenceException, NoSuchElementException):
+            pass
+
+    return False  # ไม่พบปุ่ม next เลย → หมดหน้าแล้ว
+
+
+def _get_current_url_snapshot(driver):
+    """ดึง URL + จำนวน account ปัจจุบัน เพื่อ detect ว่าหน้าเปลี่ยนจริงไหม"""
+    try:
+        return driver.current_url
+    except Exception:
+        return ""
 
 
 def collect_all_accounts(driver, wait, group_url):
     """
-    เข้า group_url แล้วดึง account URL **ทุกหน้า**
-    กลยุทธ์:
-      1. ตรวจจำนวนหน้าทั้งหมดจาก pagination element
-      2. ถ้า URL รองรับ ?page=N → navigate ตรง
-      3. ถ้าไม่ → คลิกปุ่มหมายเลขหน้า → ถ้าไม่ได้ → คลิก next ›
+    เข้า group_url แล้วดึง account URL **ทุกหน้า** ไม่จำกัดจำนวนหน้า
+    ใช้วิธี: เก็บหน้าปัจจุบัน → คลิก Next → เก็บ → วนจนหมด
     """
     driver.get(group_url)
     wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
     time.sleep(2)
 
-    all_accounts = set()
+    all_accounts   = set()
+    page_num       = 1
+    seen_urls      = set()  # ป้องกัน infinite loop ถ้า URL ไม่เปลี่ยน
+    consecutive_empty = 0
 
-    # หน้าแรก
-    page_accounts = _collect_accounts_on_page(driver)
-    all_accounts.update(page_accounts)
+    while page_num <= MAX_PAGES:
+        cur_url = _get_current_url_snapshot(driver)
 
-    total_pages = _detect_total_pages(driver)
-    print(f"   📄 ตรวจพบ {total_pages} หน้า")
-
-    if total_pages <= 1:
-        return list(all_accounts)
-
-    # ── วิธีที่ 1: navigate ผ่าน URL ?page=N ──────────────────────────────
-    page_urls = _get_page_urls(group_url, total_pages)
-    if len(page_urls) > 1:
-        print(f"   🔗 ใช้ URL pagination (?page=N)")
-        for pg_num, pg_url in enumerate(page_urls[1:], start=2):
-            print(f"   ➡️  หน้า {pg_num}/{total_pages}")
-            try:
-                driver.get(pg_url)
-                wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-                time.sleep(2)
-                pg_accounts = _collect_accounts_on_page(driver)
-                if not pg_accounts:
-                    print(f"   ⚠️  หน้า {pg_num} ไม่มี account — หยุดวน")
-                    break
-                all_accounts.update(pg_accounts)
-                print(f"      +{len(pg_accounts)} account (รวม {len(all_accounts)})")
-            except Exception as e:
-                print(f"   ❌ หน้า {pg_num} error: {e}")
-        return list(all_accounts)
-
-    # ── วิธีที่ 2: คลิกปุ่มหมายเลขหน้า ──────────────────────────────────
-    print(f"   🖱️  ใช้การคลิกปุ่ม pagination")
-    for pg_num in range(2, total_pages + 1):
-        print(f"   ➡️  หน้า {pg_num}/{total_pages}")
-        # โหลดกลับไปที่ group_url ก่อนเพื่อ reset state
-        driver.get(group_url)
-        wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-        time.sleep(1.5)
-        if not _click_page_button(driver, wait, pg_num):
-            # ── วิธีที่ 3: คลิก next › ────────────────────────────────
-            for _ in range(pg_num - 1):
-                if not _click_next_button(driver):
-                    print(f"   ⚠️  ไม่พบปุ่ม next — หยุดที่หน้า {pg_num}")
-                    return list(all_accounts)
-        pg_accounts = _collect_accounts_on_page(driver)
-        if not pg_accounts:
-            print(f"   ⚠️  หน้า {pg_num} ไม่มี account — หยุดวน")
+        # ป้องกัน loop ซ้ำ: ถ้า URL เหมือนเดิมและเราเคยเยี่ยมแล้ว
+        if cur_url in seen_urls and page_num > 1:
+            print(f"   ⚠️  URL ซ้ำ → หมดหน้าแล้ว (หน้า {page_num - 1})")
             break
-        all_accounts.update(pg_accounts)
-        print(f"      +{len(pg_accounts)} account (รวม {len(all_accounts)})")
+        seen_urls.add(cur_url)
 
+        # เก็บ account บนหน้านี้
+        pg_accounts = _collect_accounts_on_page(driver)
+        new_count   = len(pg_accounts - all_accounts)
+
+        if page_num == 1:
+            print(f"   📄 หน้า 1 — พบ {len(pg_accounts)} account")
+        else:
+            print(f"   ➡️  หน้า {page_num} — +{new_count} ใหม่ (รวม {len(all_accounts) + len(pg_accounts)})")
+
+        if not pg_accounts:
+            consecutive_empty += 1
+            if consecutive_empty >= 2:
+                print(f"   ⚠️  ไม่มี account {consecutive_empty} หน้าติดกัน → หยุด")
+                break
+        else:
+            consecutive_empty = 0
+
+        all_accounts.update(pg_accounts)
+
+        # พยายามคลิก next
+        before_click_url = _get_current_url_snapshot(driver)
+        if not _click_next(driver):
+            print(f"   ✅ ไม่มีหน้าถัดไป — สแกนครบ {page_num} หน้า")
+            break
+
+        # ตรวจว่าหน้าเปลี่ยนจริง (URL หรือ content เปลี่ยน)
+        after_click_url = _get_current_url_snapshot(driver)
+        if after_click_url == before_click_url:
+            # URL ไม่เปลี่ยน อาจเป็น SPA → รอแล้วเช็ค account ใหม่
+            time.sleep(1.5)
+            test_accounts = _collect_accounts_on_page(driver)
+            if test_accounts == pg_accounts:
+                print(f"   ✅ หน้าไม่เปลี่ยนหลังคลิก next — สแกนครบแล้ว")
+                break
+
+        page_num += 1
+
+    print(f"   📦 รวมทั้งหมด {len(all_accounts)} account จาก {page_num} หน้า")
     return list(all_accounts)
 
 
@@ -335,7 +300,6 @@ def run_scan():
 
             try:
                 acc_urls = collect_all_accounts(driver, wait, group_url)
-                print(f"   รวมพบ {len(acc_urls)} account (ทุกหน้า)")
 
                 for acc_url in acc_urls:
                     line_id = extract_id_from_url(acc_url)

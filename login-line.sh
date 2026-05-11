@@ -5,8 +5,8 @@
 # ====================================================
 
 PROFILE_DIR="${PROFILE_DIR:-/home/thaieasyvps/.line-chrome-profile}"
-VNC_PORT=5900
-DISPLAY_NUM=99
+VNC_PORT="${VNC_PORT:-5900}"
+DISPLAY_NUM="${DISPLAY_NUM:-99}"
 
 echo "🔐 เตรียมล็อกอิน LINE OA..."
 

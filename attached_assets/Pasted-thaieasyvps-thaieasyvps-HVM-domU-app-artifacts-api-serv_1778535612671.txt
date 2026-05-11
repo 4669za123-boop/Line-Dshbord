@@ -1,0 +1,49 @@
+thaieasyvps@thaieasyvps-HVM-domU:/app/artifacts/api-server$ pkill -f chrome; sleep 2; python3 - << 'EOF'
+import time
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+
+options = Options()
+options.add_argument("--headless=new")
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-dev-shm-usage")
+options.add_argument("--user-data-dir=/home/thaieasyvps/.line-chrome-profile")
+options.binary_location = "/usr/bin/google-chrome"
+
+driver = webdriver.Chrome(options=options)
+driver.get("https://manager.line.biz/groups/284033/setting")
+time.sleep(5)
+
+print("URL:", driver.current_url)
+print("Title:", driver.title)
+
+links = driver.find_elements(By.TAG_NAME, "a")
+print(f"\nLinks ทั้งหมด: {len(links)} รายการ")
+for l in links[:30]:
+    href = l.get_attribute("href")
+    if href:
+EOFver.quit()(" ", href)
+pkill: killing pid 203080 failed: Operation not permitted
+pkill: killing pid 203088 failed: Operation not permitted
+pkill: killing pid 203090 failed: Operation not permitted
+pkill: killing pid 203095 failed: Operation not permitted
+pkill: killing pid 203096 failed: Operation not permitted
+pkill: killing pid 203117 failed: Operation not permitted
+pkill: killing pid 203125 failed: Operation not permitted
+pkill: killing pid 203134 failed: Operation not permitted
+URL: https://account.line.biz/login?redirectUri=https%3A%2F%2Faccount.line.biz%2Foauth2%2Fcallback%3Fclient_id%3D10%26code_challenge%3D82_0glv_i4pVfHirF_D8cx1pw-yB_UlWCjyVgDRtF_c%26code_challenge_method%3DS256%26redirect_uri%3Dhttps%253A%252F%252Fmanager.line.biz%252Fapi%252Foauth2%252FbizId%252Fcallback%26response_type%3Dcode%26state%3DTnmN1tnDykXtrRBQV3JTqWRsVjVvBVHZ
+Title: LINE Business ID
+
+Links ทั้งหมด: 10 รายการ
+  https://account.line.biz/login/email/password/reset
+  https://account.line.biz/login/yahoo
+  https://account.line.biz/login/yahoo-otp
+  https://account.line.biz/signup
+  https://account.line.biz/login?redirectUri=https%3A%2F%2Faccount.line.biz%2Foauth2%2Fcallback%3Fclient_id%3D10%26code_challenge%3D82_0glv_i4pVfHirF_D8cx1pw-yB_UlWCjyVgDRtF_c%26code_challenge_method%3DS256%26redirect_uri%3Dhttps%253A%252F%252Fmanager.line.biz%252Fapi%252Foauth2%252FbizId%252Fcallback%26response_type%3Dcode%26state%3DTnmN1tnDykXtrRBQV3JTqWRsVjVvBVHZ&layout=default
+  https://help2.line.me/business_id/web?lang=en
+  https://help2.line.me/business_id/web/?contentId=200001358&lang=en
+  https://account.line.biz/login?redirectUri=https%3A%2F%2Faccount.line.biz%2Foauth2%2Fcallback%3Fclient_id%3D10%26code_challenge%3D82_0glv_i4pVfHirF_D8cx1pw-yB_UlWCjyVgDRtF_c%26code_challenge_method%3DS256%26redirect_uri%3Dhttps%253A%252F%252Fmanager.line.biz%252Fapi%252Foauth2%252FbizId%252Fcallback%26response_type%3Dcode%26state%3DTnmN1tnDykXtrRBQV3JTqWRsVjVvBVHZ##
+  https://account.line.biz/login?redirectUri=https%3A%2F%2Faccount.line.biz%2Foauth2%2Fcallback%3Fclient_id%3D10%26code_challenge%3D82_0glv_i4pVfHirF_D8cx1pw-yB_UlWCjyVgDRtF_c%26code_challenge_method%3DS256%26redirect_uri%3Dhttps%253A%252F%252Fmanager.line.biz%252Fapi%252Foauth2%252FbizId%252Fcallback%26response_type%3Dcode%26state%3DTnmN1tnDykXtrRBQV3JTqWRsVjVvBVHZ##
+  https://account.line.biz/login?redirectUri=https%3A%2F%2Faccount.line.biz%2Foauth2%2Fcallback%3Fclient_id%3D10%26code_challenge%3D82_0glv_i4pVfHirF_D8cx1pw-yB_UlWCjyVgDRtF_c%26code_challenge_method%3DS256%26redirect_uri%3Dhttps%253A%252F%252Fmanager.line.biz%252Fapi%252Foauth2%252FbizId%252Fcallback%26response_type%3Dcode%26state%3DTnmN1tnDykXtrRBQV3JTqWRsVjVvBVHZ##
+thaieasyvps@thaieasyvps-HVM-domU:/app/artifacts/api-server$ 

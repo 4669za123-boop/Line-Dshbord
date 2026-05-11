@@ -4,9 +4,6 @@ import linesRouter from "./lines";
 import websitesRouter from "./websites";
 import schedulesRouter from "./schedules";
 import lineStatusRouter from "./line-status";
-import backupGroupsRouter from "./backup-groups";
-import backupAccountsRouter from "./backup-accounts";
-import failoverRouter from "./failover";
 
 const router: IRouter = Router();
 
@@ -15,8 +12,5 @@ router.use(linesRouter);
 router.use(websitesRouter);
 router.use(schedulesRouter);
 router.use(lineStatusRouter);
-router.use(backupGroupsRouter);
-router.use(backupAccountsRouter);
-router.use(failoverRouter);
 
 export default router;

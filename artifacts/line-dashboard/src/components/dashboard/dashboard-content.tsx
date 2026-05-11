@@ -14,24 +14,26 @@ import {
 import {
   LineCard,
   mergeWebsitesWithLineStatus,
-  type LineAccount,
-  type FailoverEntry,
+  type DiscoveredLine,
   type WebsiteLineSummary,
 } from "./line-card";
 import type { Website } from "./types";
 
 export type DashboardContentProps = {
   websites: Website[];
-  accounts: LineAccount[];
-  failoverLog?: FailoverEntry[];
+  lines: DiscoveredLine[];
   onAddWebsite: (name: string, url: string) => void;
   onRemoveWebsite: (id: string) => void;
   onReorderWebsites: (orderedIds: string[]) => void;
+  onAssignRole: (lineId: string, role: "main" | "deposit") => void;
+  onRemoveLine: (lineId: string) => void;
 };
 
 type SortableCardProps = {
   summary: WebsiteLineSummary;
-  onRemove: (id: string) => void;
+  onRemoveWebsite: (id: string) => void;
+  onAssignRole: (lineId: string, role: "main" | "deposit") => void;
+  onRemoveLine: (lineId: string) => void;
   onDragStart: (id: string) => void;
   onDragEnter: (id: string) => void;
   onDragEnd: () => void;
@@ -41,15 +43,15 @@ type SortableCardProps = {
 
 function SortableCard({
   summary,
-  onRemove,
+  onRemoveWebsite,
+  onAssignRole,
+  onRemoveLine,
   onDragStart,
   onDragEnter,
   onDragEnd,
   isDragging,
   isOver,
 }: SortableCardProps) {
-  const handleRef = useRef<HTMLButtonElement>(null);
-
   return (
     <div
       draggable
@@ -70,7 +72,6 @@ function SortableCard({
       )}
     >
       <button
-        ref={handleRef}
         className="absolute top-3 right-10 z-10 p-1 rounded-lg opacity-0 group-hover/drag:opacity-50 hover:!opacity-100 transition-opacity cursor-grab active:cursor-grabbing text-muted-foreground hover:text-primary"
         title="ลากเพื่อเรียงลำดับ"
         type="button"
@@ -78,18 +79,24 @@ function SortableCard({
       >
         <GripVertical className="h-4 w-4" />
       </button>
-      <LineCard summary={summary} onRemove={onRemove} />
+      <LineCard
+        summary={summary}
+        onRemoveWebsite={onRemoveWebsite}
+        onAssignRole={onAssignRole}
+        onRemoveLine={onRemoveLine}
+      />
     </div>
   );
 }
 
 export function DashboardContent({
   websites,
-  accounts,
-  failoverLog = [],
+  lines,
   onAddWebsite,
   onRemoveWebsite,
   onReorderWebsites,
+  onAssignRole,
+  onRemoveLine,
 }: DashboardContentProps) {
   const [websiteDialogOpen, setWebsiteDialogOpen] = useState(false);
   const [newWebsiteName, setNewWebsiteName] = useState("");
@@ -98,9 +105,14 @@ export function DashboardContent({
   const [overId, setOverId] = useState<string | null>(null);
 
   const websiteRows = useMemo(
-    () => mergeWebsitesWithLineStatus(websites, accounts, failoverLog),
-    [websites, accounts, failoverLog],
+    () => mergeWebsitesWithLineStatus(websites, lines),
+    [websites, lines],
   );
+
+  const assignedLines = lines.filter((l) => l.role !== null);
+  const totalAccounts = assignedLines.length;
+  const onlineCount = assignedLines.filter((l) => l.status === "normal").length;
+  const suspendedCount = assignedLines.filter((l) => l.status === "suspended").length;
 
   const handleDragEnd = () => {
     if (dragId && overId && dragId !== overId) {
@@ -157,7 +169,7 @@ export function DashboardContent({
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/15 text-primary ring-1 ring-primary/25">
                 <Globe className="h-4 w-4" />
               </span>
-              เพิ่มเว็บไซต์
+              เพิ่มกลุ่ม
             </span>
           </button>
         </div>
@@ -171,7 +183,7 @@ export function DashboardContent({
                 <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/15 text-primary shadow-inner ring-1 ring-primary/25 sm:mx-0">
                   <Globe className="h-7 w-7" />
                 </div>
-                <DialogTitle className="text-xl">เพิ่มเว็บไซต์</DialogTitle>
+                <DialogTitle className="text-xl">เพิ่มกลุ่ม LINE</DialogTitle>
               </DialogHeader>
             </div>
             <form
@@ -180,35 +192,31 @@ export function DashboardContent({
             >
               <div className="space-y-2">
                 <label className="text-sm font-medium text-foreground">
-                  ชื่อเว็บไซต์
+                  ชื่อกลุ่ม
                 </label>
                 <Input
                   autoFocus
                   value={newWebsiteName}
                   onChange={(e) => setNewWebsiteName(e.target.value)}
-                  placeholder="เช่น เว็บหลัก, แบรนด์ A, แคมเปญสมาชิก"
+                  placeholder="เช่น กลุ่มหลัก, เว็บ A, แคมเปญสมาชิก"
                   className="h-11 border-border bg-input text-foreground placeholder:text-muted-foreground"
                 />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-foreground">
-                  URL เว็บไซต์
+                  URL กลุ่ม LINE OA
                 </label>
                 <Input
                   type="text"
                   value={newWebsiteUrl}
                   onChange={(e) => setNewWebsiteUrl(e.target.value)}
-                  placeholder="เช่น https://example.com"
+                  placeholder="เช่น https://manager.line.biz/groups/..."
                   className="h-11 border-border bg-input text-foreground placeholder:text-muted-foreground"
                 />
               </div>
               <DialogFooter className="gap-2 sm:gap-3">
                 <DialogClose asChild>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="rounded-xl"
-                  >
+                  <Button type="button" variant="outline" className="rounded-xl">
                     ยกเลิก
                   </Button>
                 </DialogClose>
@@ -224,176 +232,44 @@ export function DashboardContent({
           </DialogContent>
         </Dialog>
 
-        {(() => {
-          const totalAccounts = websiteRows.reduce(
-            (sum, s) =>
-              sum + (s.mainLineId ? 1 : 0) + (s.depositLineId ? 1 : 0),
-            0,
-          );
-          const onlineCount = websiteRows.reduce(
-            (sum, s) =>
-              sum +
-              (s.mainLineId && s.mainStatus === "normal" ? 1 : 0) +
-              (s.depositLineId && s.depositStatus === "normal" ? 1 : 0),
-            0,
-          );
-          const suspendedCount = websiteRows.reduce(
-            (sum, s) =>
-              sum +
-              (s.mainLineId && s.mainStatus === "suspended" ? 1 : 0) +
-              (s.depositLineId && s.depositStatus === "suspended" ? 1 : 0),
-            0,
-          );
-          return (
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-              <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)] group">
-                <div className="flex items-center gap-2 mb-3">
-                  <span
-                    className={cn(
-                      "h-3 w-3 rounded-full transition-colors",
-                      totalAccounts > 0
-                        ? "bg-foreground/70"
-                        : "bg-foreground/20",
-                    )}
-                  />
-                  <p
-                    className={cn(
-                      "text-sm transition-colors",
-                      totalAccounts > 0
-                        ? "text-foreground/80"
-                        : "text-muted-foreground",
-                    )}
-                  >
-                    บัญชีทั้งหมด
-                  </p>
-                </div>
-                <p
-                  className={cn(
-                    "text-2xl font-bold",
-                    totalAccounts > 0
-                      ? "text-foreground"
-                      : "text-muted-foreground",
-                  )}
-                >
-                  {totalAccounts}
-                </p>
-              </div>
-              <div
-                className={cn(
-                  "border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)] group",
-                  onlineCount > 0
-                    ? "bg-primary/5 border-primary/25"
-                    : "bg-card border-border",
-                )}
-              >
-                <div className="flex items-center gap-2 mb-3">
-                  <span
-                    className={cn(
-                      "h-3 w-3 rounded-full transition-colors",
-                      onlineCount > 0 ? "bg-primary" : "bg-primary/30",
-                    )}
-                  />
-                  <p
-                    className={cn(
-                      "text-sm",
-                      onlineCount > 0
-                        ? "text-primary/80"
-                        : "text-muted-foreground",
-                    )}
-                  >
-                    ออนไลน์
-                  </p>
-                </div>
-                <p
-                  className={cn(
-                    "text-2xl font-bold",
-                    onlineCount > 0 ? "text-primary" : "text-muted-foreground",
-                  )}
-                >
-                  {onlineCount}
-                </p>
-              </div>
-              <div
-                className={cn(
-                  "border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)] group",
-                  suspendedCount > 0
-                    ? "bg-destructive/5 border-destructive/25"
-                    : "bg-card border-border",
-                )}
-              >
-                <div className="flex items-center gap-2 mb-3">
-                  <span
-                    className={cn(
-                      "h-3 w-3 rounded-full transition-colors",
-                      suspendedCount > 0
-                        ? "bg-destructive"
-                        : "bg-destructive/30",
-                    )}
-                  />
-                  <p
-                    className={cn(
-                      "text-sm",
-                      suspendedCount > 0
-                        ? "text-destructive/80"
-                        : "text-muted-foreground",
-                    )}
-                  >
-                    โดนระงับ
-                  </p>
-                </div>
-                <p
-                  className={cn(
-                    "text-2xl font-bold",
-                    suspendedCount > 0
-                      ? "text-destructive"
-                      : "text-muted-foreground",
-                  )}
-                >
-                  {suspendedCount}
-                </p>
-              </div>
-              <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)] group">
-                <div className="flex items-center gap-2 mb-3">
-                  <span
-                    className={cn(
-                      "h-3 w-3 rounded-full transition-colors",
-                      websites.length > 0
-                        ? "bg-foreground/70"
-                        : "bg-foreground/20",
-                    )}
-                  />
-                  <p
-                    className={cn(
-                      "text-sm transition-colors",
-                      websites.length > 0
-                        ? "text-foreground/80"
-                        : "text-muted-foreground",
-                    )}
-                  >
-                    เว็บไซต์
-                  </p>
-                </div>
-                <p
-                  className={cn(
-                    "text-2xl font-bold",
-                    websites.length > 0
-                      ? "text-foreground"
-                      : "text-muted-foreground",
-                  )}
-                >
-                  {websites.length}
-                </p>
-              </div>
+        {/* Stats */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]">
+            <div className="flex items-center gap-2 mb-3">
+              <span className={cn("h-3 w-3 rounded-full", totalAccounts > 0 ? "bg-foreground/70" : "bg-foreground/20")} />
+              <p className={cn("text-sm", totalAccounts > 0 ? "text-foreground/80" : "text-muted-foreground")}>บัญชีทั้งหมด</p>
             </div>
-          );
-        })()}
+            <p className={cn("text-2xl font-bold", totalAccounts > 0 ? "text-foreground" : "text-muted-foreground")}>{totalAccounts}</p>
+          </div>
+          <div className={cn("border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]", onlineCount > 0 ? "bg-primary/5 border-primary/25" : "bg-card border-border")}>
+            <div className="flex items-center gap-2 mb-3">
+              <span className={cn("h-3 w-3 rounded-full", onlineCount > 0 ? "bg-primary" : "bg-primary/30")} />
+              <p className={cn("text-sm", onlineCount > 0 ? "text-primary/80" : "text-muted-foreground")}>ออนไลน์</p>
+            </div>
+            <p className={cn("text-2xl font-bold", onlineCount > 0 ? "text-primary" : "text-muted-foreground")}>{onlineCount}</p>
+          </div>
+          <div className={cn("border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]", suspendedCount > 0 ? "bg-destructive/5 border-destructive/25" : "bg-card border-border")}>
+            <div className="flex items-center gap-2 mb-3">
+              <span className={cn("h-3 w-3 rounded-full", suspendedCount > 0 ? "bg-destructive" : "bg-destructive/30")} />
+              <p className={cn("text-sm", suspendedCount > 0 ? "text-destructive/80" : "text-muted-foreground")}>โดนระงับ</p>
+            </div>
+            <p className={cn("text-2xl font-bold", suspendedCount > 0 ? "text-destructive" : "text-muted-foreground")}>{suspendedCount}</p>
+          </div>
+          <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]">
+            <div className="flex items-center gap-2 mb-3">
+              <span className={cn("h-3 w-3 rounded-full", websites.length > 0 ? "bg-foreground/70" : "bg-foreground/20")} />
+              <p className={cn("text-sm", websites.length > 0 ? "text-foreground/80" : "text-muted-foreground")}>กลุ่ม</p>
+            </div>
+            <p className={cn("text-2xl font-bold", websites.length > 0 ? "text-foreground" : "text-muted-foreground")}>{websites.length}</p>
+          </div>
+        </div>
 
         {websiteRows.length === 0 ? (
           <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border py-14 text-center">
             <Globe className="h-10 w-10 text-muted-foreground/30 mb-3" />
-            <p className="text-sm text-muted-foreground">ยังไม่มีเว็บไซต์</p>
+            <p className="text-sm text-muted-foreground">ยังไม่มีกลุ่ม</p>
             <p className="text-xs text-muted-foreground/60 mt-1">
-              กดปุ่ม "เพิ่มเว็บไซต์" มุมบนขวาเพื่อเริ่มต้น
+              กดปุ่ม "เพิ่มกลุ่ม" มุมบนขวาเพื่อเริ่มต้น
             </p>
           </div>
         ) : (
@@ -402,7 +278,9 @@ export function DashboardContent({
               <SortableCard
                 key={summary.websiteId}
                 summary={summary}
-                onRemove={onRemoveWebsite}
+                onRemoveWebsite={onRemoveWebsite}
+                onAssignRole={onAssignRole}
+                onRemoveLine={onRemoveLine}
                 onDragStart={(id) => setDragId(id)}
                 onDragEnter={(id) => setOverId(id)}
                 onDragEnd={handleDragEnd}

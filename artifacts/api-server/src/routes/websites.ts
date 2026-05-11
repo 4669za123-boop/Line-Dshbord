@@ -7,10 +7,9 @@ const router = Router();
 
 const dataDir = path.join(process.cwd(), "data");
 const filePath = path.join(dataDir, "websites.json");
-const linesFilePath = path.join(dataDir, "lines.json");
+const discoveredFilePath = path.join(dataDir, "discovered-lines.json");
 
 type WebsiteRecord = { id: string; name: string; url: string };
-type LineRecord = { id: string; type: string; site: string };
 
 function readWebsites(): WebsiteRecord[] {
   try {
@@ -26,18 +25,17 @@ function writeWebsites(data: WebsiteRecord[]) {
   fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
 }
 
-function readLines(): LineRecord[] {
+function removeDiscoveredBySite(siteId: string) {
   try {
-    if (!fs.existsSync(linesFilePath)) return [];
-    return JSON.parse(fs.readFileSync(linesFilePath, "utf-8"));
+    if (!fs.existsSync(discoveredFilePath)) return;
+    const data = JSON.parse(fs.readFileSync(discoveredFilePath, "utf-8")) as Record<string, { siteId: string }>;
+    const filtered = Object.fromEntries(
+      Object.entries(data).filter(([, v]) => v.siteId !== siteId)
+    );
+    fs.writeFileSync(discoveredFilePath, JSON.stringify(filtered, null, 2));
   } catch {
-    return [];
+    // ignore
   }
-}
-
-function writeLines(data: LineRecord[]) {
-  if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
-  fs.writeFileSync(linesFilePath, JSON.stringify(data, null, 2));
 }
 
 router.get("/websites", (_req, res) => {
@@ -59,16 +57,9 @@ router.post("/websites", (req, res) => {
 router.delete("/websites/:id", (req, res) => {
   const { id } = req.params;
   const all = readWebsites();
-  const target = all.find((w) => w.id === id);
-
   const remaining = all.filter((w) => w.id !== id);
   writeWebsites(remaining);
-
-  if (target) {
-    const lines = readLines().filter((l) => l.site !== target.name);
-    writeLines(lines);
-  }
-
+  removeDiscoveredBySite(id);
   res.json({ ok: true });
 });
 
@@ -81,27 +72,9 @@ router.put("/websites/reorder", (req, res) => {
 
   const all = readWebsites();
   const idToSite = new Map(all.map((w) => [w.id, w]));
-
-  const reordered = ids
-    .map((id) => idToSite.get(id))
-    .filter((w): w is WebsiteRecord => w !== undefined);
-
+  const reordered = ids.map((id) => idToSite.get(id)).filter((w): w is WebsiteRecord => w !== undefined);
   const missing = all.filter((w) => !ids.includes(w.id));
-  const final = [...reordered, ...missing];
-  writeWebsites(final);
-
-  const siteOrder = final.map((w) => w.name);
-  const lines = readLines();
-  const sortedLines = [...lines].sort((a, b) => {
-    const ai = siteOrder.indexOf(a.site);
-    const bi = siteOrder.indexOf(b.site);
-    const siteA = ai === -1 ? Infinity : ai;
-    const siteB = bi === -1 ? Infinity : bi;
-    if (siteA !== siteB) return siteA - siteB;
-    const typeOrder = (t: string) => (t === "หลัก" ? 0 : 1);
-    return typeOrder(a.type) - typeOrder(b.type);
-  });
-  writeLines(sortedLines);
+  writeWebsites([...reordered, ...missing]);
 
   res.json({ ok: true });
 });

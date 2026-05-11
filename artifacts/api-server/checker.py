@@ -1,7 +1,7 @@
 """
 checker.py — ตรวจสถานะ LINE OA (ออนไลน์ / โดนระงับ)
-รันต่อเนื่องทุก 1 นาที → อัปเดตสถานะบน Dashboard แบบเรียลไทม์
-สแกน account ทั้งหมดจาก group URL อัตโนมัติ ไม่ต้องกรอก LINE ID เอง
+สแกน account ทั้งหมดจาก group URL อัตโนมัติ
+ดึงชื่อ LINE + ID แล้วเก็บไว้ในระบบ พร้อมตรวจสถานะ
 """
 import time
 import json
@@ -17,7 +17,7 @@ from selenium.webdriver.support import expected_conditions as EC
 WEBSITES_FILE = "data/websites.json"
 API_URL = os.environ.get("API_URL", "http://localhost:3000/api/line-status")
 CHROME_PROFILE_DIR = os.environ.get("CHROME_PROFILE_DIR", "/home/thaieasyvps/.line-chrome-profile")
-CHECK_INTERVAL = int(os.environ.get("CHECK_INTERVAL", "60"))  # วินาที
+CHECK_INTERVAL = int(os.environ.get("CHECK_INTERVAL", "60"))
 
 
 def load_websites():
@@ -90,6 +90,41 @@ def extract_id_from_url(url):
         return ""
 
 
+def get_account_name(driver, line_id):
+    """ดึงชื่อ LINE OA จากหน้า account"""
+    try:
+        # ลอง h1 ก่อน
+        h1_els = driver.find_elements(By.TAG_NAME, "h1")
+        for el in h1_els:
+            name = el.text.strip()
+            if name and len(name) < 100 and name.lower() != "line":
+                return name
+
+        # ลอง title tag
+        title = driver.title
+        if title:
+            # "ชื่อ | LINE Official Account Manager" หรือ "ชื่อ - LINE"
+            for sep in [" | ", " - "]:
+                if sep in title:
+                    name = title.split(sep)[0].strip()
+                    if name and len(name) < 100:
+                        return name
+            if len(title) < 100:
+                return title.strip()
+
+        # ลอง meta og:title
+        metas = driver.find_elements(By.XPATH, "//meta[@property='og:title']")
+        for m in metas:
+            name = m.get_attribute("content")
+            if name and len(name) < 100:
+                return name.strip()
+
+    except Exception as e:
+        print(f"   ⚠️  get_account_name error: {e}")
+
+    return line_id
+
+
 def check_banned(driver):
     try:
         text = driver.find_element(By.TAG_NAME, "body").text
@@ -119,6 +154,7 @@ def run_check():
     statuses = {}
 
     for website in websites:
+        site_id = website.get("id", "")
         site_name = website["name"]
         group_url = website["url"]
         print(f"\n🌐 เข้าเว็บ: {site_name} → {group_url}")
@@ -141,29 +177,36 @@ def run_check():
                     wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
                     time.sleep(2)
 
+                    line_name = get_account_name(driver, line_id)
+
                     if check_banned(driver):
                         status = "suspended"
-                        print(f"   🚨 {line_id} ({site_name}) → โดนระงับ")
+                        print(f"   🚨 {line_name} ({line_id}) → โดนระงับ")
                     else:
                         status = "normal"
-                        print(f"   ✅ {line_id} ({site_name}) → ออนไลน์")
+                        print(f"   ✅ {line_name} ({line_id}) → ออนไลน์")
 
                     statuses[line_id] = {
+                        "name":   line_name,
                         "status": status,
                         "site":   site_name,
+                        "siteId": site_id,
+                        "url":    acc_url,
                     }
 
                 except Exception as e:
                     print(f"   ❌ {line_id} error:", e)
                     statuses[line_id] = {
+                        "name":   line_id,
                         "status": "inactive",
                         "site":   site_name,
+                        "siteId": site_id,
+                        "url":    acc_url,
                     }
 
         except Exception as e:
             print(f"❌ group error ({site_name}):", e)
 
-    # POST สถานะขึ้น Dashboard
     try:
         res = requests.post(API_URL, json={"statuses": statuses}, timeout=10)
         print(f"\n✅ อัปเดตสถานะ {len(statuses)} บัญชี → Dashboard ({res.status_code})")

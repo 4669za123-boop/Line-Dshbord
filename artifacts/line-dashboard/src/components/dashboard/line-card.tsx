@@ -1,191 +1,151 @@
-
 import { cn } from "@/lib/utils"
-import { Trash2, RefreshCw } from "lucide-react"
-import type { Website } from "./types"
+import { Trash2, UserCheck, Wallet } from "lucide-react"
 
-export type LineChannelStatus = "normal" | "suspended" | "inactive"
+export type LineStatus = "normal" | "suspended" | "inactive"
+export type LineRole = "main" | "deposit" | null
 
-export interface LineAccount {
+export type DiscoveredLine = {
   id: string
   name: string
+  lineId: string
   websiteId: string
   websiteName: string
-  lineRole: "main" | "deposit"
-  mainStatus: LineChannelStatus
-  depositStatus: LineChannelStatus
-}
-
-export type FailoverEntry = {
-  at: string
-  site: string
-  role: string
-  oldLineId: string
-  newLineId: string
-  newLineName: string
-  seleniumOk: boolean
+  url: string
+  role: LineRole
+  status: LineStatus
 }
 
 export type WebsiteLineSummary = {
   websiteId: string
   websiteName: string
   websiteUrl?: string
-  mainStatus: "normal" | "suspended"
-  depositStatus: "normal" | "suspended"
-  mainLineId?: string
-  depositLineId?: string
-  mainFailover?: FailoverEntry
-  depositFailover?: FailoverEntry
+  mainLines: DiscoveredLine[]
+  depositLines: DiscoveredLine[]
+  unassignedLines: DiscoveredLine[]
 }
 
-interface LineCardProps {
-  summary: WebsiteLineSummary
-  onRemove: (websiteId: string) => void
-}
-
-function StatusBadge({ status }: { status: "normal" | "suspended" }) {
-  const online = status === "normal"
-  return (
-    <div
-      className={cn(
-        "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium",
-        online
-          ? "bg-primary/10 text-primary"
-          : "bg-destructive/10 text-destructive"
-      )}
-    >
-      <span
-        className={cn(
-          "w-1.5 h-1.5 rounded-full",
-          online ? "bg-primary animate-pulse" : "bg-destructive"
-        )}
-      />
-      {online ? "ออนไลน์" : "โดนระงับ"}
-    </div>
-  )
-}
-
-function FailoverBadge({ entry }: { entry: FailoverEntry }) {
-  const diffMs = Date.now() - new Date(entry.at).getTime()
-  const diffMin = Math.floor(diffMs / 60_000)
-  const label = diffMin < 60
-    ? `${diffMin} นาทีที่แล้ว`
-    : `${Math.floor(diffMin / 60)} ชม. ที่แล้ว`
-
-  return (
-    <div className="mt-1 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-500/10 text-amber-400 ring-1 ring-amber-500/20">
-      <RefreshCw className="h-2.5 w-2.5" />
-      สับเปลี่ยน {label}
-    </div>
-  )
-}
-
-function aggregateAccountStatusesByWebsite(
-  accounts: LineAccount[],
-): Map<string, { main: "normal" | "suspended"; deposit: "normal" | "suspended" }> {
-  const groups = new Map<
-    string,
-    { websiteName: string; mains: LineAccount[]; deps: LineAccount[] }
-  >()
-
-  for (const a of accounts) {
-    let g = groups.get(a.websiteId)
-    if (!g) {
-      g = { websiteName: a.websiteName, mains: [], deps: [] }
-      groups.set(a.websiteId, g)
-    }
-    if (a.websiteName) g.websiteName = a.websiteName
-    if (a.lineRole === "main") g.mains.push(a)
-    else g.deps.push(a)
-  }
-
-  const out = new Map<
-    string,
-    { main: "normal" | "suspended"; deposit: "normal" | "suspended" }
-  >()
-
-  for (const [websiteId, g] of groups) {
-    const lastMain = g.mains[g.mains.length - 1]
-    const lastDep = g.deps[g.deps.length - 1]
-
-    const main: "normal" | "suspended" = lastMain
-      ? lastMain.mainStatus === "suspended"
-        ? "suspended"
-        : "normal"
-      : "normal"
-
-    const deposit: "normal" | "suspended" = lastDep
-      ? lastDep.depositStatus === "suspended"
-        ? "suspended"
-        : "normal"
-      : "normal"
-
-    out.set(websiteId, { main, deposit })
-  }
-
-  return out
-}
-
-function lastAccountForChannel(
-  accounts: LineAccount[],
-  websiteId: string,
-  role: "main" | "deposit",
-): LineAccount | undefined {
-  const list = accounts.filter(
-    (a) => a.websiteId === websiteId && a.lineRole === role,
-  )
-  return list[list.length - 1]
-}
-
-/** แสดงการ์ดครบทุกเว็บที่สร้างไว้ แม้ยังไม่ได้เพิ่ม LINE */
 export function mergeWebsitesWithLineStatus(
-  websites: Website[],
-  accounts: LineAccount[],
-  failoverLog: FailoverEntry[] = [],
+  websites: { id: string; name: string; url?: string }[],
+  lines: DiscoveredLine[],
 ): WebsiteLineSummary[] {
-  const bySite = aggregateAccountStatusesByWebsite(accounts)
-
-  // หา failover ล่าสุดต่อเว็บ+role (ภายใน 24 ชม.)
-  const recentCutoff = Date.now() - 24 * 60 * 60 * 1000
-  const latestFailover = new Map<string, FailoverEntry>()
-  for (const entry of failoverLog) {
-    if (new Date(entry.at).getTime() < recentCutoff) continue
-    const key = `${entry.site}:${entry.role}`
-    const existing = latestFailover.get(key)
-    if (!existing || entry.at > existing.at) {
-      latestFailover.set(key, entry)
-    }
-  }
-
   return websites.map((w) => {
-    const s = bySite.get(w.id)
-    const mainAcc = lastAccountForChannel(accounts, w.id, "main")
-    const depAcc = lastAccountForChannel(accounts, w.id, "deposit")
-
+    const siteLines = lines.filter((l) => l.websiteId === w.id)
     return {
       websiteId: w.id,
       websiteName: w.name,
       websiteUrl: w.url,
-      mainStatus: s?.main ?? "normal",
-      depositStatus: s?.deposit ?? "normal",
-      mainLineId: mainAcc?.name,
-      depositLineId: depAcc?.name,
-      mainFailover: latestFailover.get(`${w.name}:หลัก`),
-      depositFailover: latestFailover.get(`${w.name}:ฝากถอน`),
+      mainLines: siteLines.filter((l) => l.role === "main"),
+      depositLines: siteLines.filter((l) => l.role === "deposit"),
+      unassignedLines: siteLines.filter((l) => l.role === null),
     }
   })
 }
 
-export function LineCard({ summary, onRemove }: LineCardProps) {
+function StatusBadge({ status }: { status: LineStatus }) {
+  if (status === "normal") {
+    return (
+      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary">
+        <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+        ออนไลน์
+      </span>
+    )
+  }
+  if (status === "suspended") {
+    return (
+      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-destructive/10 text-destructive">
+        <span className="w-1.5 h-1.5 rounded-full bg-destructive" />
+        โดนระงับ
+      </span>
+    )
+  }
+  return (
+    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-muted/50 text-muted-foreground">
+      <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/50" />
+      ไม่ทราบ
+    </span>
+  )
+}
+
+function LineRow({
+  line,
+  onAssign,
+  onRemove,
+}: {
+  line: DiscoveredLine
+  onAssign?: (id: string, role: "main" | "deposit") => void
+  onRemove?: (id: string) => void
+}) {
+  return (
+    <div className="flex items-center justify-between gap-2 py-1.5 group/row">
+      <div className="min-w-0 flex-1">
+        <p className="text-sm font-medium text-foreground truncate">{line.name}</p>
+        <p className="text-[11px] text-muted-foreground/60 font-mono truncate">
+          ID: @{line.id}
+        </p>
+      </div>
+      <div className="flex items-center gap-1.5 shrink-0">
+        {onAssign && (
+          <>
+            <button
+              type="button"
+              onClick={() => onAssign(line.id, "main")}
+              className="flex items-center gap-1 px-2 py-1 text-[11px] font-semibold rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
+              title="กำหนดเป็นไลน์หลัก"
+            >
+              <UserCheck className="h-3 w-3" />
+              หลัก
+            </button>
+            <button
+              type="button"
+              onClick={() => onAssign(line.id, "deposit")}
+              className="flex items-center gap-1 px-2 py-1 text-[11px] font-semibold rounded-lg bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 transition-colors"
+              title="กำหนดเป็นไลน์ฝากถอน"
+            >
+              <Wallet className="h-3 w-3" />
+              ฝากถอน
+            </button>
+          </>
+        )}
+        {!onAssign && <StatusBadge status={line.status} />}
+        {onRemove && (
+          <button
+            type="button"
+            onClick={() => onRemove(line.id)}
+            className="opacity-0 group-hover/row:opacity-100 p-1 rounded text-destructive/40 hover:text-destructive transition-all"
+          >
+            <Trash2 className="h-3 w-3" />
+          </button>
+        )}
+      </div>
+    </div>
+  )
+}
+
+interface LineCardProps {
+  summary: WebsiteLineSummary
+  onRemoveWebsite: (websiteId: string) => void
+  onAssignRole: (lineId: string, role: "main" | "deposit") => void
+  onRemoveLine: (lineId: string) => void
+}
+
+export function LineCard({ summary, onRemoveWebsite, onAssignRole, onRemoveLine }: LineCardProps) {
+  const hasAny =
+    summary.mainLines.length > 0 ||
+    summary.depositLines.length > 0 ||
+    summary.unassignedLines.length > 0
+
   return (
     <div className="relative bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]">
       <button
         type="button"
-        className="absolute top-3 right-3 h-8 w-8 flex items-center justify-center rounded-lg text-destructive/50 hover:text-red-500 hover:bg-zinc-800 hover:shadow-[0_0_12px_rgba(239,68,68,0.25)] transition-all duration-200"
-        onClick={() => onRemove(summary.websiteId)}
+        className="absolute top-3 right-3 h-8 w-8 flex items-center justify-center rounded-lg text-destructive/40 hover:text-red-500 hover:bg-zinc-800 transition-all duration-200"
+        onClick={() => onRemoveWebsite(summary.websiteId)}
+        title="ลบกลุ่มนี้"
       >
         <Trash2 className="h-4 w-4" />
       </button>
 
+      {/* ชื่อกลุ่ม */}
       <div className="mb-4 pr-10 min-w-0">
         {summary.websiteUrl ? (
           <a
@@ -198,45 +158,67 @@ export function LineCard({ summary, onRemove }: LineCardProps) {
             {summary.websiteName}
           </a>
         ) : (
-          <h3 className="text-lg font-bold text-foreground truncate">
-            {summary.websiteName}
-          </h3>
+          <h3 className="text-lg font-bold text-foreground truncate">{summary.websiteName}</h3>
         )}
       </div>
 
-      <div className="space-y-3">
-        {/* ไลน์หลัก */}
-        <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0 flex-1">
-            <p className="text-sm text-muted-foreground">ไลน์หลัก</p>
-            {summary.mainLineId && (
-              <p className="mt-0.5 truncate text-[11px] text-muted-foreground/80 font-mono" title={summary.mainLineId}>
-                {summary.mainLineId}
-              </p>
-            )}
-            {summary.mainFailover && (
-              <FailoverBadge entry={summary.mainFailover} />
-            )}
-          </div>
-          <StatusBadge status={summary.mainStatus} />
-        </div>
+      {!hasAny && (
+        <p className="text-xs text-muted-foreground/50 italic">
+          ยังไม่พบไลน์ในกลุ่มนี้ รอ checker สแกน...
+        </p>
+      )}
 
-        {/* ไลน์ฝากถอน */}
-        <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0 flex-1">
-            <p className="text-sm text-muted-foreground">ไลน์ฝากถอน</p>
-            {summary.depositLineId && (
-              <p className="mt-0.5 truncate text-[11px] text-muted-foreground/80 font-mono" title={summary.depositLineId}>
-                {summary.depositLineId}
-              </p>
-            )}
-            {summary.depositFailover && (
-              <FailoverBadge entry={summary.depositFailover} />
-            )}
+      {/* ไลน์หลัก */}
+      {summary.mainLines.length > 0 && (
+        <div className="mb-3">
+          <p className="text-xs font-semibold text-muted-foreground mb-1 uppercase tracking-wide">
+            ไลน์หลัก
+          </p>
+          <div className="space-y-0.5 divide-y divide-border/40">
+            {summary.mainLines.map((l) => (
+              <LineRow key={l.id} line={l} onRemove={onRemoveLine} />
+            ))}
           </div>
-          <StatusBadge status={summary.depositStatus} />
         </div>
-      </div>
+      )}
+
+      {/* ไลน์ฝากถอน */}
+      {summary.depositLines.length > 0 && (
+        <div className={cn("mb-3", summary.mainLines.length > 0 && "border-t border-border/40 pt-3")}>
+          <p className="text-xs font-semibold text-muted-foreground mb-1 uppercase tracking-wide">
+            ไลน์ฝากถอน
+          </p>
+          <div className="space-y-0.5 divide-y divide-border/40">
+            {summary.depositLines.map((l) => (
+              <LineRow key={l.id} line={l} onRemove={onRemoveLine} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* รอกำหนดหน้าที่ */}
+      {summary.unassignedLines.length > 0 && (
+        <div
+          className={cn(
+            (summary.mainLines.length > 0 || summary.depositLines.length > 0) &&
+              "border-t border-border/40 pt-3",
+          )}
+        >
+          <p className="text-xs font-semibold text-amber-400/80 mb-1 uppercase tracking-wide">
+            รอกำหนดหน้าที่
+          </p>
+          <div className="space-y-1">
+            {summary.unassignedLines.map((l) => (
+              <LineRow
+                key={l.id}
+                line={l}
+                onAssign={onAssignRole}
+                onRemove={onRemoveLine}
+              />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

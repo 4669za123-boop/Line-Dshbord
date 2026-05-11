@@ -127,20 +127,19 @@ def extract_id_from_url(url):
 
 def get_account_name(driver, line_id):
     try:
-        h1_els = driver.find_elements(By.TAG_NAME, "h1")
-        for el in h1_els:
-            name = el.text.strip()
-            if name and len(name) < 100 and name.lower() != "line":
-                return name
+        for tag in ["h2", "h1"]:
+            els = driver.find_elements(By.TAG_NAME, tag)
+            for el in els:
+                name = el.text.strip()
+                if name and len(name) < 100 and name.lower() not in ("line", "line official account manager"):
+                    return name
         title = driver.title
         if title:
             for sep in [" | ", " - "]:
                 if sep in title:
                     name = title.split(sep)[0].strip()
-                    if name and len(name) < 100:
+                    if name and len(name) < 100 and name.lower() != "line official account manager":
                         return name
-            if len(title) < 100:
-                return title.strip()
         metas = driver.find_elements(By.XPATH, "//meta[@property='og:title']")
         for m in metas:
             name = m.get_attribute("content")

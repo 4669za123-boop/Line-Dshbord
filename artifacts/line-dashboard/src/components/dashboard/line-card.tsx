@@ -78,12 +78,12 @@ function LineRow({
   onRemove?: (id: string) => void
 }) {
   return (
-    <div className="flex items-center justify-between gap-3 py-3 group/row">
+    <div className="flex items-center justify-between gap-3 py-4 group/row">
       <div className="min-w-0 flex-1">
         <p className="text-[15px] font-semibold tracking-wide text-white leading-snug truncate">
           {line.name}
         </p>
-        <p className="text-[11px] text-muted-foreground/45 tracking-widest mt-1.5 truncate">
+        <p className="text-[11px] text-muted-foreground/40 tracking-widest mt-2 truncate">
           @{line.id}
         </p>
       </div>

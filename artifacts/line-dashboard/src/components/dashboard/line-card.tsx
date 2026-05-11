@@ -78,12 +78,12 @@ function LineRow({
   onRemove?: (id: string) => void
 }) {
   return (
-    <div className="flex items-center justify-between gap-3 py-2.5 group/row">
+    <div className="flex items-center justify-between gap-3 py-3 group/row">
       <div className="min-w-0 flex-1">
-        <p className="text-[15px] font-semibold tracking-wide text-white leading-tight truncate">
+        <p className="text-[15px] font-semibold tracking-wide text-white leading-snug truncate">
           {line.name}
         </p>
-        <p className="text-[11px] text-muted-foreground/50 tracking-widest mt-0.5 truncate">
+        <p className="text-[11px] text-muted-foreground/45 tracking-widest mt-1.5 truncate">
           @{line.id}
         </p>
       </div>
@@ -173,8 +173,8 @@ export function LineCard({ summary, onRemoveWebsite, onAssignRole, onRemoveLine 
       {/* ไลน์หลัก */}
       {hasMainSection && (
         <>
-          <div className="border-t border-white/8 mt-3 mb-2" />
-          <p className="text-[10px] font-semibold text-muted-foreground/60 uppercase tracking-[0.12em] mb-0.5">
+          <div className="border-t border-white/8 mt-4 mb-3" />
+          <p className="text-[10px] font-semibold text-muted-foreground/50 uppercase tracking-[0.15em] mb-2">
             ไลน์หลัก
           </p>
           <div className="divide-y divide-white/5">
@@ -188,8 +188,8 @@ export function LineCard({ summary, onRemoveWebsite, onAssignRole, onRemoveLine 
       {/* ไลน์ฝากถอน */}
       {hasDepositSection && (
         <>
-          <div className="border-t border-white/8 mt-3 mb-2" />
-          <p className="text-[10px] font-semibold text-muted-foreground/60 uppercase tracking-[0.12em] mb-0.5">
+          <div className="border-t border-white/8 mt-4 mb-3" />
+          <p className="text-[10px] font-semibold text-muted-foreground/50 uppercase tracking-[0.15em] mb-2">
             ไลน์ฝากถอน
           </p>
           <div className="divide-y divide-white/5">
@@ -203,8 +203,8 @@ export function LineCard({ summary, onRemoveWebsite, onAssignRole, onRemoveLine 
       {/* รอกำหนดหน้าที่ */}
       {summary.unassignedLines.length > 0 && (
         <>
-          <div className="border-t border-white/8 mt-3 mb-2" />
-          <p className="text-[10px] font-semibold text-amber-400/70 uppercase tracking-[0.12em] mb-0.5">
+          <div className="border-t border-white/8 mt-4 mb-3" />
+          <p className="text-[10px] font-semibold text-amber-400/70 uppercase tracking-[0.15em] mb-2">
             รอกำหนดหน้าที่
           </p>
           <div className="space-y-0.5">

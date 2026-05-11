@@ -1,7 +1,7 @@
 """
-checker.py — ตรวจสถานะ LINE OA (ออนไลน์ / โดนระงับ)
-สแกน account ทั้งหมดจาก group URL อัตโนมัติ
-ดึงชื่อ LINE + ID แล้วเก็บไว้ในระบบ พร้อมตรวจสถานะ
+checker.py — ตรวจสถานะ LINE OA กลุ่มหลัก
+สแกน account จาก websites.json → POST /api/line-status
+(ตรวจการระงับ + trigger auto-replace หาก URL ตรงกับ backup pool)
 """
 import time
 import json
@@ -14,8 +14,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-WEBSITES_FILE = "data/websites.json"
-API_URL = os.environ.get("API_URL", "http://localhost:3000/api/line-status")
+WEBSITES_FILE  = "data/websites.json"
+API_BASE       = os.environ.get("API_BASE", "http://localhost:3000/api")
+LINE_STATUS_URL = f"{API_BASE}/line-status"
 CHROME_PROFILE_DIR = os.environ.get("CHROME_PROFILE_DIR", "/home/thaieasyvps/.line-chrome-profile")
 CHECK_INTERVAL = int(os.environ.get("CHECK_INTERVAL", "60"))
 
@@ -91,19 +92,14 @@ def extract_id_from_url(url):
 
 
 def get_account_name(driver, line_id):
-    """ดึงชื่อ LINE OA จากหน้า account"""
     try:
-        # ลอง h1 ก่อน
         h1_els = driver.find_elements(By.TAG_NAME, "h1")
         for el in h1_els:
             name = el.text.strip()
             if name and len(name) < 100 and name.lower() != "line":
                 return name
-
-        # ลอง title tag
         title = driver.title
         if title:
-            # "ชื่อ | LINE Official Account Manager" หรือ "ชื่อ - LINE"
             for sep in [" | ", " - "]:
                 if sep in title:
                     name = title.split(sep)[0].strip()
@@ -111,17 +107,13 @@ def get_account_name(driver, line_id):
                         return name
             if len(title) < 100:
                 return title.strip()
-
-        # ลอง meta og:title
         metas = driver.find_elements(By.XPATH, "//meta[@property='og:title']")
         for m in metas:
             name = m.get_attribute("content")
             if name and len(name) < 100:
                 return name.strip()
-
     except Exception as e:
         print(f"   ⚠️  get_account_name error: {e}")
-
     return line_id
 
 
@@ -141,79 +133,81 @@ def check_banned(driver):
 
 def run_check():
     print(f"\n{'='*55}")
-    print("🔍 CHECKER: เริ่มรอบตรวจสถานะ")
+    print("🔍 CHECKER: เริ่มรอบตรวจสถานะกลุ่มหลัก")
     print(f"{'='*55}")
 
     websites = load_websites()
     if not websites:
-        print("❌ ไม่พบข้อมูลเว็บไซต์")
+        print("❌ ไม่พบข้อมูลกลุ่มหลัก")
         return
 
-    driver = connect()
-    wait = WebDriverWait(driver, 20)
+    driver   = connect()
+    wait     = WebDriverWait(driver, 20)
     statuses = {}
 
-    for website in websites:
-        site_id = website.get("id", "")
-        site_name = website["name"]
-        group_url = website["url"]
-        print(f"\n🌐 เข้าเว็บ: {site_name} → {group_url}")
+    try:
+        for website in websites:
+            site_id   = website.get("id", "")
+            site_name = website["name"]
+            group_url = website["url"]
+            print(f"\n🌐 เข้ากลุ่ม: {site_name} → {group_url}")
 
-        try:
-            driver.get(group_url)
-            wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-            time.sleep(2)
+            try:
+                driver.get(group_url)
+                wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
+                time.sleep(2)
 
-            accounts = get_accounts(driver)
-            print(f"   พบ {len(accounts)} account links")
+                accounts = get_accounts(driver)
+                print(f"   พบ {len(accounts)} account links")
 
-            for acc_url in accounts:
-                line_id = extract_id_from_url(acc_url)
-                if not line_id:
-                    continue
+                for acc_url in accounts:
+                    line_id = extract_id_from_url(acc_url)
+                    if not line_id:
+                        continue
+                    try:
+                        driver.get(acc_url)
+                        wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
+                        time.sleep(2)
 
-                try:
-                    driver.get(acc_url)
-                    wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-                    time.sleep(2)
+                        line_name = get_account_name(driver, line_id)
+                        if check_banned(driver):
+                            status = "suspended"
+                            print(f"   🚨 {line_name} ({line_id}) → โดนระงับ")
+                        else:
+                            status = "normal"
+                            print(f"   ✅ {line_name} ({line_id}) → ออนไลน์")
 
-                    line_name = get_account_name(driver, line_id)
-
-                    if check_banned(driver):
-                        status = "suspended"
-                        print(f"   🚨 {line_name} ({line_id}) → โดนระงับ")
-                    else:
-                        status = "normal"
-                        print(f"   ✅ {line_name} ({line_id}) → ออนไลน์")
-
-                    statuses[line_id] = {
-                        "name":   line_name,
-                        "status": status,
-                        "site":   site_name,
-                        "siteId": site_id,
-                        "url":    acc_url,
-                    }
-
-                except Exception as e:
-                    print(f"   ❌ {line_id} error:", e)
-                    statuses[line_id] = {
-                        "name":   line_id,
-                        "status": "inactive",
-                        "site":   site_name,
-                        "siteId": site_id,
-                        "url":    acc_url,
-                    }
-
-        except Exception as e:
-            print(f"❌ group error ({site_name}):", e)
+                        statuses[line_id] = {
+                            "name":   line_name,
+                            "status": status,
+                            "site":   site_name,
+                            "siteId": site_id,
+                            "url":    acc_url,
+                        }
+                    except Exception as e:
+                        print(f"   ❌ {line_id} error:", e)
+                        statuses[line_id] = {
+                            "name":   line_id,
+                            "status": "inactive",
+                            "site":   site_name,
+                            "siteId": site_id,
+                            "url":    acc_url,
+                        }
+            except Exception as e:
+                print(f"❌ group error ({site_name}):", e)
+    finally:
+        driver.quit()
 
     try:
-        res = requests.post(API_URL, json={"statuses": statuses}, timeout=10)
-        print(f"\n✅ อัปเดตสถานะ {len(statuses)} บัญชี → Dashboard ({res.status_code})")
+        res = requests.post(LINE_STATUS_URL, json={"statuses": statuses}, timeout=10)
+        data = res.json()
+        msg = f"active={data.get('active',0)}, suspended={data.get('suspended',0)}"
+        if data.get("replacements", 0) > 0:
+            msg += f", 🔄 auto-replaced={data['replacements']}"
+        print(f"\n✅ อัปเดต {len(statuses)} บัญชี ({res.status_code}) — {msg}")
     except Exception as e:
         print("❌ POST /api/line-status ล้มเหลว:", e)
 
-    driver.quit()
     print("\n✅ CHECKER รอบนี้เสร็จสมบูรณ์")
 
 

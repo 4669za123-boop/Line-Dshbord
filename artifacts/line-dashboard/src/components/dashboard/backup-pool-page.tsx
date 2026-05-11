@@ -6,6 +6,7 @@ import {
   ArrowRight,
   ExternalLink,
   Users2,
+  RefreshCw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,16 +31,15 @@ type TabType = "main" | "deposit" | "pending";
 
 export type BackupLineRole = "main" | "deposit";
 
+/** กลุ่มสำรองที่ผู้ใช้เพิ่มเข้ามา (เก็บใน backup-groups.json) */
 export interface BackupLine {
   id: string;
-  lineId: string;
+  url: string;
   role: BackupLineRole;
-  websiteId: string | null;
-  websiteName: string | null;
-  confirmed: boolean;
-  note?: string;
+  addedAt: string;
 }
 
+/** บัญชี LINE ที่ backup-scanner ดึงมาจากกลุ่มสำรอง */
 export interface BackupAccount {
   id: string;
   groupId: string;
@@ -60,9 +60,8 @@ interface BackupPoolPageProps {
   backupAccountsMain: BackupAccount[];
   backupAccountsDeposit: BackupAccount[];
   backupAccountsPending: BackupAccount[];
-  onAddBackup: (lineId: string, role: BackupLineRole) => void;
+  onAddBackup: (url: string, role: BackupLineRole) => void;
   onRemoveBackup: (id: string) => void;
-  onConfirmBackup: (id: string, websiteId: string, websiteName: string) => void;
   onRemoveBackupAccount: (id: string) => void;
   onConfirmBackupAccount: (id: string, websiteId: string, websiteName: string) => void;
 }
@@ -91,6 +90,36 @@ function ReadyBadge() {
   );
 }
 
+function GroupRow({ line, onRemove }: { line: BackupLine; onRemove: (id: string) => void }) {
+  const shortUrl = line.url.replace(/^https?:\/\//, "").substring(0, 50);
+  return (
+    <div className="flex items-center gap-3 bg-card border border-border rounded-2xl px-4 py-3 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)] group">
+      <Users2 className="h-4 w-4 text-muted-foreground group-hover:text-primary shrink-0 transition-colors duration-300" />
+      <div className="flex-1 min-w-0 flex items-center gap-2 flex-wrap">
+        <RoleBadge role={line.role} />
+        <a
+          href={line.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-sm font-medium text-foreground truncate hover:text-primary transition-colors duration-200"
+          title={line.url}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {shortUrl}
+        </a>
+      </div>
+      <button
+        type="button"
+        onClick={() => onRemove(line.id)}
+        className="shrink-0 h-8 w-8 flex items-center justify-center rounded-lg text-destructive/60 hover:text-red-500 hover:bg-zinc-800 transition-all duration-200"
+        title="ลบกลุ่มนี้"
+      >
+        <Trash2 className="h-4 w-4" />
+      </button>
+    </div>
+  );
+}
+
 function AccountCard({
   account,
   onRemove,
@@ -104,7 +133,7 @@ function AccountCard({
     <div className="relative bg-card border border-border rounded-2xl p-4 transition-all duration-300 hover:border-primary/40 hover:shadow-[0_0_20px_rgba(0,185,0,0.07)] group">
       <button
         type="button"
-        className="absolute top-3 right-3 h-8 w-8 flex items-center justify-center rounded-lg text-destructive/50 hover:text-red-500 hover:bg-zinc-800 hover:shadow-[0_0_12px_rgba(239,68,68,0.25)] transition-all duration-200"
+        className="absolute top-3 right-3 h-8 w-8 flex items-center justify-center rounded-lg text-destructive/50 hover:text-red-500 hover:bg-zinc-800 transition-all duration-200"
         onClick={() => onRemove(account.id)}
       >
         <Trash2 className="h-4 w-4" />
@@ -131,42 +160,12 @@ function AccountCard({
           </a>
           <ExternalLink className="h-3 w-3 text-muted-foreground shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
         </div>
-        <p className="text-xs font-mono text-muted-foreground">{account.lineAccountId}</p>
+        <p className="text-xs font-mono text-muted-foreground">@{account.lineAccountId}</p>
+        <div className="flex items-center gap-1 text-[10px] text-muted-foreground/50">
+          <RefreshCw className="h-2.5 w-2.5" />
+          สแกนล่าสุด: {new Date(account.scannedAt).toLocaleString("th-TH")}
+        </div>
       </div>
-    </div>
-  );
-}
-
-function GroupRow({ line, onRemove }: { line: BackupLine; onRemove: (id: string) => void }) {
-  const groupName = line.note || (line.role === "main" ? "กลุ่มไลน์หลัก" : "กลุ่มไลน์ฝากถอน");
-  return (
-    <div className="flex items-center gap-3 bg-card border border-border rounded-2xl px-4 py-3 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)] group">
-      <Users2 className="h-4 w-4 text-muted-foreground group-hover:text-primary shrink-0 transition-colors duration-300" />
-      <div className="flex-1 min-w-0 flex items-center gap-2">
-        <a
-          href={line.lineId}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-sm font-medium text-foreground truncate hover:text-primary transition-colors duration-200"
-          title={line.lineId}
-          onClick={(e) => e.stopPropagation()}
-        >
-          {groupName}
-        </a>
-        {line.websiteName && (
-          <span className="shrink-0 text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
-            {line.websiteName}
-          </span>
-        )}
-      </div>
-      <button
-        type="button"
-        onClick={() => onRemove(line.id)}
-        className="shrink-0 h-8 w-8 flex items-center justify-center rounded-lg text-destructive/60 hover:text-red-500 hover:bg-zinc-800 hover:shadow-[0_0_12px_rgba(239,68,68,0.25)] transition-all duration-200"
-        title="ลบกลุ่มนี้"
-      >
-        <Trash2 className="h-4 w-4" />
-      </button>
     </div>
   );
 }
@@ -179,22 +178,19 @@ export function BackupPoolPage({
   backupAccountsPending,
   onAddBackup,
   onRemoveBackup,
-  onConfirmBackup: _onConfirmBackup,
   onRemoveBackupAccount,
   onConfirmBackupAccount,
 }: BackupPoolPageProps) {
-  const [activeTab, setActiveTab] = useState<TabType>("main");
-  const [groupTab, setGroupTab] = useState<"main" | "deposit">("main");
-
-  const [addOpen, setAddOpen] = useState(false);
-  const [newLineId, setNewLineId] = useState("");
-  const [newRole, setNewRole] = useState<BackupLineRole | "">("");
-
+  const [activeTab, setActiveTab]   = useState<TabType>("main");
+  const [groupTab, setGroupTab]     = useState<"main" | "deposit">("main");
+  const [addOpen, setAddOpen]       = useState(false);
+  const [newUrl, setNewUrl]         = useState("");
+  const [newRole, setNewRole]       = useState<BackupLineRole | "">("");
   const [assignOpen, setAssignOpen] = useState(false);
   const [assigningAccount, setAssigningAccount] = useState<BackupAccount | null>(null);
-  const [assignWebsiteId, setAssignWebsiteId] = useState<string>("");
+  const [assignWebsiteId, setAssignWebsiteId]   = useState<string>("");
 
-  const mainCount = backupAccountsMain.length;
+  const mainCount    = backupAccountsMain.length;
   const depositCount = backupAccountsDeposit.length;
   const pendingCount = backupAccountsPending.length;
 
@@ -206,9 +202,9 @@ export function BackupPoolPage({
 
   const handleAdd = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newLineId.trim() || !newRole) return;
-    onAddBackup(newLineId.trim(), newRole as BackupLineRole);
-    setNewLineId("");
+    if (!newUrl.trim() || !newRole) return;
+    onAddBackup(newUrl.trim(), newRole as BackupLineRole);
+    setNewUrl("");
     setNewRole("");
     setAddOpen(false);
   };
@@ -259,7 +255,7 @@ export function BackupPoolPage({
                 </Button>
                 <button
                   type="button"
-                  className="h-8 w-8 flex items-center justify-center rounded-lg text-destructive/50 hover:text-red-500 hover:bg-zinc-800 hover:shadow-[0_0_12px_rgba(239,68,68,0.25)] transition-all duration-200"
+                  className="h-8 w-8 flex items-center justify-center rounded-lg text-destructive/50 hover:text-red-500 hover:bg-zinc-800 transition-all duration-200"
                   onClick={() => onRemoveBackupAccount(acc.id)}
                 >
                   <Trash2 className="h-4 w-4" />
@@ -278,13 +274,12 @@ export function BackupPoolPage({
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-sm font-semibold text-foreground truncate hover:text-primary transition-colors"
-                    title={acc.lineAccountUrl}
                   >
                     {acc.lineName}
                   </a>
                   <ExternalLink className="h-3 w-3 text-muted-foreground shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
-                <p className="text-xs font-mono text-muted-foreground">{acc.lineAccountId}</p>
+                <p className="text-xs font-mono text-muted-foreground">@{acc.lineAccountId}</p>
               </div>
             </div>
           ))}
@@ -298,7 +293,9 @@ export function BackupPoolPage({
         <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border py-12 text-center">
           <Archive className="h-9 w-9 text-muted-foreground/40 mb-3" />
           <p className="text-sm text-muted-foreground">ยังไม่มีบัญชีไลน์สำรองในหมวดนี้</p>
-          <p className="text-xs text-muted-foreground/60 mt-1">รอ scanner สแกนกลุ่มและกำหนดเว็บ</p>
+          <p className="text-xs text-muted-foreground/60 mt-1">
+            เพิ่มกลุ่มสำรองแล้วรอให้ backup-scanner สแกนให้เสร็จ
+          </p>
         </div>
       );
     }
@@ -329,7 +326,7 @@ export function BackupPoolPage({
               ไลน์สำรอง
             </h1>
             <p className="text-muted-foreground mt-1 ml-1">
-              หากไลน์โดนระงับระบบจะดึงจากในสต๊อกทันที
+              backup-scanner จะสแกนกลุ่มสำรอง และระบบจะสับเปลี่ยนอัตโนมัติเมื่อไลน์หลักถูกระงับ
             </p>
           </div>
           <button
@@ -342,87 +339,104 @@ export function BackupPoolPage({
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/15 text-primary ring-1 ring-primary/25">
                 <Users2 className="h-4 w-4" />
               </span>
-              เพิ่มกลุ่มไลน์สำรอง
+              เพิ่มกลุ่มสำรอง
             </span>
           </button>
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]">
-            <div className="flex items-center gap-2 mb-3">
-              <span className={cn("h-3 w-3 rounded-full", backupLines.length > 0 ? "bg-foreground/70" : "bg-foreground/20")} />
-              <p className={cn("text-sm", backupLines.length > 0 ? "text-foreground/80" : "text-muted-foreground")}>กลุ่มสำรองทั้งหมด</p>
+          {[
+            { label: "กลุ่มสำรองทั้งหมด", count: backupLines.length, color: "default" },
+            { label: "ไลน์หลัก",           count: mainCount,          color: "blue"    },
+            { label: "ไลน์ฝากถอน",         count: depositCount,       color: "purple"  },
+            { label: "รอการยืนยัน",        count: pendingCount,       color: "amber"   },
+          ].map(({ label, count, color }) => (
+            <div
+              key={label}
+              className={cn(
+                "border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]",
+                color === "blue"    && count > 0 ? "bg-blue-500/5 border-blue-500/25"     : "",
+                color === "purple"  && count > 0 ? "bg-purple-500/5 border-purple-500/25" : "",
+                color === "amber"   && count > 0 ? "bg-amber-500/5 border-amber-500/25"   : "",
+                (color === "default" || count === 0) ? "bg-card border-border" : "",
+              )}
+            >
+              <div className="flex items-center gap-2 mb-3">
+                <span className={cn(
+                  "h-3 w-3 rounded-full",
+                  color === "blue"   ? (count > 0 ? "bg-blue-400"   : "bg-blue-400/30")   : "",
+                  color === "purple" ? (count > 0 ? "bg-purple-400" : "bg-purple-400/30") : "",
+                  color === "amber"  ? (count > 0 ? "bg-amber-400"  : "bg-amber-400/30")  : "",
+                  color === "default" ? (count > 0 ? "bg-foreground/70" : "bg-foreground/20") : "",
+                )} />
+                <p className={cn(
+                  "text-sm",
+                  color === "blue"   && count > 0 ? "text-blue-400"   : "",
+                  color === "purple" && count > 0 ? "text-purple-400" : "",
+                  color === "amber"  && count > 0 ? "text-amber-400"  : "",
+                  count === 0 || color === "default" ? "text-muted-foreground" : "",
+                )}>{label}</p>
+              </div>
+              <p className={cn(
+                "text-2xl font-bold",
+                color === "blue"   && count > 0 ? "text-blue-400"   : "",
+                color === "purple" && count > 0 ? "text-purple-400" : "",
+                color === "amber"  && count > 0 ? "text-amber-400"  : "",
+                count === 0 || color === "default" ? "text-muted-foreground" : "",
+              )}>{count}</p>
             </div>
-            <p className={cn("text-2xl font-bold", backupLines.length > 0 ? "text-foreground" : "text-muted-foreground")}>{backupLines.length}</p>
-          </div>
-          <div className={cn("border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]", mainCount > 0 ? "bg-blue-500/5 border-blue-500/25" : "bg-card border-border")}>
-            <div className="flex items-center gap-2 mb-3">
-              <span className={cn("h-3 w-3 rounded-full", mainCount > 0 ? "bg-blue-400" : "bg-blue-400/30")} />
-              <p className={cn("text-sm", mainCount > 0 ? "text-blue-400" : "text-muted-foreground")}>ไลน์หลัก</p>
-            </div>
-            <p className={cn("text-2xl font-bold", mainCount > 0 ? "text-blue-400" : "text-muted-foreground")}>{mainCount}</p>
-          </div>
-          <div className={cn("border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]", depositCount > 0 ? "bg-purple-500/5 border-purple-500/25" : "bg-card border-border")}>
-            <div className="flex items-center gap-2 mb-3">
-              <span className={cn("h-3 w-3 rounded-full", depositCount > 0 ? "bg-purple-400" : "bg-purple-400/30")} />
-              <p className={cn("text-sm", depositCount > 0 ? "text-purple-400" : "text-muted-foreground")}>ไลน์ฝากถอน</p>
-            </div>
-            <p className={cn("text-2xl font-bold", depositCount > 0 ? "text-purple-400" : "text-muted-foreground")}>{depositCount}</p>
-          </div>
-          <div className={cn("border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]", pendingCount > 0 ? "bg-amber-500/5 border-amber-500/25" : "bg-card border-border")}>
-            <div className="flex items-center gap-2 mb-3">
-              <span className={cn("h-3 w-3 rounded-full", pendingCount > 0 ? "bg-amber-400" : "bg-amber-400/30")} />
-              <p className={cn("text-sm", pendingCount > 0 ? "text-amber-400" : "text-muted-foreground")}>รอการยืนยัน</p>
-            </div>
-            <p className={cn("text-2xl font-bold", pendingCount > 0 ? "text-amber-400" : "text-muted-foreground")}>{pendingCount}</p>
-          </div>
+          ))}
         </div>
 
-        {/* Section 1: กลุ่มที่เพิ่ม — tab แสดงเสมอ */}
+        {/* Section 1: กลุ่มสำรองที่เพิ่มไว้ */}
         <div className="mb-8">
-          <div className="inline-flex rounded-xl border border-border bg-card p-1 gap-1 mb-4">
-            {(["main", "deposit"] as const).map((key) => {
-              const isActive = groupTab === key;
-              const label = key === "main" ? "กลุ่มไลน์หลัก" : "กลุ่มไลน์ฝากถอน";
-              const count = backupLines.filter((l) => l.role === key).length;
-              const color = key === "main" ? "blue" : "violet";
-              return (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={() => setGroupTab(key)}
-                  className={cn(
-                    "flex items-center gap-1.5 whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-semibold transition-all",
-                    isActive
-                      ? color === "blue"
-                        ? "bg-blue-500/15 text-blue-400 ring-1 ring-blue-500/25"
-                        : "bg-violet-500/15 text-violet-400 ring-1 ring-violet-500/25"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted/40",
-                  )}
-                >
-                  {label}
-                  <span className={cn(
-                    "inline-flex items-center justify-center h-4 min-w-4 px-1 rounded-full text-[10px] font-bold",
-                    isActive
-                      ? color === "blue" ? "bg-blue-500/20 text-blue-300" : "bg-violet-500/20 text-violet-300"
-                      : "bg-muted text-muted-foreground",
-                  )}>
-                    {count}
-                  </span>
-                </button>
-              );
-            })}
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+              กลุ่มสำรอง (backup-scanner จะสแกนกลุ่มเหล่านี้)
+            </h2>
+            <div className="inline-flex rounded-xl border border-border bg-card p-1 gap-1">
+              {(["main", "deposit"] as const).map((key) => {
+                const isActive = groupTab === key;
+                const label    = key === "main" ? "ไลน์หลัก" : "ฝากถอน";
+                const count    = backupLines.filter((l) => l.role === key).length;
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => setGroupTab(key)}
+                    className={cn(
+                      "flex items-center gap-1.5 whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-semibold transition-all",
+                      isActive
+                        ? key === "main"
+                          ? "bg-blue-500/15 text-blue-400 ring-1 ring-blue-500/25"
+                          : "bg-violet-500/15 text-violet-400 ring-1 ring-violet-500/25"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted/40",
+                    )}
+                  >
+                    {label}
+                    <span className={cn(
+                      "inline-flex items-center justify-center h-4 min-w-4 px-1 rounded-full text-[10px] font-bold",
+                      isActive
+                        ? key === "main" ? "bg-blue-500/20 text-blue-300" : "bg-violet-500/20 text-violet-300"
+                        : "bg-muted text-muted-foreground",
+                    )}>
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           {backupLines.filter((l) => l.role === groupTab).length === 0 ? (
             <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border py-10 text-center">
               <Users2 className="h-9 w-9 text-muted-foreground/30 mb-3" />
               <p className="text-sm text-muted-foreground">
-                ยังไม่มี{groupTab === "main" ? "กลุ่มไลน์หลัก" : "กลุ่มไลน์ฝากถอน"}
+                ยังไม่มีกลุ่ม{groupTab === "main" ? "ไลน์หลัก" : "ไลน์ฝากถอน"}สำรอง
               </p>
               <p className="text-xs text-muted-foreground/60 mt-1">
-                กดปุ่ม "เพิ่มกลุ่มไลน์สำรอง" มุมบนขวา
+                กดปุ่ม "เพิ่มกลุ่มสำรอง" มุมบนขวา
               </p>
             </div>
           ) : (
@@ -434,42 +448,47 @@ export function BackupPoolPage({
           )}
         </div>
 
-        {/* Section 2: บัญชีจาก scanner — แยก tab ไลน์หลัก / ฝากถอน / รอการยืนยัน */}
-        <div className="inline-flex rounded-xl border border-border bg-card p-1 gap-1 mb-6">
-          {tabs.map((tab) => {
-            const isActive = activeTab === tab.key;
-            return (
-              <button
-                key={tab.key}
-                type="button"
-                onClick={() => setActiveTab(tab.key)}
-                className={cn(
-                  "flex items-center gap-1.5 whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-semibold transition-all",
-                  isActive
-                    ? tab.color === "blue"   ? "bg-blue-500/15 text-blue-400 ring-1 ring-blue-500/25"
-                    : tab.color === "purple" ? "bg-purple-500/15 text-purple-400 ring-1 ring-purple-500/25"
-                                             : "bg-amber-500/15 text-amber-400 ring-1 ring-amber-500/25"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted/40",
-                )}
-              >
-                {tab.label}
-                <span className={cn(
-                  "inline-flex items-center justify-center h-4 min-w-4 px-1 rounded-full text-[10px] font-bold",
-                  isActive
-                    ? tab.color === "blue"   ? "bg-blue-500/20 text-blue-300"
-                    : tab.color === "purple" ? "bg-purple-500/20 text-purple-300"
-                                             : "bg-amber-500/20 text-amber-300"
-                    : "bg-muted text-muted-foreground",
-                )}>
-                  {tab.count}
-                </span>
-              </button>
-            );
-          })}
+        {/* Section 2: บัญชีที่ backup-scanner พบ */}
+        <div>
+          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-4">
+            บัญชีที่ backup-scanner สแกนพบ
+          </h2>
+          <div className="inline-flex rounded-xl border border-border bg-card p-1 gap-1 mb-6">
+            {tabs.map((tab) => {
+              const isActive = activeTab === tab.key;
+              return (
+                <button
+                  key={tab.key}
+                  type="button"
+                  onClick={() => setActiveTab(tab.key)}
+                  className={cn(
+                    "flex items-center gap-1.5 whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-semibold transition-all",
+                    isActive
+                      ? tab.color === "blue"   ? "bg-blue-500/15 text-blue-400 ring-1 ring-blue-500/25"
+                      : tab.color === "purple" ? "bg-purple-500/15 text-purple-400 ring-1 ring-purple-500/25"
+                                               : "bg-amber-500/15 text-amber-400 ring-1 ring-amber-500/25"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/40",
+                  )}
+                >
+                  {tab.label}
+                  <span className={cn(
+                    "inline-flex items-center justify-center h-4 min-w-4 px-1 rounded-full text-[10px] font-bold",
+                    isActive
+                      ? tab.color === "blue"   ? "bg-blue-500/20 text-blue-300"
+                      : tab.color === "purple" ? "bg-purple-500/20 text-purple-300"
+                                               : "bg-amber-500/20 text-amber-300"
+                      : "bg-muted text-muted-foreground",
+                  )}>
+                    {tab.count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+          {renderTabContent()}
         </div>
-        {renderTabContent()}
 
-        {/* Dialog เพิ่มกลุ่ม */}
+        {/* Dialog เพิ่มกลุ่มสำรอง */}
         <Dialog open={addOpen} onOpenChange={setAddOpen}>
           <DialogContent className="overflow-hidden border-border bg-background p-0 sm:max-w-md">
             <div className="relative overflow-hidden bg-gradient-to-br from-primary/25 via-background to-background px-6 pb-2 pt-10">
@@ -478,71 +497,90 @@ export function BackupPoolPage({
                 <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/15 text-primary shadow-inner ring-1 ring-primary/25">
                   <Users2 className="h-7 w-7" />
                 </div>
-                <DialogTitle className="text-xl">เพิ่มกลุ่มไลน์สำรอง</DialogTitle>
+                <DialogTitle className="text-xl">เพิ่มกลุ่มสำรอง</DialogTitle>
               </DialogHeader>
             </div>
             <form onSubmit={handleAdd} className="space-y-5 px-6 pb-6 pt-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground">URL กลุ่มไลน์สำรอง</label>
+                <label className="text-sm font-medium text-foreground">URL กลุ่ม LINE OA สำรอง</label>
                 <Input
                   autoFocus
-                  value={newLineId}
-                  onChange={(e) => setNewLineId(e.target.value)}
+                  value={newUrl}
+                  onChange={(e) => setNewUrl(e.target.value)}
                   placeholder="https://manager.line.biz/groups/..."
                   className="h-11 border-border bg-input text-foreground placeholder:text-muted-foreground"
                 />
+                <p className="text-xs text-muted-foreground">
+                  backup-scanner จะเข้าสแกนกลุ่มนี้และดึงบัญชี LINE ทั้งหมดมาเก็บไว้
+                </p>
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-foreground">ประเภทไลน์ในกลุ่มนี้</label>
                 <Select value={newRole} onValueChange={(v) => setNewRole(v as BackupLineRole)}>
                   <SelectTrigger className="h-11 border-border bg-input text-foreground">
-                    <SelectValue placeholder="เลือกว่ากลุ่มนี้เป็นไลน์อะไร" />
+                    <SelectValue placeholder="เลือกประเภท" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="main">ไลน์หลัก</SelectItem>
-                    <SelectItem value="deposit">ไลน์ฝากถอน</SelectItem>
+                  <SelectContent className="bg-card border-border">
+                    <SelectItem value="main">
+                      <span className="flex items-center gap-2">
+                        <span className="h-2 w-2 rounded-full bg-blue-400" />
+                        ไลน์หลัก
+                      </span>
+                    </SelectItem>
+                    <SelectItem value="deposit">
+                      <span className="flex items-center gap-2">
+                        <span className="h-2 w-2 rounded-full bg-purple-400" />
+                        ไลน์ฝากถอน
+                      </span>
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
-
-              <div className="flex gap-2 pt-1">
+              <DialogFooter className="gap-2 sm:gap-3">
                 <DialogClose asChild>
-                  <Button type="button" variant="outline" className="flex-1 rounded-xl">ยกเลิก</Button>
+                  <Button type="button" variant="outline" className="rounded-xl">ยกเลิก</Button>
                 </DialogClose>
                 <Button
                   type="submit"
-                  disabled={!newLineId.trim() || !newRole}
-                  className="flex-1 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
+                  disabled={!newUrl.trim() || !newRole}
+                  className="rounded-xl bg-primary text-primary-foreground shadow-[0_0_20px_-4px_rgba(0,185,0,0.45)] hover:bg-primary/90 disabled:opacity-50"
                 >
                   เพิ่มกลุ่ม
                 </Button>
-              </div>
+              </DialogFooter>
             </form>
           </DialogContent>
         </Dialog>
 
-        {/* Dialog กำหนดเว็บ (pending → confirm) */}
+        {/* Dialog กำหนดเว็บ (pending) */}
         <Dialog open={assignOpen} onOpenChange={setAssignOpen}>
           <DialogContent className="border-border bg-background sm:max-w-sm">
             <DialogHeader>
               <DialogTitle>กำหนดเว็บสำหรับ {assigningAccount?.lineName}</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleAssign} className="space-y-4 pt-2">
-              <Select value={assignWebsiteId} onValueChange={setAssignWebsiteId}>
-                <SelectTrigger className="h-11 border-border bg-input text-foreground">
-                  <SelectValue placeholder="เลือกเว็บไซต์..." />
-                </SelectTrigger>
-                <SelectContent>
-                  {websites.map((w) => (
-                    <SelectItem key={w.id} value={w.id}>{w.name}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-foreground">เว็บที่จะใช้ไลน์สำรองนี้</label>
+                <Select value={assignWebsiteId} onValueChange={setAssignWebsiteId}>
+                  <SelectTrigger className="h-11 border-border bg-input text-foreground">
+                    <SelectValue placeholder="เลือกเว็บ" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-card border-border">
+                    {websites.map((w) => (
+                      <SelectItem key={w.id} value={w.id}>{w.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
               <DialogFooter className="gap-2">
                 <DialogClose asChild>
                   <Button type="button" variant="outline" className="rounded-xl">ยกเลิก</Button>
                 </DialogClose>
-                <Button type="submit" disabled={!assignWebsiteId} className="rounded-xl bg-primary text-primary-foreground hover:bg-primary/90">
+                <Button
+                  type="submit"
+                  disabled={!assignWebsiteId}
+                  className="rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
+                >
                   ยืนยัน
                 </Button>
               </DialogFooter>

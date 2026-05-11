@@ -1,0 +1,118 @@
+thaieasyvps@thaieasyvps-HVM-domU:/app/artifacts/line-dashboard$ cd /app && git checkout artifacts/api-server/checker.py && git pull
+Updated 1 path from the index
+Updating 56fbb49..721968d
+Fast-forward
+ artifacts/api-server/checker.py                                           |  57 +++++++---
+ artifacts/line-dashboard/src/components/dashboard/line-card.tsx           |  77 +++++++-------
+ ...easyvps-thaieasyvps-HVM-domU-app-artifacts-api-serve_1778539086554.txt |  96 +++++++++++++++++
+ ...easyvps-thaieasyvps-HVM-domU-app-artifacts-api-serve_1778541228875.txt |  52 +++++++++
+ ...easyvps-thaieasyvps-HVM-domU-app-artifacts-api-serve_1778541411464.txt |  35 ++++++
+ ...ieasyvps-thaieasyvps-HVM-domU-app-artifacts-api-serv_1778535548829.txt |  62 +++++++++++
+ ...ieasyvps-thaieasyvps-HVM-domU-app-artifacts-api-serv_1778535612671.txt |  49 +++++++++
+ ...ieasyvps-thaieasyvps-HVM-domU-app-artifacts-api-serv_1778538694006.txt | 154 +++++++++++++++++++++++++++
+ ...ieasyvps-thaieasyvps-HVM-domU-app-artifacts-api-serv_1778539305330.txt | 195 ++++++++++++++++++++++++++++++++++
+ ...ieasyvps-thaieasyvps-HVM-domU-app-artifacts-api-serv_1778539359884.txt |  52 +++++++++
+ ...ieasyvps-thaieasyvps-HVM-domU-app-artifacts-api-serv_1778539431710.txt |  62 +++++++++++
+ ...ieasyvps-thaieasyvps-HVM-domU-app-artifacts-api-serv_1778539563515.txt |  72 +++++++++++++
+ ...ieasyvps-thaieasyvps-HVM-domU-app-artifacts-api-serv_1778539744832.txt |  57 ++++++++++
+ ...ieasyvps-thaieasyvps-HVM-domU-app-artifacts-api-serv_1778540129366.txt |  40 +++++++
+ ...ieasyvps-thaieasyvps-HVM-domU-app-artifacts-api-serv_1778540209464.txt |  94 ++++++++++++++++
+ ...ieasyvps-thaieasyvps-HVM-domU-app-artifacts-api-serv_1778540572444.txt | 159 +++++++++++++++++++++++++++
+ ...ieasyvps-thaieasyvps-HVM-domU-app-artifacts-api-serv_1778540642471.txt |  38 +++++++
+ ...ieasyvps-thaieasyvps-HVM-domU-app-artifacts-api-serv_1778541175784.txt | 150 ++++++++++++++++++++++++++
+ ...ieasyvps-thaieasyvps-HVM-domU-app-cd-app-artifacts-a_1778533525097.txt |  94 ++++++++++++++++
+ ...ieasyvps-thaieasyvps-HVM-domU-app-pm2-logs-line-dash_1778533436367.txt |  62 +++++++++++
+ attached_assets/image_1778533176024.png                                   | Bin 0 -> 103531 bytes
+ attached_assets/image_1778533661612.png                                   | Bin 0 -> 71468 bytes
+ attached_assets/image_1778534396407.png                                   | Bin 0 -> 60549 bytes
+ attached_assets/image_1778535265300.png                                   | Bin 0 -> 85147 bytes
+ attached_assets/image_1778535306625.png                                   | Bin 0 -> 21279 bytes
+ attached_assets/image_1778535351700.png                                   | Bin 0 -> 135947 bytes
+ attached_assets/image_1778535423224.png                                   | Bin 0 -> 160561 bytes
+ attached_assets/image_1778537533486.png                                   | Bin 0 -> 97225 bytes
+ attached_assets/image_1778538969596.png                                   | Bin 0 -> 34989 bytes
+ attached_assets/image_1778540395181.png                                   | Bin 0 -> 113091 bytes
+ attached_assets/image_1778541051667.png                                   | Bin 0 -> 72502 bytes
+ attached_assets/image_1778541127940.png                                   | Bin 0 -> 145282 bytes
+ attached_assets/image_1778541516866.png                                   | Bin 0 -> 95460 bytes
+ attached_assets/image_1778541854230.png                                   | Bin 0 -> 90920 bytes
+ attached_assets/image_1778542065480.png                                   | Bin 0 -> 7224 bytes
+ login-line.sh                                                             |   6 +-
+ 36 files changed, 1612 insertions(+), 51 deletions(-)
+ create mode 100644 attached_assets/Pasted-haieasyvps-thaieasyvps-HVM-domU-app-artifacts-api-serve_1778539086554.txt
+ create mode 100644 attached_assets/Pasted-haieasyvps-thaieasyvps-HVM-domU-app-artifacts-api-serve_1778541228875.txt
+ create mode 100644 attached_assets/Pasted-haieasyvps-thaieasyvps-HVM-domU-app-artifacts-api-serve_1778541411464.txt
+ create mode 100644 attached_assets/Pasted-thaieasyvps-thaieasyvps-HVM-domU-app-artifacts-api-serv_1778535548829.txt
+ create mode 100644 attached_assets/Pasted-thaieasyvps-thaieasyvps-HVM-domU-app-artifacts-api-serv_1778535612671.txt
+ create mode 100644 attached_assets/Pasted-thaieasyvps-thaieasyvps-HVM-domU-app-artifacts-api-serv_1778538694006.txt
+ create mode 100644 attached_assets/Pasted-thaieasyvps-thaieasyvps-HVM-domU-app-artifacts-api-serv_1778539305330.txt
+ create mode 100644 attached_assets/Pasted-thaieasyvps-thaieasyvps-HVM-domU-app-artifacts-api-serv_1778539359884.txt
+ create mode 100644 attached_assets/Pasted-thaieasyvps-thaieasyvps-HVM-domU-app-artifacts-api-serv_1778539431710.txt
+ create mode 100644 attached_assets/Pasted-thaieasyvps-thaieasyvps-HVM-domU-app-artifacts-api-serv_1778539563515.txt
+ create mode 100644 attached_assets/Pasted-thaieasyvps-thaieasyvps-HVM-domU-app-artifacts-api-serv_1778539744832.txt
+ create mode 100644 attached_assets/Pasted-thaieasyvps-thaieasyvps-HVM-domU-app-artifacts-api-serv_1778540129366.txt
+ create mode 100644 attached_assets/Pasted-thaieasyvps-thaieasyvps-HVM-domU-app-artifacts-api-serv_1778540209464.txt
+ create mode 100644 attached_assets/Pasted-thaieasyvps-thaieasyvps-HVM-domU-app-artifacts-api-serv_1778540572444.txt
+ create mode 100644 attached_assets/Pasted-thaieasyvps-thaieasyvps-HVM-domU-app-artifacts-api-serv_1778540642471.txt
+ create mode 100644 attached_assets/Pasted-thaieasyvps-thaieasyvps-HVM-domU-app-artifacts-api-serv_1778541175784.txt
+ create mode 100644 attached_assets/Pasted-thaieasyvps-thaieasyvps-HVM-domU-app-cd-app-artifacts-a_1778533525097.txt
+ create mode 100644 attached_assets/Pasted-thaieasyvps-thaieasyvps-HVM-domU-app-pm2-logs-line-dash_1778533436367.txt
+ create mode 100644 attached_assets/image_1778533176024.png
+ create mode 100644 attached_assets/image_1778533661612.png
+ create mode 100644 attached_assets/image_1778534396407.png
+ create mode 100644 attached_assets/image_1778535265300.png
+ create mode 100644 attached_assets/image_1778535306625.png
+ create mode 100644 attached_assets/image_1778535351700.png
+ create mode 100644 attached_assets/image_1778535423224.png
+ create mode 100644 attached_assets/image_1778537533486.png
+ create mode 100644 attached_assets/image_1778538969596.png
+ create mode 100644 attached_assets/image_1778540395181.png
+ create mode 100644 attached_assets/image_1778541051667.png
+ create mode 100644 attached_assets/image_1778541127940.png
+ create mode 100644 attached_assets/image_1778541516866.png
+ create mode 100644 attached_assets/image_1778541854230.png
+ create mode 100644 attached_assets/image_1778542065480.png
+thaieasyvps@thaieasyvps-HVM-domU:/app$ pm2 restart line-dashboard-api 2>/dev/null || true
+# checker ต้อง restart แยก
+pm2 restart line-checker 2>/dev/null || true
+Use --update-env to update environment variables
+[PM2] Applying action restartProcessId on app [line-dashboard-api](ids: [ 0 ])
+[PM2] [line-dashboard-api](0) ✓
+┌────┬────────────────────┬──────────┬──────┬───────────┬──────────┬──────────┐
+│ id │ name               │ mode     │ ↺    │ status    │ cpu      │ memory   │
+├────┼────────────────────┼──────────┼──────┼───────────┼──────────┼──────────┤
+│ 0  │ line-dashboard-api │ fork     │ 1    │ online    │ 0%       │ 17.9mb   │
+└────┴────────────────────┴──────────┴──────┴───────────┴──────────┴──────────┘
+Use --update-env to update environment variables
+thaieasyvps@thaieasyvps-HVM-domU:/app$ CHROME_PROFILE_DIR=/home/thaieasyvps/.line-chrome-profile-v2 \
+API_BASE=http://localhost:8080/api \
+pm2 start /app/artifacts/api-server/checker.py \
+  --name line-checker \
+  --interpreter python3
+pm2 save
+pm2 logs line-checker --lines 20
+[PM2] Starting /app/artifacts/api-server/checker.py in fork_mode (1 instance)
+[PM2] Done.
+┌────┬────────────────────┬──────────┬──────┬───────────┬──────────┬──────────┐
+│ id │ name               │ mode     │ ↺    │ status    │ cpu      │ memory   │
+├────┼────────────────────┼──────────┼──────┼───────────┼──────────┼──────────┤
+│ 1  │ line-checker       │ fork     │ 0    │ online    │ 0%       │ 6.1mb    │
+│ 0  │ line-dashboard-api │ fork     │ 1    │ online    │ 0%       │ 66.6mb   │
+└────┴────────────────────┴──────────┴──────┴───────────┴──────────┴──────────┘
+[PM2] Saving current process list...
+[PM2] Successfully saved in /home/thaieasyvps/.pm2/dump.pm2
+[TAILING] Tailing last 20 lines for [line-checker] process (change the value with --lines option)
+/home/thaieasyvps/.pm2/logs/line-checker-error.log last 20 lines:
+1|line-che | /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+1|line-che |   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+
+/home/thaieasyvps/.pm2/logs/line-checker-out.log last 20 lines:
+1|line-che | 🔍 CHECKER START (ตรวจทุก 60 วินาที)
+1|line-che | 
+1|line-che | =======================================================
+1|line-che | 🔍 CHECKER: เริ่มรอบตรวจสถานะกลุ่มหลัก
+1|line-che | =======================================================
+1|line-che | ❌ load websites error: [Errno 2] No such file or directory: 'data/websites.json'
+1|line-che | ❌ ไม่พบข้อมูลกลุ่มหลัก
+1|line-che | 
+1|line-che | ⏳ รอ 60 วินาทีก่อนรอบถัดไป...

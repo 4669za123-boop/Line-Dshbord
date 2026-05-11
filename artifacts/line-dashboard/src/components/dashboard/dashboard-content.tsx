@@ -1,4 +1,4 @@
-import { useMemo, useState, useRef } from "react";
+import { useMemo, useState } from "react";
 import { Globe, LayoutDashboard, GripVertical } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -112,7 +112,7 @@ export function DashboardContent({
   const assignedLines = lines.filter((l) => l.role !== null);
   const totalAccounts = assignedLines.length;
   const onlineCount = assignedLines.filter((l) => l.status === "normal").length;
-  const suspendedCount = assignedLines.filter((l) => l.status === "suspended").length;
+  const suspendedCount = 0; // สถานะ suspended ถูกย้ายออกอัตโนมัติ
 
   const handleDragEnd = () => {
     if (dragId && overId && dragId !== overId) {
@@ -186,26 +186,19 @@ export function DashboardContent({
                 <DialogTitle className="text-xl">เพิ่มกลุ่ม LINE</DialogTitle>
               </DialogHeader>
             </div>
-            <form
-              onSubmit={submitNewWebsite}
-              className="space-y-5 px-6 pb-6 pt-4"
-            >
+            <form onSubmit={submitNewWebsite} className="space-y-5 px-6 pb-6 pt-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground">
-                  ชื่อกลุ่ม
-                </label>
+                <label className="text-sm font-medium text-foreground">ชื่อกลุ่ม</label>
                 <Input
                   autoFocus
                   value={newWebsiteName}
                   onChange={(e) => setNewWebsiteName(e.target.value)}
-                  placeholder="เช่น กลุ่มหลัก, เว็บ A, แคมเปญสมาชิก"
+                  placeholder="เช่น กลุ่มหลัก, เว็บ A"
                   className="h-11 border-border bg-input text-foreground placeholder:text-muted-foreground"
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground">
-                  URL กลุ่ม LINE OA
-                </label>
+                <label className="text-sm font-medium text-foreground">URL กลุ่ม LINE OA</label>
                 <Input
                   type="text"
                   value={newWebsiteUrl}
@@ -216,9 +209,7 @@ export function DashboardContent({
               </div>
               <DialogFooter className="gap-2 sm:gap-3">
                 <DialogClose asChild>
-                  <Button type="button" variant="outline" className="rounded-xl">
-                    ยกเลิก
-                  </Button>
+                  <Button type="button" variant="outline" className="rounded-xl">ยกเลิก</Button>
                 </DialogClose>
                 <Button
                   type="submit"
@@ -268,9 +259,7 @@ export function DashboardContent({
           <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border py-14 text-center">
             <Globe className="h-10 w-10 text-muted-foreground/30 mb-3" />
             <p className="text-sm text-muted-foreground">ยังไม่มีกลุ่ม</p>
-            <p className="text-xs text-muted-foreground/60 mt-1">
-              กดปุ่ม "เพิ่มกลุ่ม" มุมบนขวาเพื่อเริ่มต้น
-            </p>
+            <p className="text-xs text-muted-foreground/60 mt-1">กดปุ่ม "เพิ่มกลุ่ม" มุมบนขวาเพื่อเริ่มต้น</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">

@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils"
 import { Trash2, UserCheck, Wallet } from "lucide-react"
 
-export type LineStatus = "normal" | "suspended" | "inactive"
+export type LineStatus = "normal" | "inactive"
 export type LineRole = "main" | "deposit" | null
 
 export type DiscoveredLine = {
@@ -13,6 +13,16 @@ export type DiscoveredLine = {
   url: string
   role: LineRole
   status: LineStatus
+}
+
+export type SuspendedLine = {
+  id: string
+  name: string
+  site: string
+  siteId: string
+  url: string
+  role: "main" | "deposit"
+  suspendedAt: string
 }
 
 export type WebsiteLineSummary = {
@@ -50,14 +60,6 @@ function StatusBadge({ status }: { status: LineStatus }) {
       </span>
     )
   }
-  if (status === "suspended") {
-    return (
-      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-destructive/10 text-destructive">
-        <span className="w-1.5 h-1.5 rounded-full bg-destructive" />
-        โดนระงับ
-      </span>
-    )
-  }
   return (
     <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-muted/50 text-muted-foreground">
       <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/50" />
@@ -90,7 +92,6 @@ function LineRow({
               type="button"
               onClick={() => onAssign(line.id, "main")}
               className="flex items-center gap-1 px-2 py-1 text-[11px] font-semibold rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
-              title="กำหนดเป็นไลน์หลัก"
             >
               <UserCheck className="h-3 w-3" />
               หลัก
@@ -99,7 +100,6 @@ function LineRow({
               type="button"
               onClick={() => onAssign(line.id, "deposit")}
               className="flex items-center gap-1 px-2 py-1 text-[11px] font-semibold rounded-lg bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 transition-colors"
-              title="กำหนดเป็นไลน์ฝากถอน"
             >
               <Wallet className="h-3 w-3" />
               ฝากถอน
@@ -133,6 +133,9 @@ export function LineCard({ summary, onRemoveWebsite, onAssignRole, onRemoveLine 
     summary.mainLines.length > 0 ||
     summary.depositLines.length > 0 ||
     summary.unassignedLines.length > 0
+
+  const hasMainSection = summary.mainLines.length > 0
+  const hasDepositSection = summary.depositLines.length > 0
 
   return (
     <div className="relative bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]">
@@ -169,12 +172,12 @@ export function LineCard({ summary, onRemoveWebsite, onAssignRole, onRemoveLine 
       )}
 
       {/* ไลน์หลัก */}
-      {summary.mainLines.length > 0 && (
+      {hasMainSection && (
         <div className="mb-3">
           <p className="text-xs font-semibold text-muted-foreground mb-1 uppercase tracking-wide">
             ไลน์หลัก
           </p>
-          <div className="space-y-0.5 divide-y divide-border/40">
+          <div className="divide-y divide-border/40">
             {summary.mainLines.map((l) => (
               <LineRow key={l.id} line={l} onRemove={onRemoveLine} />
             ))}
@@ -183,12 +186,12 @@ export function LineCard({ summary, onRemoveWebsite, onAssignRole, onRemoveLine 
       )}
 
       {/* ไลน์ฝากถอน */}
-      {summary.depositLines.length > 0 && (
-        <div className={cn("mb-3", summary.mainLines.length > 0 && "border-t border-border/40 pt-3")}>
+      {hasDepositSection && (
+        <div className={cn("mb-3", hasMainSection && "border-t border-border/40 pt-3")}>
           <p className="text-xs font-semibold text-muted-foreground mb-1 uppercase tracking-wide">
             ไลน์ฝากถอน
           </p>
-          <div className="space-y-0.5 divide-y divide-border/40">
+          <div className="divide-y divide-border/40">
             {summary.depositLines.map((l) => (
               <LineRow key={l.id} line={l} onRemove={onRemoveLine} />
             ))}
@@ -200,8 +203,7 @@ export function LineCard({ summary, onRemoveWebsite, onAssignRole, onRemoveLine 
       {summary.unassignedLines.length > 0 && (
         <div
           className={cn(
-            (summary.mainLines.length > 0 || summary.depositLines.length > 0) &&
-              "border-t border-border/40 pt-3",
+            (hasMainSection || hasDepositSection) && "border-t border-border/40 pt-3",
           )}
         >
           <p className="text-xs font-semibold text-amber-400/80 mb-1 uppercase tracking-wide">

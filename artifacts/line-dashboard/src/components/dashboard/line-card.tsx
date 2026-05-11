@@ -173,53 +173,58 @@ export function LineCard({ summary, onRemoveWebsite, onAssignRole, onRemoveLine 
 
       {/* ไลน์หลัก */}
       {hasMainSection && (
-        <div className="mb-3">
-          <p className="text-xs font-semibold text-muted-foreground mb-1 uppercase tracking-wide">
-            ไลน์หลัก
-          </p>
-          <div className="divide-y divide-border/40">
-            {summary.mainLines.map((l) => (
-              <LineRow key={l.id} line={l} onRemove={onRemoveLine} />
-            ))}
+        <>
+          <div className="border-t border-border/50 my-3" />
+          <div className="mb-1">
+            <p className="text-xs font-semibold text-muted-foreground mb-2 tracking-wide">
+              ไลน์หลัก
+            </p>
+            <div className="divide-y divide-border/30">
+              {summary.mainLines.map((l) => (
+                <LineRow key={l.id} line={l} />
+              ))}
+            </div>
           </div>
-        </div>
+        </>
       )}
 
       {/* ไลน์ฝากถอน */}
       {hasDepositSection && (
-        <div className={cn("mb-3", hasMainSection && "border-t border-border/40 pt-3")}>
-          <p className="text-xs font-semibold text-muted-foreground mb-1 uppercase tracking-wide">
-            ไลน์ฝากถอน
-          </p>
-          <div className="divide-y divide-border/40">
-            {summary.depositLines.map((l) => (
-              <LineRow key={l.id} line={l} onRemove={onRemoveLine} />
-            ))}
+        <>
+          <div className="border-t border-border/50 my-3" />
+          <div className="mb-1">
+            <p className="text-xs font-semibold text-muted-foreground mb-2 tracking-wide">
+              ไลน์ฝากถอน
+            </p>
+            <div className="divide-y divide-border/30">
+              {summary.depositLines.map((l) => (
+                <LineRow key={l.id} line={l} />
+              ))}
+            </div>
           </div>
-        </div>
+        </>
       )}
 
       {/* รอกำหนดหน้าที่ */}
       {summary.unassignedLines.length > 0 && (
-        <div
-          className={cn(
-            (hasMainSection || hasDepositSection) && "border-t border-border/40 pt-3",
-          )}
-        >
-          <p className="text-xs font-semibold text-amber-400/80 mb-1 uppercase tracking-wide">
-            รอกำหนดหน้าที่
-          </p>
-          <div className="space-y-1">
-            {summary.unassignedLines.map((l) => (
-              <LineRow
-                key={l.id}
-                line={l}
-                onAssign={onAssignRole}
-                onRemove={onRemoveLine}
-              />
-            ))}
+        <>
+          <div className="border-t border-border/50 my-3" />
+          <div>
+            <p className="text-xs font-semibold text-amber-400/80 mb-2 tracking-wide">
+              รอกำหนดหน้าที่
+            </p>
+            <div className="space-y-1">
+              {summary.unassignedLines.map((l) => (
+                <LineRow
+                  key={l.id}
+                  line={l}
+                  onAssign={onAssignRole}
+                  onRemove={onRemoveLine}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   )

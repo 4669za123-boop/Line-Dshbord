@@ -130,7 +130,43 @@ export default function App() {
         setBackupAccountsPending([]);
       });
 
-    setBackupLines(loadBackupFromStorage());
+    // โหลด backup groups จาก server เป็นหลัก แล้ว sync จาก localStorage ถ้า server ขาด
+    fetch("/api/backup-groups")
+      .then((r) => r.json())
+      .then(async (serverGroups: { id: string; url: string; role: string; addedAt: string }[]) => {
+        const localGroups = loadBackupFromStorage();
+        if (serverGroups.length > 0) {
+          // ใช้ server data เป็นหลัก แปลงให้ตรง BackupLine format
+          const converted: BackupLine[] = serverGroups.map((g) => ({
+            id: g.id,
+            lineId: g.url,
+            role: g.role as BackupLineRole,
+            websiteId: null,
+            websiteName: null,
+            confirmed: false,
+          }));
+          setBackupLines(converted);
+          window.localStorage.setItem(BACKUP_STORAGE_KEY, JSON.stringify(converted));
+        } else if (localGroups.length > 0) {
+          // server ว่าง แต่ localStorage มีข้อมูล → sync ขึ้น server
+          setBackupLines(localGroups);
+          for (const g of localGroups) {
+            try {
+              await fetch("/api/backup-groups", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ url: g.lineId, role: g.role }),
+              });
+            } catch {
+              // ignore
+            }
+          }
+        }
+      })
+      .catch(() => {
+        setBackupLines(loadBackupFromStorage());
+      });
+
     setPersistReady(true);
   }, []);
 

@@ -6,7 +6,6 @@ import {
   ArrowRight,
   ExternalLink,
   Users2,
-  PlusCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -66,14 +65,6 @@ interface BackupPoolPageProps {
   onConfirmBackup: (id: string, websiteId: string, websiteName: string) => void;
   onRemoveBackupAccount: (id: string) => void;
   onConfirmBackupAccount: (id: string, websiteId: string, websiteName: string) => void;
-  onAddBackupAccountManual: (account: {
-    lineName: string;
-    lineAccountUrl: string;
-    lineAccountId: string;
-    role: BackupLineRole;
-    websiteId: string | null;
-    websiteName: string | null;
-  }) => void;
 }
 
 function RoleBadge({ role }: { role: BackupLineRole }) {
@@ -191,7 +182,6 @@ export function BackupPoolPage({
   onConfirmBackup: _onConfirmBackup,
   onRemoveBackupAccount,
   onConfirmBackupAccount,
-  onAddBackupAccountManual,
 }: BackupPoolPageProps) {
   const [activeTab, setActiveTab] = useState<TabType>("main");
   const [groupTab, setGroupTab] = useState<"main" | "deposit">("main");
@@ -199,12 +189,6 @@ export function BackupPoolPage({
   const [addOpen, setAddOpen] = useState(false);
   const [newLineId, setNewLineId] = useState("");
   const [newRole, setNewRole] = useState<BackupLineRole | "">("");
-
-  const [manualOpen, setManualOpen] = useState(false);
-  const [manualName, setManualName] = useState("");
-  const [manualUrl, setManualUrl] = useState("");
-  const [manualRole, setManualRole] = useState<BackupLineRole | "">("");
-  const [manualWebsiteId, setManualWebsiteId] = useState<string>("");
 
   const [assignOpen, setAssignOpen] = useState(false);
   const [assigningAccount, setAssigningAccount] = useState<BackupAccount | null>(null);
@@ -227,29 +211,6 @@ export function BackupPoolPage({
     setNewLineId("");
     setNewRole("");
     setAddOpen(false);
-  };
-
-  const handleManualAdd = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!manualName.trim() || !manualUrl.trim() || !manualRole) return;
-    const ws = manualWebsiteId ? websites.find((w) => w.id === manualWebsiteId) : null;
-    const rawUrl = manualUrl.trim();
-    const lineAccountId = rawUrl.includes("/account/")
-      ? rawUrl.split("/account/")[1].replace("@", "").toLowerCase()
-      : rawUrl.replace("@", "").toLowerCase();
-    onAddBackupAccountManual({
-      lineName: manualName.trim(),
-      lineAccountUrl: rawUrl,
-      lineAccountId,
-      role: manualRole as BackupLineRole,
-      websiteId: ws?.id ?? null,
-      websiteName: ws?.name ?? null,
-    });
-    setManualName("");
-    setManualUrl("");
-    setManualRole("");
-    setManualWebsiteId("");
-    setManualOpen(false);
   };
 
   const openAssign = (acc: BackupAccount) => {

@@ -60,14 +60,17 @@ def connect():
         print(f"✅ ใช้ Chrome profile: {CHROME_PROFILE_DIR}")
 
     if platform.system() == "Linux":
-        for binary in [
+        import glob as _glob
+        candidates = [
             "/usr/bin/google-chrome",
             "/usr/bin/google-chrome-stable",
             "/usr/bin/chromium",
             "/usr/bin/chromium-browser",
-        ]:
+        ] + _glob.glob("/nix/store/*chromium*/bin/chromium")
+        for binary in candidates:
             if os.path.exists(binary):
                 options.binary_location = binary
+                print(f"✅ ใช้ Chrome binary: {binary}")
                 break
 
     try:

@@ -68,7 +68,9 @@ function SortableCard({
       className={cn(
         "relative group/drag transition-all duration-200 cursor-default",
         isDragging && "opacity-40 scale-[0.98]",
-        isOver && !isDragging && "ring-2 ring-primary/60 rounded-2xl scale-[1.01]",
+        isOver &&
+          !isDragging &&
+          "ring-2 ring-primary/60 rounded-2xl scale-[1.01]",
       )}
     >
       <button
@@ -153,7 +155,7 @@ export function DashboardContent({
               แดชบอร์ด
             </h1>
             <p className="text-muted-foreground mt-1 ml-1">
-              จัดการและตรวจสอบบัญชีไลน์ของคุณ
+              จัดการและตรวจสอบสถานะบัญชีไลน์
             </p>
           </div>
           <button
@@ -186,9 +188,14 @@ export function DashboardContent({
                 <DialogTitle className="text-xl">เพิ่มกลุ่ม LINE</DialogTitle>
               </DialogHeader>
             </div>
-            <form onSubmit={submitNewWebsite} className="space-y-5 px-6 pb-6 pt-4">
+            <form
+              onSubmit={submitNewWebsite}
+              className="space-y-5 px-6 pb-6 pt-4"
+            >
               <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground">ชื่อกลุ่ม</label>
+                <label className="text-sm font-medium text-foreground">
+                  ชื่อกลุ่ม
+                </label>
                 <Input
                   autoFocus
                   value={newWebsiteName}
@@ -198,7 +205,9 @@ export function DashboardContent({
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground">URL กลุ่ม LINE OA</label>
+                <label className="text-sm font-medium text-foreground">
+                  URL กลุ่ม LINE OA
+                </label>
                 <Input
                   type="text"
                   value={newWebsiteUrl}
@@ -209,7 +218,13 @@ export function DashboardContent({
               </div>
               <DialogFooter className="gap-2 sm:gap-3">
                 <DialogClose asChild>
-                  <Button type="button" variant="outline" className="rounded-xl">ยกเลิก</Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="rounded-xl"
+                  >
+                    ยกเลิก
+                  </Button>
                 </DialogClose>
                 <Button
                   type="submit"
@@ -227,31 +242,131 @@ export function DashboardContent({
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]">
             <div className="flex items-center gap-2 mb-3">
-              <span className={cn("h-3 w-3 rounded-full", totalAccounts > 0 ? "bg-foreground/70" : "bg-foreground/20")} />
-              <p className={cn("text-sm", totalAccounts > 0 ? "text-foreground/80" : "text-muted-foreground")}>บัญชีทั้งหมด</p>
+              <span
+                className={cn(
+                  "h-3 w-3 rounded-full",
+                  totalAccounts > 0 ? "bg-foreground/70" : "bg-foreground/20",
+                )}
+              />
+              <p
+                className={cn(
+                  "text-sm",
+                  totalAccounts > 0
+                    ? "text-foreground/80"
+                    : "text-muted-foreground",
+                )}
+              >
+                บัญชีทั้งหมด
+              </p>
             </div>
-            <p className={cn("text-2xl font-bold", totalAccounts > 0 ? "text-foreground" : "text-muted-foreground")}>{totalAccounts}</p>
+            <p
+              className={cn(
+                "text-2xl font-bold",
+                totalAccounts > 0 ? "text-foreground" : "text-muted-foreground",
+              )}
+            >
+              {totalAccounts}
+            </p>
           </div>
-          <div className={cn("border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]", onlineCount > 0 ? "bg-primary/5 border-primary/25" : "bg-card border-border")}>
+          <div
+            className={cn(
+              "border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]",
+              onlineCount > 0
+                ? "bg-primary/5 border-primary/25"
+                : "bg-card border-border",
+            )}
+          >
             <div className="flex items-center gap-2 mb-3">
-              <span className={cn("h-3 w-3 rounded-full", onlineCount > 0 ? "bg-primary" : "bg-primary/30")} />
-              <p className={cn("text-sm", onlineCount > 0 ? "text-primary/80" : "text-muted-foreground")}>ออนไลน์</p>
+              <span
+                className={cn(
+                  "h-3 w-3 rounded-full",
+                  onlineCount > 0 ? "bg-primary" : "bg-primary/30",
+                )}
+              />
+              <p
+                className={cn(
+                  "text-sm",
+                  onlineCount > 0 ? "text-primary/80" : "text-muted-foreground",
+                )}
+              >
+                ออนไลน์
+              </p>
             </div>
-            <p className={cn("text-2xl font-bold", onlineCount > 0 ? "text-primary" : "text-muted-foreground")}>{onlineCount}</p>
+            <p
+              className={cn(
+                "text-2xl font-bold",
+                onlineCount > 0 ? "text-primary" : "text-muted-foreground",
+              )}
+            >
+              {onlineCount}
+            </p>
           </div>
-          <div className={cn("border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]", suspendedCount > 0 ? "bg-destructive/5 border-destructive/25" : "bg-card border-border")}>
+          <div
+            className={cn(
+              "border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]",
+              suspendedCount > 0
+                ? "bg-destructive/5 border-destructive/25"
+                : "bg-card border-border",
+            )}
+          >
             <div className="flex items-center gap-2 mb-3">
-              <span className={cn("h-3 w-3 rounded-full", suspendedCount > 0 ? "bg-destructive" : "bg-destructive/30")} />
-              <p className={cn("text-sm", suspendedCount > 0 ? "text-destructive/80" : "text-muted-foreground")}>โดนระงับ</p>
+              <span
+                className={cn(
+                  "h-3 w-3 rounded-full",
+                  suspendedCount > 0 ? "bg-destructive" : "bg-destructive/30",
+                )}
+              />
+              <p
+                className={cn(
+                  "text-sm",
+                  suspendedCount > 0
+                    ? "text-destructive/80"
+                    : "text-muted-foreground",
+                )}
+              >
+                โดนระงับ
+              </p>
             </div>
-            <p className={cn("text-2xl font-bold", suspendedCount > 0 ? "text-destructive" : "text-muted-foreground")}>{suspendedCount}</p>
+            <p
+              className={cn(
+                "text-2xl font-bold",
+                suspendedCount > 0
+                  ? "text-destructive"
+                  : "text-muted-foreground",
+              )}
+            >
+              {suspendedCount}
+            </p>
           </div>
           <div className="bg-card border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]">
             <div className="flex items-center gap-2 mb-3">
-              <span className={cn("h-3 w-3 rounded-full", websites.length > 0 ? "bg-foreground/70" : "bg-foreground/20")} />
-              <p className={cn("text-sm", websites.length > 0 ? "text-foreground/80" : "text-muted-foreground")}>กลุ่ม</p>
+              <span
+                className={cn(
+                  "h-3 w-3 rounded-full",
+                  websites.length > 0 ? "bg-foreground/70" : "bg-foreground/20",
+                )}
+              />
+              <p
+                className={cn(
+                  "text-sm",
+                  websites.length > 0
+                    ? "text-foreground/80"
+                    : "text-muted-foreground",
+                )}
+              >
+                กลุ่ม
+              </p>
             </div>
-            <p className={cn("text-2xl font-bold", websites.length > 0 ? "text-foreground" : "text-muted-foreground")}>{websites.length}</p>
+            <p
+              className={cn(
+                "text-2xl font-bold",
+                websites.length > 0
+                  ? "text-foreground"
+                  : "text-muted-foreground",
+              )}
+            >
+              {websites.length}
+            </p>
           </div>
         </div>
 
@@ -259,7 +374,9 @@ export function DashboardContent({
           <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border py-14 text-center">
             <Globe className="h-10 w-10 text-muted-foreground/30 mb-3" />
             <p className="text-sm text-muted-foreground">ยังไม่มีกลุ่ม</p>
-            <p className="text-xs text-muted-foreground/60 mt-1">กดปุ่ม "เพิ่มกลุ่ม" มุมบนขวาเพื่อเริ่มต้น</p>
+            <p className="text-xs text-muted-foreground/60 mt-1">
+              กดปุ่ม "เพิ่มกลุ่ม" มุมบนขวาเพื่อเริ่มต้น
+            </p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
@@ -274,7 +391,9 @@ export function DashboardContent({
                 onDragEnter={(id) => setOverId(id)}
                 onDragEnd={handleDragEnd}
                 isDragging={dragId === summary.websiteId}
-                isOver={overId === summary.websiteId && dragId !== summary.websiteId}
+                isOver={
+                  overId === summary.websiteId && dragId !== summary.websiteId
+                }
               />
             ))}
           </div>

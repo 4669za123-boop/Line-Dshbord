@@ -31,7 +31,6 @@ type TabType = "main" | "deposit" | "pending";
 
 export type BackupLineRole = "main" | "deposit";
 
-/** กลุ่มสำรองที่ผู้ใช้เพิ่มเข้ามา (เก็บใน backup-groups.json) */
 export interface BackupLine {
   id: string;
   url: string;
@@ -39,7 +38,6 @@ export interface BackupLine {
   addedAt: string;
 }
 
-/** บัญชี LINE ที่ backup-scanner ดึงมาจากกลุ่มสำรอง */
 export interface BackupAccount {
   id: string;
   groupId: string;
@@ -91,23 +89,20 @@ function ReadyBadge() {
 }
 
 function GroupRow({ line, onRemove }: { line: BackupLine; onRemove: (id: string) => void }) {
-  const shortUrl = line.url.replace(/^https?:\/\//, "").substring(0, 50);
+  const shortUrl = line.url.replace(/^https?:\/\//, "").substring(0, 55);
   return (
     <div className="flex items-center gap-3 bg-card border border-border rounded-2xl px-4 py-3 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)] group">
       <Users2 className="h-4 w-4 text-muted-foreground group-hover:text-primary shrink-0 transition-colors duration-300" />
-      <div className="flex-1 min-w-0 flex items-center gap-2 flex-wrap">
-        <RoleBadge role={line.role} />
-        <a
-          href={line.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-sm font-medium text-foreground truncate hover:text-primary transition-colors duration-200"
-          title={line.url}
-          onClick={(e) => e.stopPropagation()}
-        >
-          {shortUrl}
-        </a>
-      </div>
+      <a
+        href={line.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex-1 text-sm font-medium text-foreground truncate hover:text-primary transition-colors duration-200"
+        title={line.url}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {shortUrl}
+      </a>
       <button
         type="button"
         onClick={() => onRemove(line.id)}
@@ -140,7 +135,6 @@ function AccountCard({
       </button>
       <div className="pr-10 space-y-2">
         <div className="flex items-center gap-2 flex-wrap">
-          <RoleBadge role={account.role} />
           {account.websiteName && (
             <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-muted/60 text-muted-foreground ring-1 ring-border">
               {account.websiteName}
@@ -182,7 +176,6 @@ export function BackupPoolPage({
   onConfirmBackupAccount,
 }: BackupPoolPageProps) {
   const [activeTab, setActiveTab]   = useState<TabType>("main");
-  const [groupTab, setGroupTab]     = useState<"main" | "deposit">("main");
   const [addOpen, setAddOpen]       = useState(false);
   const [newUrl, setNewUrl]         = useState("");
   const [newRole, setNewRole]       = useState<BackupLineRole | "">("");
@@ -225,7 +218,14 @@ export function BackupPoolPage({
     setAssigningAccount(null);
   };
 
-  const renderTabContent = () => {
+  // กลุ่มสำรองและบัญชีที่กรองตาม tab ที่เลือก
+  const groupsForTab  = activeTab !== "pending" ? backupLines.filter((l) => l.role === activeTab) : [];
+  const accountsForTab =
+    activeTab === "main"    ? backupAccountsMain :
+    activeTab === "deposit" ? backupAccountsDeposit :
+    backupAccountsPending;
+
+  const renderContent = () => {
     if (activeTab === "pending") {
       if (pendingCount === 0) {
         return (
@@ -287,21 +287,35 @@ export function BackupPoolPage({
       );
     }
 
-    const items = activeTab === "main" ? backupAccountsMain : backupAccountsDeposit;
-    if (items.length === 0) {
+    const hasGroups   = groupsForTab.length > 0;
+    const hasAccounts = accountsForTab.length > 0;
+
+    if (!hasGroups && !hasAccounts) {
       return (
         <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border py-12 text-center">
           <Archive className="h-9 w-9 text-muted-foreground/40 mb-3" />
-          <p className="text-sm text-muted-foreground">ยังไม่มีบัญชีไลน์สำรองในหมวดนี้</p>
+          <p className="text-sm text-muted-foreground">ยังไม่มีข้อมูลในหมวดนี้</p>
           <p className="text-xs text-muted-foreground/60 mt-1">
-            เพิ่มกลุ่มสำรองแล้วรอให้ backup-scanner สแกนให้เสร็จ
+            กดปุ่ม "เพิ่มกลุ่มสำรอง" แล้วรอให้ backup-scanner สแกน
           </p>
         </div>
       );
     }
+
     return (
       <div className="space-y-3">
-        {items.map((acc) => (
+        {/* กลุ่มสำรอง */}
+        {groupsForTab.map((line) => (
+          <GroupRow key={line.id} line={line} onRemove={onRemoveBackup} />
+        ))}
+
+        {/* เส้นคั่น (เฉพาะเมื่อมีทั้ง 2 ส่วน) */}
+        {hasGroups && hasAccounts && (
+          <div className="border-t border-border/60 my-2" />
+        )}
+
+        {/* บัญชีที่สแกนพบ */}
+        {accountsForTab.map((acc) => (
           <AccountCard
             key={acc.id}
             account={acc}
@@ -356,9 +370,9 @@ export function BackupPoolPage({
               key={label}
               className={cn(
                 "border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_30px_rgba(0,185,0,0.1)]",
-                color === "blue"    && count > 0 ? "bg-blue-500/5 border-blue-500/25"     : "",
-                color === "purple"  && count > 0 ? "bg-purple-500/5 border-purple-500/25" : "",
-                color === "amber"   && count > 0 ? "bg-amber-500/5 border-amber-500/25"   : "",
+                color === "blue"   && count > 0 ? "bg-blue-500/5 border-blue-500/25"     : "",
+                color === "purple" && count > 0 ? "bg-purple-500/5 border-purple-500/25" : "",
+                color === "amber"  && count > 0 ? "bg-amber-500/5 border-amber-500/25"   : "",
                 (color === "default" || count === 0) ? "bg-card border-border" : "",
               )}
             >
@@ -389,104 +403,42 @@ export function BackupPoolPage({
           ))}
         </div>
 
-        {/* Section 1: กลุ่มสำรองที่เพิ่มไว้ */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
-              กลุ่มสำรอง (backup-scanner จะสแกนกลุ่มเหล่านี้)
-            </h2>
-            <div className="inline-flex rounded-xl border border-border bg-card p-1 gap-1">
-              {(["main", "deposit"] as const).map((key) => {
-                const isActive = groupTab === key;
-                const label    = key === "main" ? "ไลน์หลัก" : "ฝากถอน";
-                const count    = backupLines.filter((l) => l.role === key).length;
-                return (
-                  <button
-                    key={key}
-                    type="button"
-                    onClick={() => setGroupTab(key)}
-                    className={cn(
-                      "flex items-center gap-1.5 whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-semibold transition-all",
-                      isActive
-                        ? key === "main"
-                          ? "bg-blue-500/15 text-blue-400 ring-1 ring-blue-500/25"
-                          : "bg-violet-500/15 text-violet-400 ring-1 ring-violet-500/25"
-                        : "text-muted-foreground hover:text-foreground hover:bg-muted/40",
-                    )}
-                  >
-                    {label}
-                    <span className={cn(
-                      "inline-flex items-center justify-center h-4 min-w-4 px-1 rounded-full text-[10px] font-bold",
-                      isActive
-                        ? key === "main" ? "bg-blue-500/20 text-blue-300" : "bg-violet-500/20 text-violet-300"
-                        : "bg-muted text-muted-foreground",
-                    )}>
-                      {count}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {backupLines.filter((l) => l.role === groupTab).length === 0 ? (
-            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border py-10 text-center">
-              <Users2 className="h-9 w-9 text-muted-foreground/30 mb-3" />
-              <p className="text-sm text-muted-foreground">
-                ยังไม่มีกลุ่ม{groupTab === "main" ? "ไลน์หลัก" : "ไลน์ฝากถอน"}สำรอง
-              </p>
-              <p className="text-xs text-muted-foreground/60 mt-1">
-                กดปุ่ม "เพิ่มกลุ่มสำรอง" มุมบนขวา
-              </p>
-            </div>
-          ) : (
-            <div className="space-y-2">
-              {backupLines.filter((l) => l.role === groupTab).map((line) => (
-                <GroupRow key={line.id} line={line} onRemove={onRemoveBackup} />
-              ))}
-            </div>
-          )}
+        {/* Tabs */}
+        <div className="inline-flex rounded-xl border border-border bg-card p-1 gap-1 mb-6">
+          {tabs.map((tab) => {
+            const isActive = activeTab === tab.key;
+            return (
+              <button
+                key={tab.key}
+                type="button"
+                onClick={() => setActiveTab(tab.key)}
+                className={cn(
+                  "flex items-center gap-1.5 whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-semibold transition-all",
+                  isActive
+                    ? tab.color === "blue"   ? "bg-blue-500/15 text-blue-400 ring-1 ring-blue-500/25"
+                    : tab.color === "purple" ? "bg-purple-500/15 text-purple-400 ring-1 ring-purple-500/25"
+                                             : "bg-amber-500/15 text-amber-400 ring-1 ring-amber-500/25"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/40",
+                )}
+              >
+                {tab.label}
+                <span className={cn(
+                  "inline-flex items-center justify-center h-4 min-w-4 px-1 rounded-full text-[10px] font-bold",
+                  isActive
+                    ? tab.color === "blue"   ? "bg-blue-500/20 text-blue-300"
+                    : tab.color === "purple" ? "bg-purple-500/20 text-purple-300"
+                                             : "bg-amber-500/20 text-amber-300"
+                    : "bg-muted text-muted-foreground",
+                )}>
+                  {tab.count}
+                </span>
+              </button>
+            );
+          })}
         </div>
 
-        {/* Section 2: บัญชีที่ backup-scanner พบ */}
-        <div>
-          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-4">
-            บัญชีที่ backup-scanner สแกนพบ
-          </h2>
-          <div className="inline-flex rounded-xl border border-border bg-card p-1 gap-1 mb-6">
-            {tabs.map((tab) => {
-              const isActive = activeTab === tab.key;
-              return (
-                <button
-                  key={tab.key}
-                  type="button"
-                  onClick={() => setActiveTab(tab.key)}
-                  className={cn(
-                    "flex items-center gap-1.5 whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-semibold transition-all",
-                    isActive
-                      ? tab.color === "blue"   ? "bg-blue-500/15 text-blue-400 ring-1 ring-blue-500/25"
-                      : tab.color === "purple" ? "bg-purple-500/15 text-purple-400 ring-1 ring-purple-500/25"
-                                               : "bg-amber-500/15 text-amber-400 ring-1 ring-amber-500/25"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted/40",
-                  )}
-                >
-                  {tab.label}
-                  <span className={cn(
-                    "inline-flex items-center justify-center h-4 min-w-4 px-1 rounded-full text-[10px] font-bold",
-                    isActive
-                      ? tab.color === "blue"   ? "bg-blue-500/20 text-blue-300"
-                      : tab.color === "purple" ? "bg-purple-500/20 text-purple-300"
-                                               : "bg-amber-500/20 text-amber-300"
-                      : "bg-muted text-muted-foreground",
-                  )}>
-                    {tab.count}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-          {renderTabContent()}
-        </div>
+        {/* Content */}
+        {renderContent()}
 
         {/* Dialog เพิ่มกลุ่มสำรอง */}
         <Dialog open={addOpen} onOpenChange={setAddOpen}>

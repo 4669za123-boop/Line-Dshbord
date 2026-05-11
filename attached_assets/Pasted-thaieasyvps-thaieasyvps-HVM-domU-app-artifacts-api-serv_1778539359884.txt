@@ -1,0 +1,52 @@
+thaieasyvps@thaieasyvps-HVM-domU:/app/artifacts/api-server$ cd /app/artifacts/api-server && CHROME_PROFILE_DIR=/home/thaieasyvps/.line-chrome-profile-new API_BASE=http://localhost:8080/api python3 checker.py
+/usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+  warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+🔍 CHECKER START (ตรวจทุก 60 วินาที)
+
+=======================================================
+🔍 CHECKER: เริ่มรอบตรวจสถานะกลุ่มหลัก
+=======================================================
+✅ WEBSITES: 1 รายการ
+✅ ใช้ Chrome profile: /home/thaieasyvps/.line-chrome-profile-new
+✅ ใช้ Chrome: /usr/bin/google-chrome
+/usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+  warnings.warn(
+⚠️  webdriver_manager ไม่ได้: Message: session not created: Chrome instance exited. Examine ChromeDriver verbose log to determine the cause.; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#sessionnotcreatedexception
+Stacktrace:
+#0 0x5c049de948aa <unknown>
+#1 0x5c049d88f8a9 <unknown>
+#2 0x5c049d8cde5b <unknown>
+#3 0x5c049d8c8b29 <unknown>
+#4 0x5c049d918316 <unknown>
+#5 0x5c049d9179fc <unknown>
+#6 0x5c049d8d74cf <unknown>
+#7 0x5c049d8d8291 <unknown>
+#8 0x5c049de5a76b <unknown>
+#9 0x5c049de5d67d <unknown>
+#10 0x5c049de476c8 <unknown>
+#11 0x5c049de5e210 <unknown>
+#12 0x5c049de2e170 <unknown>
+#13 0x5c049de817b8 <unknown>
+#14 0x5c049de81955 <unknown>
+#15 0x5c049de9330e <unknown>
+#16 0x773c99294ac3 <unknown>
+ — ลอง default
+❌ run_check error: Message: session not created: Chrome instance exited. Examine ChromeDriver verbose log to determine the cause.; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#sessionnotcreatedexception
+Stacktrace:
+#0 0x63b5079388aa <unknown>
+#1 0x63b5073338a9 <unknown>
+#2 0x63b507371e5b <unknown>
+#3 0x63b50736cb29 <unknown>
+#4 0x63b5073bc316 <unknown>
+#5 0x63b5073bb9fc <unknown>
+#6 0x63b50737b4cf <unknown>
+#7 0x63b50737c291 <unknown>
+#8 0x63b5078fe76b <unknown>
+#9 0x63b50790167d <unknown>
+#10 0x63b5078eb6c8 <unknown>
+#11 0x63b507902210 <unknown>
+#12 0x63b5078d2170 <unknown>
+#13 0x63b5079257b8 <unknown>
+#14 0x63b507925955 <unknown>
+#15 0x63b50793730e <unknown>
+#16 0x7cb3c3a94ac3 <unknown>

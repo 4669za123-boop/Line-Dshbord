@@ -35,14 +35,23 @@ def load_websites():
 
 def connect():
     options = webdriver.ChromeOptions()
-    options.add_argument("--headless")
+    options.add_argument("--headless=new")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-gpu")
     options.add_argument("--window-size=1920,1080")
     options.add_argument("--disable-blink-features=AutomationControlled")
+    options.add_argument("--remote-debugging-port=0")
 
     if os.path.exists(CHROME_PROFILE_DIR):
+        # ลบ singleton lock ก่อนเสมอ เพื่อไม่ให้ชนกับ Chrome อื่น
+        for lock_file in ["SingletonLock", "SingletonSocket", "SingletonCookie"]:
+            lock_path = os.path.join(CHROME_PROFILE_DIR, lock_file)
+            if os.path.exists(lock_path):
+                try:
+                    os.remove(lock_path)
+                except Exception:
+                    pass
         options.add_argument(f"--user-data-dir={CHROME_PROFILE_DIR}")
         print(f"✅ ใช้ Chrome profile: {CHROME_PROFILE_DIR}")
     else:

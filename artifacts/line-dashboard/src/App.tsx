@@ -2,6 +2,12 @@ import { useEffect, useState, useCallback } from "react";
 import { Sidebar, type PageType } from "@/components/dashboard/sidebar";
 import { DashboardContent } from "@/components/dashboard/dashboard-content";
 import { NotificationSettingsPage } from "@/components/dashboard/notification-settings-page";
+import {
+  BackupPoolPage,
+  type BackupLine,
+  type BackupAccount,
+  type BackupLineRole,
+} from "@/components/dashboard/backup-pool-page";
 import type { Website } from "@/components/dashboard/types";
 import type { DiscoveredLine } from "@/components/dashboard/line-card";
 
@@ -9,6 +15,12 @@ export default function App() {
   const [activePage, setActivePage] = useState<PageType>("dashboard");
   const [websites, setWebsites] = useState<Website[]>([]);
   const [lines, setLines] = useState<DiscoveredLine[]>([]);
+
+  // ไลน์สำรอง state
+  const [backupLines, setBackupLines] = useState<BackupLine[]>([]);
+  const [backupAccountsMain, setBackupAccountsMain] = useState<BackupAccount[]>([]);
+  const [backupAccountsDeposit, setBackupAccountsDeposit] = useState<BackupAccount[]>([]);
+  const [backupAccountsPending, setBackupAccountsPending] = useState<BackupAccount[]>([]);
 
   const fetchData = useCallback(() => {
     fetch("/api/websites")
@@ -24,16 +36,33 @@ export default function App() {
       .catch(() => {});
   }, []);
 
+  const fetchBackupAccounts = useCallback(() => {
+    fetch("/api/backup-accounts")
+      .then((r) => r.json())
+      .then((data: { main: BackupAccount[]; deposit: BackupAccount[]; pending: BackupAccount[] }) => {
+        setBackupAccountsMain(data.main ?? []);
+        setBackupAccountsDeposit(data.deposit ?? []);
+        setBackupAccountsPending(data.pending ?? []);
+      })
+      .catch(() => {});
+  }, []);
+
   // โหลดข้อมูลครั้งแรก
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+    fetchBackupAccounts();
+  }, [fetchData, fetchBackupAccounts]);
 
   // รีเฟรชทุก 15 วินาที
   useEffect(() => {
-    const id = setInterval(fetchData, 15_000);
+    const id = setInterval(() => {
+      fetchData();
+      fetchBackupAccounts();
+    }, 15_000);
     return () => clearInterval(id);
-  }, [fetchData]);
+  }, [fetchData, fetchBackupAccounts]);
+
+  // ── Dashboard handlers ──────────────────────────────────────────────────
 
   const handleAddWebsite = async (name: string, url: string) => {
     const trimmed = name.trim();
@@ -74,7 +103,6 @@ export default function App() {
   };
 
   const handleAssignRole = async (lineId: string, role: "main" | "deposit") => {
-    // อัปเดต UI ทันที
     setLines((prev) =>
       prev.map((l) => (l.id === lineId ? { ...l, role } : l))
     );
@@ -94,6 +122,68 @@ export default function App() {
     } catch {}
   };
 
+  // ── Backup pool handlers ────────────────────────────────────────────────
+
+  const handleAddBackup = async (lineId: string, role: BackupLineRole) => {
+    const newLine: BackupLine = {
+      id: crypto.randomUUID(),
+      lineId,
+      role,
+      websiteId: null,
+      websiteName: null,
+      confirmed: false,
+    };
+    setBackupLines((prev) => [...prev, newLine]);
+  };
+
+  const handleRemoveBackup = (id: string) => {
+    setBackupLines((prev) => prev.filter((l) => l.id !== id));
+  };
+
+  const handleConfirmBackup = (id: string, websiteId: string, websiteName: string) => {
+    setBackupLines((prev) =>
+      prev.map((l) =>
+        l.id === id ? { ...l, websiteId, websiteName, confirmed: true } : l
+      )
+    );
+  };
+
+  const handleRemoveBackupAccount = async (id: string) => {
+    setBackupAccountsMain((prev) => prev.filter((a) => a.id !== id));
+    setBackupAccountsDeposit((prev) => prev.filter((a) => a.id !== id));
+    setBackupAccountsPending((prev) => prev.filter((a) => a.id !== id));
+    try {
+      await fetch(`/api/backup-accounts/${id}`, { method: "DELETE" });
+    } catch {}
+  };
+
+  const handleConfirmBackupAccount = async (
+    id: string,
+    websiteId: string,
+    websiteName: string
+  ) => {
+    // หา account ใน pending แล้ว optimistic-update ไปก่อน
+    const acc = backupAccountsPending.find((a) => a.id === id);
+    if (acc) {
+      const confirmed = { ...acc, websiteId, websiteName, confirmed: true };
+      setBackupAccountsPending((prev) => prev.filter((a) => a.id !== id));
+      if (acc.role === "main") {
+        setBackupAccountsMain((prev) => [...prev, confirmed]);
+      } else {
+        setBackupAccountsDeposit((prev) => [...prev, confirmed]);
+      }
+    }
+    try {
+      await fetch(`/api/backup-accounts/${id}/confirm`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ websiteId, websiteName }),
+      });
+    } catch {}
+  };
+
+  // ── Render ──────────────────────────────────────────────────────────────
+
   const renderPage = () => {
     switch (activePage) {
       case "dashboard":
@@ -106,6 +196,21 @@ export default function App() {
             onReorderWebsites={handleReorderWebsites}
             onAssignRole={handleAssignRole}
             onRemoveLine={handleRemoveLine}
+          />
+        );
+      case "backup-pool":
+        return (
+          <BackupPoolPage
+            websites={websites}
+            backupLines={backupLines}
+            backupAccountsMain={backupAccountsMain}
+            backupAccountsDeposit={backupAccountsDeposit}
+            backupAccountsPending={backupAccountsPending}
+            onAddBackup={handleAddBackup}
+            onRemoveBackup={handleRemoveBackup}
+            onConfirmBackup={handleConfirmBackup}
+            onRemoveBackupAccount={handleRemoveBackupAccount}
+            onConfirmBackupAccount={handleConfirmBackupAccount}
           />
         );
       case "notification-settings":

@@ -1,19 +1,20 @@
-
 import { cn } from "@/lib/utils"
 import {
   LayoutDashboard,
   Bell,
+  Archive,
   Menu,
   X,
 } from "lucide-react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 
-export type PageType = "dashboard" | "notification-settings"
+export type PageType = "dashboard" | "backup-pool" | "notification-settings"
 
 const menuItems: { icon: typeof LayoutDashboard; label: string; page: PageType }[] = [
-  { icon: LayoutDashboard, label: "แดชบอร์ด", page: "dashboard" },
-  { icon: Bell, label: "ตั้งค่าแจ้งเตือน", page: "notification-settings" },
+  { icon: LayoutDashboard, label: "แดชบอร์ด",      page: "dashboard" },
+  { icon: Archive,         label: "ไลน์สำรอง",      page: "backup-pool" },
+  { icon: Bell,            label: "ตั้งค่าแจ้งเตือน", page: "notification-settings" },
 ]
 
 interface SidebarProps {

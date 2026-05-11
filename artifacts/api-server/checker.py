@@ -71,6 +71,23 @@ def connect():
                 print(f"✅ ใช้ Chrome: {binary}")
                 break
 
+    # ลอง chromedriver ที่ติดตั้งไว้ก่อน
+    chromedriver_candidates = [
+        "/tmp/chromedriver-linux64/chromedriver",
+        "/home/thaieasyvps/chromedriver",
+        "/usr/local/bin/chromedriver",
+        "/usr/bin/chromedriver",
+    ]
+    for cd_path in chromedriver_candidates:
+        if os.path.exists(cd_path):
+            try:
+                service = Service(cd_path)
+                driver = webdriver.Chrome(service=service, options=options)
+                print(f"✅ ใช้ chromedriver: {cd_path}")
+                return driver
+            except Exception as e:
+                print(f"⚠️  {cd_path} ไม่ได้: {e}")
+
     try:
         from webdriver_manager.chrome import ChromeDriverManager
         service = Service(ChromeDriverManager().install())

@@ -1,0 +1,72 @@
+thaieasyvps@thaieasyvps-HVM-domU:/app/artifacts/api-server$ # ดาวน์โหลด chromedriver สำหรับ Chrome 148
+wget -q "https://storage.googleapis.com/chrome-for-testing-public/148.0.7778.96/linux64/chromedriver-linux64.zip" -O /tmp/chromedriver.zip && \
+unzip -o /tmp/chromedriver.zip -d /tmp/ && \
+cp /tmp/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
+chmod +x /usr/local/bin/chromedriver && \
+chromedriver --version
+Archive:  /tmp/chromedriver.zip
+  inflating: /tmp/chromedriver-linux64/LICENSE.chromedriver  
+  inflating: /tmp/chromedriver-linux64/THIRD_PARTY_NOTICES.chromedriver  
+  inflating: /tmp/chromedriver-linux64/chromedriver  
+cp: cannot create regular file '/usr/local/bin/chromedriver': Permission denied
+thaieasyvps@thaieasyvps-HVM-domU:/app/artifacts/api-server$ cd /app/artifacts/api-server && CHROME_PROFILE_DIR=/home/thaieasyvps/.line-chrome-profile-new API_BASE=http://localhost:8080/api python3 checker.py
+/usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+  warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+🔍 CHECKER START (ตรวจทุก 60 วินาที)
+
+=======================================================
+🔍 CHECKER: เริ่มรอบตรวจสถานะกลุ่มหลัก
+=======================================================
+✅ WEBSITES: 1 รายการ
+✅ ใช้ Chrome profile: /home/thaieasyvps/.line-chrome-profile-new
+✅ ใช้ Chrome: /usr/bin/google-chrome
+/usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+  warnings.warn(
+⚠️  webdriver_manager ไม่ได้: Message: session not created: Chrome instance exited. Examine ChromeDriver verbose log to determine the cause.; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#sessionnotcreatedexception
+Stacktrace:
+#0 0x56b843d318aa <unknown>
+#1 0x56b84372c8a9 <unknown>
+#2 0x56b84376ae5b <unknown>
+#3 0x56b843765b29 <unknown>
+#4 0x56b8437b5316 <unknown>
+#5 0x56b8437b49fc <unknown>
+#6 0x56b8437744cf <unknown>
+#7 0x56b843775291 <unknown>
+#8 0x56b843cf776b <unknown>
+#9 0x56b843cfa67d <unknown>
+#10 0x56b843ce46c8 <unknown>
+#11 0x56b843cfb210 <unknown>
+#12 0x56b843ccb170 <unknown>
+#13 0x56b843d1e7b8 <unknown>
+#14 0x56b843d1e955 <unknown>
+#15 0x56b843d3030e <unknown>
+#16 0x706900694ac3 <unknown>
+ — ลอง default
+❌ run_check error: Message: session not created: Chrome instance exited. Examine ChromeDriver verbose log to determine the cause.; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#sessionnotcreatedexception
+Stacktrace:
+#0 0x61251fc158aa <unknown>
+#1 0x61251f6108a9 <unknown>
+#2 0x61251f64ee5b <unknown>
+#3 0x61251f649b29 <unknown>
+#4 0x61251f699316 <unknown>
+#5 0x61251f6989fc <unknown>
+#6 0x61251f6584cf <unknown>
+#7 0x61251f659291 <unknown>
+#8 0x61251fbdb76b <unknown>
+#9 0x61251fbde67d <unknown>
+#10 0x61251fbc86c8 <unknown>
+#11 0x61251fbdf210 <unknown>
+#12 0x61251fbaf170 <unknown>
+#13 0x61251fc027b8 <unknown>
+#14 0x61251fc02955 <unknown>
+#15 0x61251fc1430e <unknown>
+#16 0x7a4bc7e94ac3 <unknown>
+
+
+⏳ รอ 60 วินาทีก่อนรอบถัดไป...
+^CTraceback (most recent call last):
+  File "/app/artifacts/api-server/checker.py", line 226, in <module>
+    main()
+  File "/app/artifacts/api-server/checker.py", line 222, in main
+    time.sleep(CHECK_INTERVAL)
+KeyboardInterrupt

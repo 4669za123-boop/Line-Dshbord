@@ -1,0 +1,40 @@
+thaieasyvps@thaieasyvps-HVM-domU:/app/artifacts/api-server$ python3 -c "
+import os, time
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+
+profile = '/home/thaieasyvps/.line-chrome-profile-new'
+for f in ['SingletonLock','SingletonSocket','SingletonCookie']:
+    p = os.path.join(profile, f)
+    if os.path.exists(p): os.remove(p)
+
+options = webdriver.ChromeOptions()
+options.add_argument('--headless=new')
+options.add_argument('--no-sandbox')
+options.add_argument('--disable-dev-shm-usage')
+options.add_argument('--disable-gpu')
+options.add_argument('--remote-debugging-port=0')
+options.add_argument(f'--user-data-dir={profile}')
+options.binary_location = '/usr/bin/google-chrome'
+service = Service('/tmp/chromedriver-linux64/chromedriver')
+driver = webdriver.Chrome(service=service, options=options)
+driver.get('https://manager.line.biz/groups/284033/setting')
+for i in range(12):
+    time.sleep(5)
+    url = driver.current_url
+    print(f'{i*5}s: {url[:70]}')
+    if 'manager.line.biz/groups' in url:
+        print('SUCCESS! เข้า manager ได้แล้ว')
+"river.quit()
+0s: https://account.line.biz/login?redirectUri=https%3A%2F%2Faccount.line.
+5s: https://account.line.biz/login?redirectUri=https%3A%2F%2Faccount.line.
+10s: https://account.line.biz/login?redirectUri=https%3A%2F%2Faccount.line.
+15s: https://account.line.biz/login?redirectUri=https%3A%2F%2Faccount.line.
+20s: https://account.line.biz/login?redirectUri=https%3A%2F%2Faccount.line.
+25s: https://account.line.biz/login?redirectUri=https%3A%2F%2Faccount.line.
+30s: https://account.line.biz/login?redirectUri=https%3A%2F%2Faccount.line.
+35s: https://account.line.biz/login?redirectUri=https%3A%2F%2Faccount.line.
+40s: https://account.line.biz/login?redirectUri=https%3A%2F%2Faccount.line.
+45s: https://account.line.biz/login?redirectUri=https%3A%2F%2Faccount.line.
+50s: https://account.line.biz/login?redirectUri=https%3A%2F%2Faccount.line.
+55s: https://account.line.biz/login?redirectUri=https%3A%2F%2Faccount.line.

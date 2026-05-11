@@ -1,0 +1,64 @@
+thaieasyvps@thaieasyvps-HVM-domU:/app$ cd /app && git stash && git pull && NODE_ENV=production BASE_PATH=/ pnpm --filter @workspace/line-dashboard run build && pm2 restart line-dashboard-api
+Saved working directory and index state WIP on main: b056ece Archive suspended LINE accounts and remove them from the dashboard view
+Updating b056ece..0118591
+Fast-forward
+ .replit                                                        |  23 +
+ artifacts/api-server/backup-scanner.py                         | 360 +++++++++++++++
+ artifacts/api-server/checker.py                                | 142 +++---
+ artifacts/api-server/data/backup-accounts-deposit.json         |   1 +
+ artifacts/api-server/data/backup-accounts-main.json            |   1 +
+ artifacts/api-server/data/backup-accounts-pending.json         |   1 +
+ artifacts/api-server/data/discovered-lines.json                |   1 +
+ artifacts/api-server/data/lines.json                           |   1 -
+ artifacts/api-server/data/schedules.json                       |   6 +-
+ artifacts/api-server/data/statuses.json                        |   1 -
+ artifacts/api-server/data/suspended-lines.json                 |   1 +
+ artifacts/api-server/src/index.ts                              |   4 +
+ artifacts/api-server/src/lib/data-init.ts                      |  37 ++
+ artifacts/api-server/src/routes/backup-groups.ts               |  42 +-
+ artifacts/api-server/src/routes/index.ts                       |   4 +
+ artifacts/api-server/src/routes/line-status.ts                 | 182 ++++++--
+ artifacts/api-server/src/routes/lines.ts                       |  34 +-
+ artifacts/api-server/src/routes/websites.ts                    |  96 +++-
+ artifacts/line-dashboard/src/App.tsx                           | 217 ++++++++-
+ .../src/components/dashboard/backup-pool-page.tsx              | 674 +++++++++++++++++-----------
+ .../src/components/dashboard/dashboard-content.tsx             | 163 ++++++-
+ .../src/components/dashboard/notification-settings-page.tsx    | 144 +++---
+ artifacts/line-dashboard/src/components/dashboard/sidebar.tsx  |   9 +-
+ attached_assets/image_1778530191024.png                        | Bin 0 -> 70756 bytes
+ attached_assets/image_1778531877894.png                        | Bin 0 -> 123931 bytes
+ attached_assets/image_1778532078340.png                        | Bin 0 -> 123931 bytes
+ attached_assets/image_1778532576330.png                        | Bin 0 -> 2359 bytes
+ 27 files changed, 1648 insertions(+), 496 deletions(-)
+ create mode 100644 artifacts/api-server/backup-scanner.py
+ create mode 100644 artifacts/api-server/data/backup-accounts-deposit.json
+ create mode 100644 artifacts/api-server/data/backup-accounts-main.json
+ create mode 100644 artifacts/api-server/data/backup-accounts-pending.json
+ create mode 100644 artifacts/api-server/data/discovered-lines.json
+ delete mode 100644 artifacts/api-server/data/lines.json
+ delete mode 100644 artifacts/api-server/data/statuses.json
+ create mode 100644 artifacts/api-server/data/suspended-lines.json
+ create mode 100644 artifacts/api-server/src/lib/data-init.ts
+ create mode 100644 attached_assets/image_1778530191024.png
+ create mode 100644 attached_assets/image_1778531877894.png
+ create mode 100644 attached_assets/image_1778532078340.png
+ create mode 100644 attached_assets/image_1778532576330.png
+
+> @workspace/line-dashboard@0.0.0 build /app/artifacts/line-dashboard
+> vite build --config vite.config.ts
+
+vite v7.3.2 building client environment for production...
+src/components/ui/select.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+src/components/ui/dialog.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+✓ 1758 modules transformed.
+dist/public/index.html                   1.12 kB │ gzip:   0.58 kB
+dist/public/assets/index-BEybmWGn.css  137.07 kB │ gzip:  20.47 kB
+dist/public/assets/index-BX9AhYK4.js   353.25 kB │ gzip: 111.01 kB
+✓ built in 20.93s
+Use --update-env to update environment variables
+[PM2] Applying action restartProcessId on app [line-dashboard-api](ids: [ 0 ])
+[PM2] [line-dashboard-api](0) ✓
+┌────┬────────────────────┬──────────┬──────┬───────────┬──────────┬──────────┐
+│ id │ name               │ mode     │ ↺    │ status    │ cpu      │ memory   │
+├────┼────────────────────┼──────────┼──────┼───────────┼──────────┼──────────┤
+│ 0  │ line-dashboard-api │ fork     │ 9    │ online    │ 0%       │ 18.5mb   │

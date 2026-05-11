@@ -1,0 +1,78 @@
+thaieasyvps@thaieasyvps-HVM-domU:/app$ pm2 delete line-checker
+
+CHROME_PROFILE_DIR=/home/thaieasyvps/.line-chrome-profile-v2 \
+API_BASE=http://localhost:8080/api \
+pm2 start /app/artifacts/api-server/checker.py \
+  --name line-checker \
+  --interpreter python3 \
+  --cwd /app/artifacts/api-server
+
+pm2 save
+pm2 logs line-checker --lines 30
+[PM2] Applying action deleteProcessId on app [line-checker](ids: [ 1 ])
+[PM2] [line-checker](1) ✓
+┌────┬────────────────────┬──────────┬──────┬───────────┬──────────┬──────────┐
+│ id │ name               │ mode     │ ↺    │ status    │ cpu      │ memory   │
+├────┼────────────────────┼──────────┼──────┼───────────┼──────────┼──────────┤
+│ 0  │ line-dashboard-api │ fork     │ 1    │ online    │ 0%       │ 68.6mb   │
+└────┴────────────────────┴──────────┴──────┴───────────┴──────────┴──────────┘
+[PM2] Starting /app/artifacts/api-server/checker.py in fork_mode (1 instance)
+[PM2] Done.
+┌────┬────────────────────┬──────────┬──────┬───────────┬──────────┬──────────┐
+│ id │ name               │ mode     │ ↺    │ status    │ cpu      │ memory   │
+├────┼────────────────────┼──────────┼──────┼───────────┼──────────┼──────────┤
+│ 2  │ line-checker       │ fork     │ 0    │ online    │ 0%       │ 5.9mb    │
+│ 0  │ line-dashboard-api │ fork     │ 1    │ online    │ 0%       │ 68.7mb   │
+└────┴────────────────────┴──────────┴──────┴───────────┴──────────┴──────────┘
+[PM2] Saving current process list...
+[PM2] Successfully saved in /home/thaieasyvps/.pm2/dump.pm2
+[TAILING] Tailing last 30 lines for [line-checker] process (change the value with --lines option)
+/home/thaieasyvps/.pm2/logs/line-checker-error.log last 30 lines:
+2|line-che | /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+2|line-che |   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+2|line-che | Traceback (most recent call last):
+2|line-che |   File "/app/artifacts/api-server/checker.py", line 259, in <module>
+2|line-che |     main()
+2|line-che |   File "/app/artifacts/api-server/checker.py", line 255, in main
+2|line-che |     time.sleep(CHECK_INTERVAL)
+2|line-che | KeyboardInterrupt
+2|line-che | /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+2|line-che |   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+
+/home/thaieasyvps/.pm2/logs/line-checker-out.log last 30 lines:
+2|line-che | 🔍 CHECKER START (ตรวจทุก 60 วินาที)
+2|line-che | 
+2|line-che | =======================================================
+2|line-che | 🔍 CHECKER: เริ่มรอบตรวจสถานะกลุ่มหลัก
+2|line-che | =======================================================
+2|line-che | ❌ load websites error: [Errno 2] No such file or directory: 'data/websites.json'
+2|line-che | ❌ ไม่พบข้อมูลกลุ่มหลัก
+2|line-che | 
+2|line-che | ⏳ รอ 60 วินาทีก่อนรอบถัดไป...
+2|line-che | 
+2|line-che | =======================================================
+2|line-che | 🔍 CHECKER: เริ่มรอบตรวจสถานะกลุ่มหลัก
+2|line-che | =======================================================
+2|line-che | ❌ load websites error: [Errno 2] No such file or directory: 'data/websites.json'
+2|line-che | ❌ ไม่พบข้อมูลกลุ่มหลัก
+2|line-che | 
+2|line-che | ⏳ รอ 60 วินาทีก่อนรอบถัดไป...
+2|line-che | 🔍 CHECKER START (ตรวจทุก 60 วินาที)
+2|line-che | 
+2|line-che | =======================================================
+2|line-che | 🔍 CHECKER: เริ่มรอบตรวจสถานะกลุ่มหลัก
+2|line-che | =======================================================
+2|line-che | ✅ WEBSITES: 1 รายการ
+2|line-che | ✅ ใช้ Chrome profile: /home/thaieasyvps/.line-chrome-profile-v2
+2|line-che | ✅ ใช้ Chrome: /usr/bin/google-chrome
+
+2|line-checker  | ✅ ใช้ chromedriver: /tmp/chromedriver-linux64/chromedriver
+2|line-checker  | 🌐 เข้ากลุ่ม: Jun88 → https://manager.line.biz/groups/284033/setting
+2|line-checker  |    พบ 2 account links
+2|line-checker  |    ✅ Jun88 F💤 (777zyhzk) → ออนไลน์
+2|line-checker  |    ✅ JUN88 ⚡️J Main (598evuml) → ออนไลน์
+2|line-checker  | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+2|line-checker  |   warnings.warn(
+2|line-checker  | ✅ อัปเดต 2 บัญชี (200) — active=2, suspended=0
+2|line-checker  | ✅ CHECKER รอบนี้เสร็จสมบูรณ์
+2|line-checker  | ⏳ รอ 60 วินาทีก่อนรอบถัดไป...

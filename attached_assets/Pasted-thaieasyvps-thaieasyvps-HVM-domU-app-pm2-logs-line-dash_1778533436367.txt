@@ -1,0 +1,62 @@
+thaieasyvps@thaieasyvps-HVM-domU:/app$ pm2 logs line-dashboard-api --lines 30
+[TAILING] Tailing last 30 lines for [line-dashboard-api] process (change the value with --lines option)
+/app/logs/line-dashboard-error.log last 30 lines:
+0|line-das | 2026-05-11 05:31:39: /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+0|line-das | 2026-05-11 05:31:39:   warnings.warn(
+0|line-das | 2026-05-11 05:35:39: /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+0|line-das | 2026-05-11 05:35:39:   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+0|line-das | 2026-05-11 05:35:41: /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+0|line-das | 2026-05-11 05:35:41:   warnings.warn(
+0|line-das | 2026-05-11 06:05:30: /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+0|line-das | 2026-05-11 06:05:30:   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+0|line-das | 2026-05-11 06:05:30: /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+0|line-das | 2026-05-11 06:05:30:   warnings.warn(
+0|line-das | 2026-05-11 06:07:23: /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+0|line-das | 2026-05-11 06:07:23:   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+0|line-das | 2026-05-11 06:07:24: /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+0|line-das | 2026-05-11 06:07:24:   warnings.warn(
+0|line-das | 2026-05-11 06:07:32: /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+0|line-das | 2026-05-11 06:07:32:   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+0|line-das | 2026-05-11 06:07:32: /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+0|line-das | 2026-05-11 06:07:32:   warnings.warn(
+0|line-das | 2026-05-11 06:08:17: /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+0|line-das | 2026-05-11 06:08:17:   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+0|line-das | 2026-05-11 06:08:18: /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+0|line-das | 2026-05-11 06:08:18:   warnings.warn(
+0|line-das | 2026-05-11 06:12:17: /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+0|line-das | 2026-05-11 06:12:17:   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+0|line-das | 2026-05-11 06:12:18: /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+0|line-das | 2026-05-11 06:12:18:   warnings.warn(
+0|line-das | 2026-05-12 03:56:09: /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+0|line-das | 2026-05-12 03:56:09:   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+0|line-das | 2026-05-12 03:59:10: /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+0|line-das | 2026-05-12 03:59:10:   warnings.warn(
+
+/app/logs/line-dashboard-out.log last 30 lines:
+0|line-das | ,"pid":278868,"hostname":"thaieasyvps-HVM-domU","req":{"id":288,"method":"GET","url":"/api/backup-accounts"},"res":{"statusCode":404},"responseTime":26,"msg":"request completed"}
+0|line-das | 2026-05-12 04:02:33: {"level":30,"time":1778533353653,"pid":278868,"hostname":"thaieasyvps-HVM-domU","req":{"id":291,"method":"GET","url":"/api/websites"},"res":{"statusCode":304},"responseTime":5,"msg":"request completed"}
+0|line-das | 2026-05-12 04:02:33: {"level":30,"time":1778533353659,"pid":278868,"hostname":"thaieasyvps-HVM-domU","req":{"id":290,"method":"GET","url":"/api/backup-groups"},"res":{"statusCode":404},"responseTime":14,"msg":"request completed"}
+0|line-das | 2026-05-12 04:02:33: {"level":30,"time":1778533353784,"pid":278868,"hostname":"thaieasyvps-HVM-domU","req":{"id":292,"method":"GET","url":"/api/backup-accounts"},"res":{"statusCode":404},"responseTime":11,"msg":"request completed"}
+0|line-das | 2026-05-12 04:02:33: {"level":30,"time":1778533353806,"pid":278868,"hostname":"thaieasyvps-HVM-domU","req":{"id":294,"method":"GET","url":"/api/websites"},"res":{"statusCode":304},"responseTime":12,"msg":"request completed"}
+0|line-das | 2026-05-12 04:02:33: {"level":30,"time":1778533353816,"pid":278868,"hostname":"thaieasyvps-HVM-domU","req":{"id":293,"method":"GET","url":"/api/backup-groups"},"res":{"statusCode":404},"responseTime":37,"msg":"request completed"}
+0|line-das | 2026-05-12 04:02:33: {"level":30,"time":1778533353834,"pid":278868,"hostname":"thaieasyvps-HVM-domU","req":{"id":295,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":8,"msg":"request completed"}
+0|line-das | 2026-05-12 04:02:33: {"level":30,"time":1778533353971,"pid":278868,"hostname":"thaieasyvps-HVM-domU","req":{"id":296,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":8,"msg":"request completed"}
+0|line-das | 2026-05-12 04:02:33: {"level":30,"time":1778533353986,"pid":278868,"hostname":"thaieasyvps-HVM-domU","req":{"id":297,"method":"GET","url":"/api/backup-groups"},"res":{"statusCode":404},"responseTime":9,"msg":"request completed"}
+0|line-das | 2026-05-12 04:02:33: {"level":30,"time":1778533353992,"pid":278868,"hostname":"thaieasyvps-HVM-domU","req":{"id":299,"method":"GET","url":"/api/websites"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+0|line-das | 2026-05-12 04:02:34: {"level":30,"time":1778533353996,"pid":278868,"hostname":"thaieasyvps-HVM-domU","req":{"id":298,"method":"GET","url":"/api/backup-accounts"},"res":{"statusCode":404},"responseTime":16,"msg":"request completed"}
+0|line-das | 2026-05-12 04:02:49: {"level":30,"time":1778533369606,"pid":278868,"hostname":"thaieasyvps-HVM-domU","req":{"id":301,"method":"GET","url":"/api/websites"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+0|line-das | 2026-05-12 04:02:49: {"level":30,"time":1778533369608,"pid":278868,"hostname":"thaieasyvps-HVM-domU","req":{"id":300,"method":"GET","url":"/api/backup-accounts"},"res":{"statusCode":404},"responseTime":6,"msg":"request completed"}
+0|line-das | 2026-05-12 04:02:49: {"level":30,"time":1778533369614,"pid":278868,"hostname":"thaieasyvps-HVM-domU","req":{"id":303,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+0|line-das | 2026-05-12 04:02:49: {"level":30,"time":1778533369616,"pid":278868,"hostname":"thaieasyvps-HVM-domU","req":{"id":302,"method":"GET","url":"/api/backup-groups"},"res":{"statusCode":404},"responseTime":6,"msg":"request completed"}
+0|line-das | 2026-05-12 04:03:04: {"level":30,"time":1778533384608,"pid":278868,"hostname":"thaieasyvps-HVM-domU","req":{"id":305,"method":"GET","url":"/api/websites"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+0|line-das | 2026-05-12 04:03:04: {"level":30,"time":1778533384611,"pid":278868,"hostname":"thaieasyvps-HVM-domU","req":{"id":304,"method":"GET","url":"/api/backup-groups"},"res":{"statusCode":404},"responseTime":8,"msg":"request completed"}
+0|line-das | 2026-05-12 04:03:04: {"level":30,"time":1778533384620,"pid":278868,"hostname":"thaieasyvps-HVM-domU","req":{"id":307,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+0|line-das | 2026-05-12 04:03:04: {"level":30,"time":1778533384622,"pid":278868,"hostname":"thaieasyvps-HVM-domU","req":{"id":306,"method":"GET","url":"/api/backup-accounts"},"res":{"statusCode":404},"responseTime":5,"msg":"request completed"}
+0|line-das | 2026-05-12 04:03:07: {"level":30,"time":1778533387606,"pid":278868,"hostname":"thaieasyvps-HVM-domU","req":{"id":308,"method":"GET","url":"/api/line-status"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+0|line-das | 2026-05-12 04:03:07: {"level":30,"time":1778533387612,"pid":278868,"hostname":"thaieasyvps-HVM-domU","req":{"id":310,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+0|line-das | 2026-05-12 04:03:07: {"level":30,"time":1778533387614,"pid":278868,"hostname":"thaieasyvps-HVM-domU","req":{"id":309,"method":"GET","url":"/api/failover-log"},"res":{"statusCode":404},"responseTime":6,"msg":"request completed"}
+0|line-das | 2026-05-12 04:03:09: {"level":30,"time":1778533389375,"pid":278868,"hostname":"thaieasyvps-HVM-domU","msg":"⏭️  Checker already running, skipping this tick"}
+0|line-das | 2026-05-12 04:03:19: {"level":30,"time":1778533399604,"pid":278868,"hostname":"thaieasyvps-HVM-domU","req":{"id":311,"method":"GET","url":"/api/websites"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+0|line-das | 2026-05-12 04:03:19: {"level":30,"time":1778533399612,"pid":278868,"hostname":"thaieasyvps-HVM-domU","req":{"id":312,"method":"GET","url":"/api/backup-accounts"},"res":{"statusCode":404},"responseTime":4,"msg":"request completed"}
+0|line-das | 2026-05-12 04:03:19: {"level":30,"time":1778533399616,"pid":278868,"hostname":"thaieasyvps-HVM-domU","req":{"id":314,"method":"GET","url":"/api/lines"},"res":{"statusCode":304},"responseTime":2,"msg":"request completed"}
+0|line-das | 2026-05-12 04:03:19: {"level":30,"time":1778533399618,"pid":278868,"hostname":"thaieasyvps-HVM-domU","req":{"id":313,"method":"GET","url":"/api/backup-groups"},"res":{"statusCode":404},"responseTime":8,"msg":"request completed"}

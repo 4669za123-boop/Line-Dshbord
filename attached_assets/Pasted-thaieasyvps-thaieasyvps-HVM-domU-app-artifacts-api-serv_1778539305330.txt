@@ -1,0 +1,195 @@
+thaieasyvps@thaieasyvps-HVM-domU:/app/artifacts/api-server$ # ล้างและเริ่มใหม่
+kill $(pgrep -f "Xvfb :98") $(pgrep -f "x11vnc.*98") 2>/dev/null; sleep 1
+
+Xvfb :98 -screen 0 1920x1080x24 &
+sleep 2
+
+x11vnc -display :98 -nopw -listen localhost -rfbport 5901 -xkb -forever &
+sleep 2
+
+DISPLAY=:98 google-chrome \
+  --user-data-dir="/home/thaieasyvps/.line-chrome-profile-new" \
+  --no-first-run --no-default-browser-check \
+  --no-sandbox --disable-dev-shm-usage --disable-gpu \
+  https://manager.line.biz/ &
+
+echo "⏳ เปิด VNC localhost:5901 → login LINE → ปิด Chrome ด้วยปุ่ม X → กด Enter"
+read
+sleep 3
+ls /home/thaieasyvps/.line-chrome-profile-new/ 2>/dev/null && echo "✅ Profile สำเร็จ" || echo "❌ ไม่พบ profile"
+[299726:299726:0512/053846.032852:ERROR:ui/gfx/x/connection.cc:66] X connection error received.
+[299726:299745:0512/053846.029917:ERROR:ui/gfx/x/connection.cc:66] X connection error received.
+[301172:301181:0512/053846.075897:ERROR:ui/gfx/x/connection.cc:66] X connection error received.
+[301172:301172:0512/053846.088007:ERROR:ui/gfx/x/connection.cc:66] X connection error received.
+[1]   Done                    Xvfb :98 -screen 0 1920x1080x24
+[2]-  Done                    DISPLAY=:98 google-chrome --user-data-dir="/home/thaieasyvps/.line-chrome-profile-new" --no-first-run --no-default-browser-check --no-sandbox --disable-dev-shm-usage --disable-gpu https://manager.line.biz/
+[3]+  Done                    DISPLAY=:98 google-chrome --user-data-dir="/home/thaieasyvps/.line-chrome-profile-new" --no-first-run --no-default-browser-check --no-sandbox --disable-dev-shm-usage --disable-gpu https://manager.line.biz/
+[1] 302767
+[2] 302818
+12/05/2026 05:38:49 passing arg to libvncserver: -listen
+12/05/2026 05:38:49 passing arg to libvncserver: localhost
+12/05/2026 05:38:49 passing arg to libvncserver: -rfbport
+12/05/2026 05:38:49 passing arg to libvncserver: 5901
+12/05/2026 05:38:49 x11vnc version: 0.9.16 lastmod: 2019-01-05  pid: 302818
+12/05/2026 05:38:49 Using X display :98
+12/05/2026 05:38:49 rootwin: 0x50d reswin: 0x200001 dpy: 0xe0e3f6f0
+12/05/2026 05:38:49 
+12/05/2026 05:38:49 ------------------ USEFUL INFORMATION ------------------
+12/05/2026 05:38:49 X DAMAGE available on display, using it for polling hints.
+12/05/2026 05:38:49   To disable this behavior use: '-noxdamage'
+12/05/2026 05:38:49 
+12/05/2026 05:38:49   Most compositing window managers like 'compiz' or 'beryl'
+12/05/2026 05:38:49   cause X DAMAGE to fail, and so you may not see any screen
+12/05/2026 05:38:49   updates via VNC.  Either disable 'compiz' (recommended) or
+12/05/2026 05:38:49   supply the x11vnc '-noxdamage' command line option.
+12/05/2026 05:38:49 
+12/05/2026 05:38:49 Wireframing: -wireframe mode is in effect for window moves.
+12/05/2026 05:38:49   If this yields undesired behavior (poor response, painting
+12/05/2026 05:38:49   errors, etc) it may be disabled:
+12/05/2026 05:38:49    - use '-nowf' to disable wireframing completely.
+12/05/2026 05:38:49    - use '-nowcr' to disable the Copy Rectangle after the
+12/05/2026 05:38:49      moved window is released in the new position.
+12/05/2026 05:38:49   Also see the -help entry for tuning parameters.
+12/05/2026 05:38:49   You can press 3 Alt_L's (Left "Alt" key) in a row to 
+12/05/2026 05:38:49   repaint the screen, also see the -fixscreen option for
+12/05/2026 05:38:49   periodic repaints.
+12/05/2026 05:38:49 
+12/05/2026 05:38:49 XFIXES available on display, resetting cursor mode
+12/05/2026 05:38:49   to: '-cursor most'.
+12/05/2026 05:38:49   to disable this behavior use: '-cursor arrow'
+12/05/2026 05:38:49   or '-noxfixes'.
+12/05/2026 05:38:49 using XFIXES for cursor drawing.
+12/05/2026 05:38:49 GrabServer control via XTEST.
+12/05/2026 05:38:49 
+12/05/2026 05:38:49 Scroll Detection: -scrollcopyrect mode is in effect to
+12/05/2026 05:38:49   use RECORD extension to try to detect scrolling windows
+12/05/2026 05:38:49   (induced by either user keystroke or mouse input).
+12/05/2026 05:38:49   If this yields undesired behavior (poor response, painting
+12/05/2026 05:38:49   errors, etc) it may be disabled via: '-noscr'
+12/05/2026 05:38:49   Also see the -help entry for tuning parameters.
+12/05/2026 05:38:49   You can press 3 Alt_L's (Left "Alt" key) in a row to 
+12/05/2026 05:38:49   repaint the screen, also see the -fixscreen option for
+12/05/2026 05:38:49   periodic repaints.
+12/05/2026 05:38:49 X FBPM extension not supported.
+Xlib:  extension "DPMS" missing on display ":98".
+12/05/2026 05:38:49 X display is not capable of DPMS.
+12/05/2026 05:38:49 --------------------------------------------------------
+12/05/2026 05:38:49 
+12/05/2026 05:38:49 Default visual ID: 0x21
+12/05/2026 05:38:49 Read initial data from X display into framebuffer.
+12/05/2026 05:38:49 initialize_screen: fb_depth/fb_bpp/fb_Bpl 24/32/7680
+12/05/2026 05:38:49 
+12/05/2026 05:38:49 X display :98 is 32bpp depth=24 true color
+12/05/2026 05:38:49 
+12/05/2026 05:38:49 Listening for VNC connections on TCP port 5901
+12/05/2026 05:38:49 Listening for VNC connections on TCP6 port 5900
+12/05/2026 05:38:49 Listening also on IPv6 port 5901 (socket 10)
+12/05/2026 05:38:49 
+12/05/2026 05:38:49 Xinerama is present and active (e.g. multi-head).
+12/05/2026 05:38:49 Xinerama: number of sub-screens: 1
+12/05/2026 05:38:49 Xinerama: no blackouts needed (only one sub-screen)
+12/05/2026 05:38:49 
+12/05/2026 05:38:49 fb read rate: 286 MB/sec
+12/05/2026 05:38:49 fast read: reset -wait  ms to: 10
+12/05/2026 05:38:49 fast read: reset -defer ms to: 10
+12/05/2026 05:38:49 The X server says there are 10 mouse buttons.
+12/05/2026 05:38:49 screen setup finished.
+12/05/2026 05:38:49 
+
+The VNC desktop is:      localhost:1
+PORT=5901
+
+******************************************************************************
+Have you tried the x11vnc '-ncache' VNC client-side pixel caching feature yet?
+
+The scheme stores pixel data offscreen on the VNC viewer side for faster
+retrieval.  It should work with any VNC viewer.  Try it by running:
+
+    x11vnc -ncache 10 ...
+
+One can also add -ncache_cr for smooth 'copyrect' window motion.
+More info: http://www.karlrunge.com/x11vnc/faq.html#faq-client-caching
+
+[3] 302832
+⏳ เปิด VNC localhost:5901 → login LINE → ปิด Chrome ด้วยปุ่ม X → กด Enter
+[302832:302856:0512/053917.667616:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT
+Created TensorFlow Lite XNNPACK delegate for CPU.
+12/05/2026 05:39:29 Got connection from client 127.0.0.1
+12/05/2026 05:39:29   0 other clients
+12/05/2026 05:39:29 Normal socket connection
+12/05/2026 05:39:29 Disabled X server key autorepeat.
+12/05/2026 05:39:29   to force back on run: 'xset r on' (3 times)
+12/05/2026 05:39:29 incr accepted_client=1 for 127.0.0.1:35946  sock=11
+12/05/2026 05:39:29 Client Protocol Version 3.8
+12/05/2026 05:39:29 Protocol version sent 3.8, using 3.8
+12/05/2026 05:39:29 rfbProcessClientSecurityType: executing handler for type 1
+12/05/2026 05:39:29 rfbProcessClientSecurityType: returning securityResult for client rfb version >= 3.8
+12/05/2026 05:39:30 created   xdamage object: 0x200040
+12/05/2026 05:39:30 copy_tiles: allocating first_line at size 61
+12/05/2026 05:39:34 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0x00000018)
+12/05/2026 05:39:34 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0x00000016)
+12/05/2026 05:39:34 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0x00000015)
+12/05/2026 05:39:34 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0x0000000F)
+12/05/2026 05:39:34 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0xFFFFFEC6)
+12/05/2026 05:39:34 Enabling full-color cursor updates for client 127.0.0.1
+12/05/2026 05:39:34 Enabling NewFBSize protocol extension for client 127.0.0.1
+12/05/2026 05:39:34 Using ZRLE encoding for client 127.0.0.1
+12/05/2026 05:39:34 client_set_net: 127.0.0.1  0.0005
+12/05/2026 05:39:34 Pixel format for client 127.0.0.1:
+12/05/2026 05:39:34   8 bpp, depth 6
+12/05/2026 05:39:34   true colour: max r 3 g 3 b 3, shift r 4 g 2 b 0
+12/05/2026 05:39:34 Pixel format for client 127.0.0.1:
+12/05/2026 05:39:34   32 bpp, depth 24, little endian
+12/05/2026 05:39:34   true colour: max r 255 g 255 b 255, shift r 16 g 8 b 0
+12/05/2026 05:39:34 no translation needed
+12/05/2026 05:39:34 client 1 network rate 361.3 KB/sec (97865.9 eff KB/sec)
+12/05/2026 05:39:34 client 1 latency:  13.7 ms
+12/05/2026 05:39:34 dt1: 0.0359, dt2: 0.0557 dt3: 0.0137 bytes: 30621
+12/05/2026 05:39:34 link_rate: LR_UNKNOWN - 13 ms, 361 KB/s
+12/05/2026 05:39:39 created selwin: 0x200041
+12/05/2026 05:39:39 called initialize_xfixes()
+[302832:302856:0512/053943.195708:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT
+12/05/2026 05:39:55 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0x00000018)
+12/05/2026 05:39:55 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0x0000000F)
+12/05/2026 05:39:55 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0x00000016)
+12/05/2026 05:39:55 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0x00000015)
+12/05/2026 05:39:55 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0xFFFFFEC6)
+12/05/2026 05:39:55 Enabling full-color cursor updates for client 127.0.0.1
+12/05/2026 05:39:55 Enabling NewFBSize protocol extension for client 127.0.0.1
+12/05/2026 05:39:55 Switching from ZRLE to hextile Encoding for client 127.0.0.1
+[302832:302856:0512/054034.797039:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT
+12/05/2026 05:40:51 client_count: 0
+12/05/2026 05:40:51 Restored X server key autorepeat to: 1
+12/05/2026 05:40:51 Client 127.0.0.1 gone
+12/05/2026 05:40:51 Statistics             events    Transmit/ RawEquiv ( saved)
+12/05/2026 05:40:51  ServerCutText       :      1 |         8/        8 (  0.0%)
+12/05/2026 05:40:51  FramebufferUpdate   :    849 |         0/        0 (  0.0%)
+12/05/2026 05:40:51  hextile             :   1656 |  36198013/ 69166688 ( 47.7%)
+12/05/2026 05:40:51  ZRLE                :    273 |    364486/ 24703788 ( 98.5%)
+12/05/2026 05:40:51  RichCursor          :     51 |    112482/   112482 (  0.0%)
+12/05/2026 05:40:51  TOTALS              :   2830 |  36674989/ 93982966 ( 61.0%)
+12/05/2026 05:40:51 Statistics             events    Received/ RawEquiv ( saved)
+12/05/2026 05:40:51  KeyEvent            :     92 |       736/      736 (  0.0%)
+12/05/2026 05:40:51  PointerEvent        :   2299 |     13794/    13794 (  0.0%)
+12/05/2026 05:40:51  FramebufferUpdate   :    850 |      8500/     8500 (  0.0%)
+12/05/2026 05:40:51  SetPixelFormat      :      2 |        40/       40 (  0.0%)
+12/05/2026 05:40:51  SetEncodings        :      2 |       112/      112 (  0.0%)
+12/05/2026 05:40:51  TOTALS              :   3245 |     23182/    23182 (  0.0%)
+12/05/2026 05:40:51 destroyed xdamage object: 0x200040
+^C
+ ActorSafetyLists                   GrShaderCache                         ShaderCache
+ AmountExtractionHeuristicRegexes   hyphen-data                           SingletonCookie
+ BrowserMetrics-spare.pma          'Last Version'                         SingletonLock
+ CaptchaProviders                  'Local State'                          SingletonSocket
+ CertificateRevocation              MEIPreload                            SSLErrorAssistant
+ component_crx_cache                NativeMessagingHosts                 'Subresource Filter'
+'Crowd Deny'                        OnDeviceHeadSuggestModel              TrustTokenKeyCommitments
+ Default                            optimization_guide_model_store        Variations
+ Dictionaries                       OptimizationHints                     VariationsSafeSeedV2
+ extensions_crx_cache               OriginTrials                          VariationsSeedV2
+ FileTypePolicies                   PKIMetadata                           WasmTtsEngine
+ first_party_sets.db                PrivacySandboxAttestationsPreloaded   WidevineCdm
+ first_party_sets.db-journal       'Safe Browsing'                        ZxcvbnData
+ FirstPartySetsPreloaded            SafetyTips
+ GraphiteDawnCache                  segmentation_platform
+✅ Profile สำเร็จ

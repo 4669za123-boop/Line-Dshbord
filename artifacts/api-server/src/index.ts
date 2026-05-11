@@ -1,6 +1,7 @@
 import app from "./app";
 import { logger } from "./lib/logger";
 import { startScheduler } from "./lib/scheduler.js";
+import { initDataFiles } from "./lib/data-init.js";
 
 const rawPort = process.env["PORT"];
 
@@ -15,6 +16,9 @@ const port = Number(rawPort);
 if (Number.isNaN(port) || port <= 0) {
   throw new Error(`Invalid PORT value: "${rawPort}"`);
 }
+
+// สร้างไฟล์ข้อมูลทั้งหมดก่อน server start
+initDataFiles();
 
 app.listen(port, (err) => {
   if (err) {

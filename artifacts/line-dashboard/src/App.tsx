@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { Sidebar, type PageType } from "@/components/dashboard/sidebar";
 import { DashboardContent } from "@/components/dashboard/dashboard-content";
 import { NotificationSettingsPage } from "@/components/dashboard/notification-settings-page";
@@ -11,23 +11,88 @@ import {
 import type { Website } from "@/components/dashboard/types";
 import type { DiscoveredLine } from "@/components/dashboard/line-card";
 
+// ─── localStorage cache ───────────────────────────────────────────────────────
+const CACHE_KEY = "line_dashboard_v2";
+
+interface CacheShape {
+  websites:              Website[];
+  lines:                 DiscoveredLine[];
+  backupLines:           BackupLine[];
+  backupAccountsMain:    BackupAccount[];
+  backupAccountsDeposit: BackupAccount[];
+  backupAccountsPending: BackupAccount[];
+}
+
+const EMPTY_CACHE: CacheShape = {
+  websites:              [],
+  lines:                 [],
+  backupLines:           [],
+  backupAccountsMain:    [],
+  backupAccountsDeposit: [],
+  backupAccountsPending: [],
+};
+
+function loadCache(): CacheShape {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return EMPTY_CACHE;
+    const parsed = JSON.parse(raw) as Partial<CacheShape>;
+    return {
+      websites:              Array.isArray(parsed.websites)              ? parsed.websites              : [],
+      lines:                 Array.isArray(parsed.lines)                 ? parsed.lines                 : [],
+      backupLines:           Array.isArray(parsed.backupLines)           ? parsed.backupLines           : [],
+      backupAccountsMain:    Array.isArray(parsed.backupAccountsMain)    ? parsed.backupAccountsMain    : [],
+      backupAccountsDeposit: Array.isArray(parsed.backupAccountsDeposit) ? parsed.backupAccountsDeposit : [],
+      backupAccountsPending: Array.isArray(parsed.backupAccountsPending) ? parsed.backupAccountsPending : [],
+    };
+  } catch {
+    return EMPTY_CACHE;
+  }
+}
+
+function saveCache(data: CacheShape) {
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+  } catch {
+    // localStorage เต็ม หรือ private mode → ไม่เป็นไร
+  }
+}
+
+// ─── App ──────────────────────────────────────────────────────────────────────
+
 export default function App() {
   const [activePage, setActivePage] = useState<PageType>("dashboard");
-  const [websites, setWebsites]     = useState<Website[]>([]);
-  const [lines, setLines]           = useState<DiscoveredLine[]>([]);
 
-  // ไลน์สำรอง state
-  const [backupLines, setBackupLines]                   = useState<BackupLine[]>([]);
-  const [backupAccountsMain, setBackupAccountsMain]     = useState<BackupAccount[]>([]);
-  const [backupAccountsDeposit, setBackupAccountsDeposit] = useState<BackupAccount[]>([]);
-  const [backupAccountsPending, setBackupAccountsPending] = useState<BackupAccount[]>([]);
+  // โหลด state จาก localStorage ทันที → ไม่มี flash หน้าว่าง
+  const cached = useRef(loadCache());
+
+  const [websites,              setWebsites]              = useState<Website[]>(cached.current.websites);
+  const [lines,                 setLines]                 = useState<DiscoveredLine[]>(cached.current.lines);
+  const [backupLines,           setBackupLines]           = useState<BackupLine[]>(cached.current.backupLines);
+  const [backupAccountsMain,    setBackupAccountsMain]    = useState<BackupAccount[]>(cached.current.backupAccountsMain);
+  const [backupAccountsDeposit, setBackupAccountsDeposit] = useState<BackupAccount[]>(cached.current.backupAccountsDeposit);
+  const [backupAccountsPending, setBackupAccountsPending] = useState<BackupAccount[]>(cached.current.backupAccountsPending);
+
+  // sync cache ทุกครั้งที่ state เปลี่ยน
+  useEffect(() => {
+    saveCache({
+      websites,
+      lines,
+      backupLines,
+      backupAccountsMain,
+      backupAccountsDeposit,
+      backupAccountsPending,
+    });
+  }, [websites, lines, backupLines, backupAccountsMain, backupAccountsDeposit, backupAccountsPending]);
 
   // ── Fetch functions ─────────────────────────────────────────────────────────
 
   const fetchDashboard = useCallback(() => {
     fetch("/api/websites")
       .then((r) => r.json())
-      .then((data: Website[]) => setWebsites(data))
+      .then((data: Website[]) => {
+        if (Array.isArray(data)) setWebsites(data);
+      })
       .catch(() => {});
 
     fetch("/api/lines")
@@ -39,7 +104,6 @@ export default function App() {
   }, []);
 
   const fetchBackupData = useCallback(() => {
-    // กลุ่มสำรองที่ผู้ใช้เพิ่มไว้
     fetch("/api/backup-groups")
       .then((r) => r.json())
       .then((data: BackupLine[]) => {
@@ -47,13 +111,14 @@ export default function App() {
       })
       .catch(() => {});
 
-    // บัญชีที่ backup-scanner สแกนพบ
     fetch("/api/backup-accounts")
       .then((r) => r.json())
       .then((data: { main: BackupAccount[]; deposit: BackupAccount[]; pending: BackupAccount[] }) => {
-        setBackupAccountsMain(data.main ?? []);
-        setBackupAccountsDeposit(data.deposit ?? []);
-        setBackupAccountsPending(data.pending ?? []);
+        if (data && typeof data === "object") {
+          setBackupAccountsMain(data.main ?? []);
+          setBackupAccountsDeposit(data.deposit ?? []);
+          setBackupAccountsPending(data.pending ?? []);
+        }
       })
       .catch(() => {});
   }, []);
@@ -85,14 +150,17 @@ export default function App() {
         body: JSON.stringify({ name: trimmed, url: url.trim() }),
       });
       const site: Website = await res.json();
-      setWebsites((prev) => [...prev, site]);
+      setWebsites((prev) => {
+        if (prev.find((w) => w.id === site.id)) return prev;
+        return [...prev, site];
+      });
     } catch {}
   };
 
   const handleRemoveWebsite = async (id: string) => {
-    try { await fetch(`/api/websites/${id}`, { method: "DELETE" }); } catch {}
     setWebsites((prev) => prev.filter((w) => w.id !== id));
     setLines((prev) => prev.filter((l) => l.websiteId !== id));
+    try { await fetch(`/api/websites/${id}`, { method: "DELETE" }); } catch {}
   };
 
   const handleReorderWebsites = async (orderedIds: string[]) => {
@@ -127,38 +195,37 @@ export default function App() {
 
   // ── Backup pool handlers ────────────────────────────────────────────────────
 
-  /** เพิ่มกลุ่มสำรอง → บันทึกผ่าน API (backup-scanner จะสแกนในรอบถัดไป) */
   const handleAddBackup = async (url: string, role: BackupLineRole) => {
     try {
-      const res  = await fetch("/api/backup-groups", {
+      const res   = await fetch("/api/backup-groups", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url, role }),
       });
       const group: BackupLine = await res.json();
       setBackupLines((prev) => {
-        // ป้องกัน duplicate
         if (prev.find((l) => l.id === group.id)) return prev;
         return [...prev, group];
       });
     } catch {}
   };
 
-  /** ลบกลุ่มสำรอง */
   const handleRemoveBackup = async (id: string) => {
     setBackupLines((prev) => prev.filter((l) => l.id !== id));
+    // ลบ backup accounts ที่สแกนมาจากกลุ่มนี้ออกจาก UI ด้วย
+    setBackupAccountsMain((prev)    => prev.filter((a) => a.groupId !== id));
+    setBackupAccountsDeposit((prev) => prev.filter((a) => a.groupId !== id));
+    setBackupAccountsPending((prev) => prev.filter((a) => a.groupId !== id));
     try { await fetch(`/api/backup-groups/${id}`, { method: "DELETE" }); } catch {}
   };
 
-  /** ลบบัญชีสำรองออกจาก pool */
   const handleRemoveBackupAccount = async (id: string) => {
-    setBackupAccountsMain((prev) => prev.filter((a) => a.id !== id));
+    setBackupAccountsMain((prev)    => prev.filter((a) => a.id !== id));
     setBackupAccountsDeposit((prev) => prev.filter((a) => a.id !== id));
     setBackupAccountsPending((prev) => prev.filter((a) => a.id !== id));
     try { await fetch(`/api/backup-accounts/${id}`, { method: "DELETE" }); } catch {}
   };
 
-  /** ยืนยันบัญชี pending → กำหนดเว็บแล้วย้ายไป main/deposit */
   const handleConfirmBackupAccount = async (
     id: string,
     websiteId: string,

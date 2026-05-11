@@ -14,6 +14,21 @@ type BackupGroupRecord = {
   addedAt: string;
 };
 
+type BackupAccount = {
+  id: string;
+  groupId: string;
+  websiteId: string | null;
+  websiteName: string | null;
+  confirmed: boolean;
+  [key: string]: unknown;
+};
+
+const ACCOUNT_FILES = {
+  main:    path.join(dataDir, "backup-accounts-main.json"),
+  deposit: path.join(dataDir, "backup-accounts-deposit.json"),
+  pending: path.join(dataDir, "backup-accounts-pending.json"),
+} as const;
+
 function readGroups(): BackupGroupRecord[] {
   try {
     if (!fs.existsSync(filePath)) return [];
@@ -26,6 +41,20 @@ function readGroups(): BackupGroupRecord[] {
 function writeGroups(data: BackupGroupRecord[]) {
   if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
   fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+}
+
+/** ลบ backup accounts ทุกตัวที่มาจากกลุ่มนี้ ออกจากทุก section */
+function removeAccountsByGroupId(groupId: string) {
+  for (const [, filePath] of Object.entries(ACCOUNT_FILES)) {
+    try {
+      if (!fs.existsSync(filePath)) continue;
+      const data: BackupAccount[] = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+      const filtered = data.filter((a) => a.groupId !== groupId);
+      fs.writeFileSync(filePath, JSON.stringify(filtered, null, 2));
+    } catch {
+      // ignore
+    }
+  }
 }
 
 router.get("/backup-groups", (_req, res) => {
@@ -56,8 +85,17 @@ router.post("/backup-groups", (req, res) => {
 
 router.delete("/backup-groups/:id", (req, res) => {
   const { id } = req.params;
-  const data = readGroups().filter((g) => g.id !== id);
-  writeGroups(data);
+  const all = readGroups();
+  const target = all.find((g) => g.id === id);
+
+  // ลบกลุ่มออก
+  writeGroups(all.filter((g) => g.id !== id));
+
+  // ลบ backup accounts ทุกตัวที่สแกนมาจากกลุ่มนี้
+  if (target) {
+    removeAccountsByGroupId(id);
+  }
+
   res.json({ ok: true });
 });
 

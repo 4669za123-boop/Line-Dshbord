@@ -12,10 +12,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 BANGKOK_TZ = timezone(timedelta(hours=7))
 
-WEBHOOK_URL = os.environ.get(
-    "DISCORD_WEBHOOK_URL",
-    "https://discord.com/api/webhooks/1500401729387364524/zFTtXlU1J5L6bObpjsT9cQsNdFA-jkNQYlYfYzEP--SOk0OU1Q6R5RVDbwZfXsTPsfiJ"
-)
+WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK_URL", "")
 
 WEBSITES_FILE = "data/websites.json"
 DATA_FILE = "data/lines.json"
@@ -170,6 +167,9 @@ def get_unread(driver):
 
 
 def send(text):
+    if not WEBHOOK_URL:
+        print("⚠️  DISCORD_WEBHOOK_URL ไม่ได้ตั้งค่า — ข้ามการส่ง Discord")
+        return
     try:
         requests.post(WEBHOOK_URL, json={"content": text}, timeout=10)
         print("✅ ส่ง Discord สำเร็จ")

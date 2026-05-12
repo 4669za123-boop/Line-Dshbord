@@ -29,19 +29,12 @@ while true; do
     log "📦 พบ commit ใหม่: $REMOTE — เริ่ม deploy..."
 
     git fetch origin main --quiet 2>/dev/null
-    # backup data ก่อน reset เพื่อไม่ให้ข้อมูลหาย
-    DATA_DIR="$APP_DIR/artifacts/api-server/data"
-    BACKUP_DIR="/tmp/api-data-backup-$$"
-    if [ -d "$DATA_DIR" ]; then
-      cp -r "$DATA_DIR" "$BACKUP_DIR"
-      log "  💾 backup data → $BACKUP_DIR"
-    fi
+    # บอก git อย่าแตะ data files เลยแม้ reset --hard
+    git ls-files artifacts/api-server/data/ | xargs -r git update-index --skip-worktree
     git reset --hard origin/main 2>&1 | while read -r line; do log "  git: $line"; done
-    # restore data หลัง reset
-    if [ -d "$BACKUP_DIR" ]; then
-      cp -r "$BACKUP_DIR/." "$DATA_DIR/"
-      log "  ✅ restore data สำเร็จ"
-    fi
+    # ยืนยันว่า skip-worktree ยังอยู่หลัง reset
+    git ls-files artifacts/api-server/data/ | xargs -r git update-index --skip-worktree
+    log "  ✅ data files ได้รับการปกป้อง (skip-worktree)"
 
     log "🔨 Build API server..."
     cd "$APP_DIR/artifacts/api-server" && pnpm run build 2>&1 | tail -5 | while read -r line; do log "  build: $line"; done

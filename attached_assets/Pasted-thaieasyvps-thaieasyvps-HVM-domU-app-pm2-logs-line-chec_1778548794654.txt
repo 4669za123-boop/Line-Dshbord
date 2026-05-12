@@ -1,0 +1,129 @@
+thaieasyvps@thaieasyvps-HVM-domU:/app$ pm2 logs line-checker --lines 60 --nostream
+
+
+[TAILING] Tailing last 60 lines for [line-checker] process (change the value with --lines option)
+/home/thaieasyvps/.pm2/logs/line-checker-error.log last 60 lines:
+2|line-che | Traceback (most recent call last):
+2|line-che |   File "/app/artifacts/api-server/checker.py", line 262, in <module>
+2|line-che |     main()
+2|line-che |   File "/app/artifacts/api-server/checker.py", line 258, in main
+2|line-che |     time.sleep(CHECK_INTERVAL)
+2|line-che | KeyboardInterrupt
+2|line-che | /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+2|line-che |   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+2|line-che | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+2|line-che |   warnings.warn(
+2|line-che | Traceback (most recent call last):
+2|line-che |   File "/app/artifacts/api-server/checker.py", line 262, in <module>
+2|line-che |     if data.get("replacements", 0) > 0:
+2|line-che |   File "/app/artifacts/api-server/checker.py", line 254, in main
+2|line-che |     except Exception:
+2|line-che |   File "/app/artifacts/api-server/checker.py", line 177, in run_check
+2|line-che |     driver   = connect()
+2|line-che |   File "/app/artifacts/api-server/checker.py", line 88, in connect
+2|line-che |     driver = webdriver.Chrome(service=service, options=options)
+2|line-che |   File "/usr/local/lib/python3.10/dist-packages/selenium/webdriver/chrome/webdriver.py", line 45, in __init__
+2|line-che |     super().__init__(
+2|line-che |   File "/usr/local/lib/python3.10/dist-packages/selenium/webdriver/chromium/webdriver.py", line 66, in __init__
+2|line-che |     super().__init__(command_executor=executor, options=self.options)
+2|line-che |   File "/usr/local/lib/python3.10/dist-packages/selenium/webdriver/common/webdriver.py", line 25, in __init__
+2|line-che |     super().__init__(*args, **kwargs)
+2|line-che |   File "/usr/local/lib/python3.10/dist-packages/selenium/webdriver/remote/webdriver.py", line 274, in __init__
+2|line-che |     self.start_session(capabilities)
+2|line-che |   File "/usr/local/lib/python3.10/dist-packages/selenium/webdriver/remote/webdriver.py", line 370, in start_session
+2|line-che |     response = self.execute(Command.NEW_SESSION, caps)["value"]
+2|line-che |   File "/usr/local/lib/python3.10/dist-packages/selenium/webdriver/remote/webdriver.py", line 447, in execute
+2|line-che |     response = cast(RemoteConnection, self.command_executor).execute(driver_command, params)
+2|line-che |   File "/usr/local/lib/python3.10/dist-packages/selenium/webdriver/remote/remote_connection.py", line 407, in execute
+2|line-che |     return self._request(command_info[0], url, body=data)
+2|line-che |   File "/usr/local/lib/python3.10/dist-packages/selenium/webdriver/remote/remote_connection.py", line 431, in _request
+2|line-che |     response = self._conn.request(method, url, body=body, headers=headers, timeout=self._client_config.timeout)
+2|line-che |   File "/usr/local/lib/python3.10/dist-packages/urllib3/_request_methods.py", line 143, in request
+2|line-che |     return self.request_encode_body(
+2|line-che |   File "/usr/local/lib/python3.10/dist-packages/urllib3/_request_methods.py", line 278, in request_encode_body
+2|line-che |     return self.urlopen(method, url, **extra_kw)
+2|line-che |   File "/usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py", line 457, in urlopen
+2|line-che |     response = conn.urlopen(method, u.request_uri, **kw)
+2|line-che |   File "/usr/local/lib/python3.10/dist-packages/urllib3/connectionpool.py", line 788, in urlopen
+2|line-che |     response = self._make_request(
+2|line-che |   File "/usr/local/lib/python3.10/dist-packages/urllib3/connectionpool.py", line 534, in _make_request
+2|line-che |     response = conn.getresponse()
+2|line-che |   File "/usr/local/lib/python3.10/dist-packages/urllib3/connection.py", line 571, in getresponse
+2|line-che |     httplib_response = super().getresponse()
+2|line-che |   File "/usr/lib/python3.10/http/client.py", line 1395, in getresponse
+2|line-che |     response.begin()
+2|line-che |   File "/usr/lib/python3.10/http/client.py", line 323, in begin
+2|line-che |     version, status, reason = self._read_status()
+2|line-che |   File "/usr/lib/python3.10/http/client.py", line 284, in _read_status
+2|line-che |     line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+2|line-che |   File "/usr/lib/python3.10/socket.py", line 705, in readinto
+2|line-che |     return self._sock.recv_into(b)
+2|line-che | KeyboardInterrupt
+2|line-che | /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+2|line-che |   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+2|line-che | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+2|line-che |   warnings.warn(
+
+/home/thaieasyvps/.pm2/logs/line-checker-out.log last 60 lines:
+2|line-che | from disconnected: not connected to DevTools
+2|line-che |   (Session info: chrome=148.0.7778.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#invalidsessionidexception
+2|line-che | Stacktrace:
+2|line-che | #0 0x616cf671e86a <unknown>
+2|line-che | #1 0x616cf61198a9 <unknown>
+2|line-che | #2 0x616cf60ff623 <unknown>
+2|line-che | #3 0x616cf6128be6 <unknown>
+2|line-che | #4 0x616cf619bd80 <unknown>
+2|line-che | #5 0x616cf61b58e8 <unknown>
+2|line-che | #6 0x616cf61614cf <unknown>
+2|line-che | #7 0x616cf6162291 <unknown>
+2|line-che | #8 0x616cf66e472b <unknown>
+2|line-che | #9 0x616cf66e763d <unknown>
+2|line-che | #10 0x616cf66d1688 <unknown>
+2|line-che | #11 0x616cf66e81d0 <unknown>
+2|line-che | #12 0x616cf66b8130 <unknown>
+2|line-che | #13 0x616cf670b778 <unknown>
+2|line-che | #14 0x616cf670b915 <unknown>
+2|line-che | #15 0x616cf671d2ce <unknown>
+2|line-che | #16 0x74b9aa094ac3 <unknown>
+2|line-che | 
+2|line-che |    ✅ 545ypuvj (545ypuvj) → ออนไลน์
+2|line-che |    ⚠️  Chrome crash ตอนตรวจ 391xrgqe — restart
+2|line-che | 🔄 Restart Chrome...
+2|line-che | ✅ ใช้ Chrome profile: /home/thaieasyvps/.line-chrome-profile-v2
+2|line-che | ✅ ใช้ Chrome: /usr/bin/google-chrome
+2|line-che | ✅ ใช้ chromedriver: /tmp/chromedriver-linux64/chromedriver
+2|line-che | 
+2|line-che | 🌐 เข้ากลุ่ม: BT678 → https://manager.line.biz/groups/293858/setting
+2|line-che |    พบ 2 account links
+2|line-che |    ✅ BT678🌺 (782jrvos) → ออนไลน์
+2|line-che |    ✅ 🌾BT678📕ฝาก (944pjpwn) → ออนไลน์
+2|line-che | 
+2|line-che | ✅ อัปเดต 17 บัญชี (200) — active=18, suspended=0
+2|line-che | 
+2|line-che | ✅ CHECKER รอบนี้เสร็จสมบูรณ์
+2|line-che | 
+2|line-che | ⏳ รอ 60 วินาทีก่อนรอบถัดไป...
+2|line-che | 
+2|line-che | =======================================================
+2|line-che | 🔍 CHECKER: เริ่มรอบตรวจสถานะกลุ่มหลัก
+2|line-che | =======================================================
+2|line-che | ✅ WEBSITES: 10 รายการ
+2|line-che | ✅ ใช้ Chrome profile: /home/thaieasyvps/.line-chrome-profile-v2
+2|line-che | ✅ ใช้ Chrome: /usr/bin/google-chrome
+2|line-che | ✅ ใช้ chromedriver: /tmp/chromedriver-linux64/chromedriver
+2|line-che | 
+2|line-che | 🌐 เข้ากลุ่ม: Jun88 → https://manager.line.biz/groups/284033/setting
+2|line-che |    พบ 2 account links
+2|line-che |    ✅ JUN88 ⚡️J Main (598evuml) → ออนไลน์
+2|line-che |    ✅ Jun88 F💤 (777zyhzk) → ออนไลน์
+2|line-che | 
+2|line-che | 🌐 เข้ากลุ่ม: MK8 → https://manager.line.biz/groups/274572/setting
+2|line-che |    พบ 2 account links
+2|line-che |    ✅ 🧸MK8🧸Deposit (408wnqlw) → ออนไลน์
+2|line-che |    ✅ MK8 ADMIN💯 (662xbdet) → ออนไลน์
+2|line-che | 
+2|line-che | 🌐 เข้ากลุ่ม: F168 → https://manager.line.biz/groups/274574/setting
+2|line-che |    พบ 2 account links
+2|line-che |    ✅ F🏆168 (235npgcy) → ออนไลน์
+
+thaieasyvps@thaieasyvps-HVM-domU:/app$ 

@@ -28,7 +28,8 @@ while true; do
   if [ "$LOCAL" != "$REMOTE" ]; then
     log "📦 พบ commit ใหม่: $REMOTE — เริ่ม deploy..."
 
-    git pull origin main --quiet 2>&1 | while read -r line; do log "  git: $line"; done
+    git fetch origin main --quiet 2>/dev/null
+    git reset --hard origin/main 2>&1 | while read -r line; do log "  git: $line"; done
 
     log "🔨 Build API server..."
     cd "$APP_DIR/artifacts/api-server" && pnpm run build 2>&1 | tail -5 | while read -r line; do log "  build: $line"; done

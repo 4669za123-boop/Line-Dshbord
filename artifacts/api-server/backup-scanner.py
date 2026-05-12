@@ -331,7 +331,17 @@ def run_scan():
                     line_id = extract_id_from_url(acc_url)
                     if not line_id:
                         continue
-                    line_name = acc_name if acc_name else line_id
+                    # ถ้าชื่อว่างหรือเป็น generic name → เปิดหน้า account จริงเพื่อดึงชื่อ
+                    bad = {"line official account manager", "line", ""}
+                    if not acc_name or acc_name.lower() in bad or "LINE Official" in acc_name:
+                        try:
+                            driver.get(acc_url)
+                            time.sleep(2)
+                            acc_name = get_account_name(driver, "")
+                            # กลับไปหน้า group (ไม่ต้อง scroll ใหม่ เพราะเก็บ acc_dict แล้ว)
+                        except Exception as e:
+                            print(f"   ⚠️  fetch account name: {e}")
+                    line_name = acc_name if acc_name and acc_name.lower() not in bad else line_id
                     print(f"   ✅ {line_name} (@{line_id})")
 
                     found.append({

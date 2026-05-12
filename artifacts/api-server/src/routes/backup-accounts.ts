@@ -233,10 +233,18 @@ router.post("/backup-accounts", (req, res) => {
           ? (resolvedAcc.role as "main" | "deposit")
           : "pending";
 
+        const BAD_NAMES = new Set(["line official account manager", "line", ""]);
+        const isBad = (n: string) => !n || BAD_NAMES.has(n.toLowerCase()) || n.toLowerCase().includes("line official");
+        const bestName = !isBad(resolvedAcc.lineName)
+          ? resolvedAcc.lineName
+          : !isBad(existing.lineName)
+            ? existing.lineName
+            : resolvedAcc.lineName || existing.lineName;
+
         const updated: BackupAccount = {
           ...existing,
           ...keepWebsite,
-          lineName:      resolvedAcc.lineName || existing.lineName,
+          lineName:      bestName,
           lineAccountId: resolvedAcc.lineAccountId || existing.lineAccountId,
           scannedAt:     new Date().toISOString(),
         };

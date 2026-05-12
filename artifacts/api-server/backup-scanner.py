@@ -27,7 +27,7 @@ from selenium.common.exceptions import (
 BACKUP_GROUPS_FILE  = "data/backup-groups.json"
 API_BASE            = os.environ.get("API_BASE", "http://localhost:3000/api")
 BACKUP_ACCOUNTS_URL = f"{API_BASE}/backup-accounts"
-CHROME_PROFILE_DIR  = os.environ.get("CHROME_PROFILE_DIR", "/home/thaieasyvps/.line-chrome-profile-v2")
+CHROME_PROFILE_DIR  = os.environ.get("CHROME_PROFILE_DIR", "/home/thaieasyvps/.line-chrome-profile-backup")
 SCAN_INTERVAL       = int(os.environ.get("BACKUP_SCAN_INTERVAL", "120"))  # ทุก 2 นาที
 MAX_PAGES           = int(os.environ.get("MAX_PAGES", "200"))              # safety cap
 

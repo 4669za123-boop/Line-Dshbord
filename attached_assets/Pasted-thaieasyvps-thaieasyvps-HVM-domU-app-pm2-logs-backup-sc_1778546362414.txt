@@ -1,0 +1,105 @@
+thaieasyvps@thaieasyvps-HVM-domU:/app$ pm2 logs backup-scanner --lines 50 --nostream
+[TAILING] Tailing last 50 lines for [backup-scanner] process (change the value with --lines option)
+/home/thaieasyvps/.pm2/logs/backup-scanner-error.log last 50 lines:
+3|backup-s | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+3|backup-s |   warnings.warn(
+3|backup-s | Traceback (most recent call last):
+3|backup-s |   File "/app/artifacts/api-server/backup-scanner.py", line 363, in <module>
+3|backup-s |     
+3|backup-s |   File "/app/artifacts/api-server/backup-scanner.py", line 359, in main
+3|backup-s |     except Exception as e:
+3|backup-s | KeyboardInterrupt
+3|backup-s | /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+3|backup-s |   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+3|backup-s | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+3|backup-s |   warnings.warn(
+3|backup-s | Traceback (most recent call last):
+3|backup-s |   File "/app/artifacts/api-server/backup-scanner.py", line 379, in <module>
+3|backup-s |     main()
+3|backup-s |   File "/app/artifacts/api-server/backup-scanner.py", line 371, in main
+3|backup-s |     run_scan()
+3|backup-s |   File "/app/artifacts/api-server/backup-scanner.py", line 328, in run_scan
+3|backup-s |     driver.get(acc_url)
+3|backup-s |   File "/usr/local/lib/python3.10/dist-packages/selenium/webdriver/remote/webdriver.py", line 470, in get
+3|backup-s |     self.execute(Command.GET, {"url": url})
+3|backup-s |   File "/usr/local/lib/python3.10/dist-packages/selenium/webdriver/remote/webdriver.py", line 447, in execute
+3|backup-s |     response = cast(RemoteConnection, self.command_executor).execute(driver_command, params)
+3|backup-s |   File "/usr/local/lib/python3.10/dist-packages/selenium/webdriver/remote/remote_connection.py", line 407, in execute
+3|backup-s |     return self._request(command_info[0], url, body=data)
+3|backup-s |   File "/usr/local/lib/python3.10/dist-packages/selenium/webdriver/remote/remote_connection.py", line 431, in _request
+3|backup-s |     response = self._conn.request(method, url, body=body, headers=headers, timeout=self._client_config.timeout)
+3|backup-s |   File "/usr/local/lib/python3.10/dist-packages/urllib3/_request_methods.py", line 143, in request
+3|backup-s |     return self.request_encode_body(
+3|backup-s |   File "/usr/local/lib/python3.10/dist-packages/urllib3/_request_methods.py", line 278, in request_encode_body
+3|backup-s |     return self.urlopen(method, url, **extra_kw)
+3|backup-s |   File "/usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py", line 457, in urlopen
+3|backup-s |     response = conn.urlopen(method, u.request_uri, **kw)
+3|backup-s |   File "/usr/local/lib/python3.10/dist-packages/urllib3/connectionpool.py", line 788, in urlopen
+3|backup-s |     response = self._make_request(
+3|backup-s |   File "/usr/local/lib/python3.10/dist-packages/urllib3/connectionpool.py", line 534, in _make_request
+3|backup-s |     response = conn.getresponse()
+3|backup-s |   File "/usr/local/lib/python3.10/dist-packages/urllib3/connection.py", line 571, in getresponse
+3|backup-s |     httplib_response = super().getresponse()
+3|backup-s |   File "/usr/lib/python3.10/http/client.py", line 1395, in getresponse
+3|backup-s |     response.begin()
+3|backup-s |   File "/usr/lib/python3.10/http/client.py", line 323, in begin
+3|backup-s |     version, status, reason = self._read_status()
+3|backup-s |   File "/usr/lib/python3.10/http/client.py", line 284, in _read_status
+3|backup-s |     line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+3|backup-s |   File "/usr/lib/python3.10/socket.py", line 705, in readinto
+3|backup-s |     return self._sock.recv_into(b)
+3|backup-s | KeyboardInterrupt
+3|backup-s | /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+3|backup-s |   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+
+/home/thaieasyvps/.pm2/logs/backup-scanner-out.log last 50 lines:
+3|backup-s |    ✅ LINE Official Account Manager (@456voibi)
+3|backup-s |    ✅ LINE Official Account Manager (@797jvgyk)
+3|backup-s |    ✅ LINE Official Account Manager (@529jruom)
+3|backup-s | ❌ POST /api/backup-accounts ล้มเหลว: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /api/backup-accounts (Caused by NewConnectionError("HTTPConnection(host='localhost', port=3000): Failed to establish a new connection: [Errno 111] Connection refused"))
+3|backup-s | 
+3|backup-s | ✅ BACKUP-SCANNER รอบนี้เสร็จสมบูรณ์
+3|backup-s | 
+3|backup-s | ⏳ รอ 120 วินาทีก่อนรอบถัดไป...
+3|backup-s | 
+3|backup-s | =======================================================
+3|backup-s | 📦 BACKUP-SCANNER: เริ่มสแกนกลุ่มสำรอง
+3|backup-s | =======================================================
+3|backup-s | ✅ BACKUP GROUPS: 2 รายการ
+3|backup-s | ✅ ใช้ Chrome profile: /home/thaieasyvps/.line-chrome-profile-backup
+3|backup-s | ✅ ใช้ Chrome: /usr/bin/google-chrome
+3|backup-s | ✅ ใช้ chromedriver: /tmp/chromedriver-linux64/chromedriver
+3|backup-s | 
+3|backup-s | 📂 [ไลน์หลัก] https://manager.line.biz/groups/284342/setting
+3|backup-s |    📄 หน้า 1 — พบ 10 account
+3|backup-s |    ⚠️  URL ซ้ำ → หมดหน้าแล้ว (หน้า 1)
+3|backup-s |    📦 รวมทั้งหมด 10 account จาก 2 หน้า
+3|backup-s |    ✅ LINE Official Account Manager (@301tcddr)
+3|backup-s |    ✅ LINE Official Account Manager (@318cdpxf)
+3|backup-s |    ✅ LINE Official Account Manager (@778vbcqy)
+3|backup-s | 📦 BACKUP-SCANNER START (สแกนทุก 120 วินาที)
+3|backup-s | 
+3|backup-s | =======================================================
+3|backup-s | 📦 BACKUP-SCANNER: เริ่มสแกนกลุ่มสำรอง
+3|backup-s | =======================================================
+3|backup-s | ✅ BACKUP GROUPS: 2 รายการ
+3|backup-s | ✅ ใช้ Chrome profile: /home/thaieasyvps/.line-chrome-profile-backup
+3|backup-s | ✅ ใช้ Chrome: /usr/bin/google-chrome
+3|backup-s | ✅ ใช้ chromedriver: /tmp/chromedriver-linux64/chromedriver
+3|backup-s | 
+3|backup-s | 📂 [ไลน์หลัก] https://manager.line.biz/groups/284342/setting
+3|backup-s |    📄 หน้า 1 — พบ 10 account
+3|backup-s |    ⚠️  URL ซ้ำ → หมดหน้าแล้ว (หน้า 1)
+3|backup-s |    📦 รวมทั้งหมด 10 account จาก 2 หน้า
+3|backup-s |    ✅ LINE Official Account Manager (@113fusuz)
+3|backup-s |    ✅ LINE Official Account Manager (@603giiwv)
+3|backup-s |    ✅ LINE Official Account Manager (@745ntxpl)
+3|backup-s |    ✅ LINE Official Account Manager (@768bbnix)
+3|backup-s |    ✅ LINE Official Account Manager (@301tcddr)
+3|backup-s |    ✅ LINE Official Account Manager (@738syvvo)
+3|backup-s |    ✅ LINE Official Account Manager (@501xqucr)
+3|backup-s |    ✅ LINE Official Account Manager (@778vbcqy)
+3|backup-s |    ✅ LINE Official Account Manager (@318cdpxf)
+3|backup-s |    ✅ LINE Official Account Manager (@602mfefw)
+3|backup-s | 
+3|backup-s | 📂 [ไลน์ฝากถอน] https://manager.line.biz/groups/294265/setting

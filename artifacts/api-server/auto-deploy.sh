@@ -29,12 +29,33 @@ while true; do
     log "📦 พบ commit ใหม่: $REMOTE — เริ่ม deploy..."
 
     git fetch origin main --quiet 2>/dev/null
-    # บอก git อย่าแตะ data files เลยแม้ reset --hard
-    git ls-files artifacts/api-server/data/ | xargs -r git update-index --skip-worktree
+
+    # ── 1. backup data files ก่อนทำอะไร ──────────────────────────────────────
+    DATA_SRC="$APP_DIR/artifacts/api-server/data"
+    DATA_BACKUP=$(mktemp -d)
+    if [ -d "$DATA_SRC" ]; then
+      cp -r "$DATA_SRC/." "$DATA_BACKUP/" 2>/dev/null || true
+      log "  💾 backup data → $DATA_BACKUP"
+    fi
+
+    # ── 2. clear data files จาก index เพื่อให้ reset ผ่าน ────────────────────
+    #    skip-worktree อย่างเดียวไม่พอ ถ้า index ยัง dirty อยู่
+    git update-index --no-skip-worktree -- $(git ls-files artifacts/api-server/data/) 2>/dev/null || true
+    git checkout -- artifacts/api-server/data/ 2>/dev/null || true
+
+    # ── 3. reset ──────────────────────────────────────────────────────────────
     git reset --hard origin/main 2>&1 | while read -r line; do log "  git: $line"; done
-    # ยืนยันว่า skip-worktree ยังอยู่หลัง reset
+
+    # ── 4. restore data files ─────────────────────────────────────────────────
+    if [ -d "$DATA_BACKUP" ] && [ "$(ls -A "$DATA_BACKUP" 2>/dev/null)" ]; then
+      mkdir -p "$DATA_SRC"
+      cp -r "$DATA_BACKUP/." "$DATA_SRC/" 2>/dev/null || true
+      log "  ✅ restore data สำเร็จ"
+    fi
+
+    # ── 5. ตั้ง skip-worktree ป้องกัน deploy ครั้งถัดไป ────────────────────────
     git ls-files artifacts/api-server/data/ | xargs -r git update-index --skip-worktree
-    log "  ✅ data files ได้รับการปกป้อง (skip-worktree)"
+    log "  🔒 skip-worktree ตั้งค่าแล้ว"
 
     log "🔨 Build API server..."
     cd "$APP_DIR/artifacts/api-server" && pnpm run build 2>&1 | tail -5 | while read -r line; do log "  build: $line"; done

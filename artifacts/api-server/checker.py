@@ -42,11 +42,8 @@ def connect():
     options.add_argument("--disable-software-rasterizer")
     options.add_argument("--disable-extensions")
     options.add_argument("--window-size=1920,1080")
-    options.add_argument("--disable-blink-features=AutomationControlled")
     options.add_argument("--password-store=basic")
     options.add_argument("--memory-pressure-off")
-    options.add_experimental_option("excludeSwitches", ["enable-automation"])
-    options.add_experimental_option("useAutomationExtension", False)
 
     if os.path.exists(CHROME_PROFILE_DIR):
         # ลบ singleton lock ก่อนเสมอ เพื่อไม่ให้ชนกับ Chrome อื่น
@@ -79,7 +76,6 @@ def connect():
     # ลอง chromedriver ที่ติดตั้งไว้ก่อน
     chromedriver_candidates = [
         "/tmp/chromedriver-linux64/chromedriver",
-        "/home/thaieasyvps/chromedriver",
         "/usr/local/bin/chromedriver",
         "/usr/bin/chromedriver",
     ]

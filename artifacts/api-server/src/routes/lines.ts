@@ -37,6 +37,11 @@ function readWebsites(): Website[] {
   }
 }
 
+function writeDiscovered(data: Record<string, StoredLine>) {
+  if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
+  fs.writeFileSync(discoveredFilePath, JSON.stringify(data, null, 2));
+}
+
 // GET /api/lines — คืนรายการ LINE ทั้งหมด (map field ให้ตรงกับ frontend)
 router.get("/lines", (_req, res) => {
   const discovered = readDiscovered();
@@ -70,6 +75,19 @@ router.get("/lines", (_req, res) => {
   });
 
   res.json(lines);
+});
+
+// DELETE /api/discovered-lines/:id — ลบ LINE account ออกจาก discovered-lines.json
+router.delete("/discovered-lines/:id", (req, res) => {
+  const { id } = req.params;
+  const discovered = readDiscovered();
+  if (!discovered[id]) {
+    res.json({ ok: false, error: "not found" });
+    return;
+  }
+  delete discovered[id];
+  writeDiscovered(discovered);
+  res.json({ ok: true });
 });
 
 export default router;

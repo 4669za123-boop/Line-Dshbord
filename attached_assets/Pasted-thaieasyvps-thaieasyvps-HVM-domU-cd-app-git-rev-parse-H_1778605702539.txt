@@ -1,0 +1,54 @@
+thaieasyvps@thaieasyvps-HVM-domU:~$ cd /app && git rev-parse HEAD
+
+0d23e21d1914237249728a127226f01a9b581515
+thaieasyvps@thaieasyvps-HVM-domU:/app$ cd /app
+thaieasyvps@thaieasyvps-HVM-domU:/app$ cp -r artifacts/api-server/data/ /tmp/data-fix-backup/
+thaieasyvps@thaieasyvps-HVM-domU:/app$ git update-index --no-skip-worktree -- $(git ls-files artifacts/api-server/data/)
+git checkout -- artifacts/api-server/data/
+thaieasyvps@thaieasyvps-HVM-domU:/app$ git reset --hard origin/main
+HEAD is now at c772550 Prevent automatic addition of new line accounts
+thaieasyvps@thaieasyvps-HVM-domU:/app$ cp -r /tmp/data-fix-backup/. artifacts/api-server/data/
+thaieasyvps@thaieasyvps-HVM-domU:/app$ git ls-files artifacts/api-server/data/ | xargs -r git update-index --skip-worktree
+thaieasyvps@thaieasyvps-HVM-domU:/app$ cd /app/artifacts/api-server && pnpm run build
+cd /app/artifacts/line-dashboard && pnpm run build
+pm2 restart line-dashboard-api
+
+> @workspace/api-server@0.0.0 build /app/artifacts/api-server
+> node ./build.mjs
+
+
+  dist/index.mjs                       1.4mb ⚠️
+  dist/pino-worker.mjs               153.4kb
+  dist/pino-file.mjs                 142.0kb
+  dist/pino-pretty.mjs               114.6kb
+  dist/thread-stream-worker.mjs        7.3kb
+  dist/index.mjs.map                   2.2mb
+  dist/pino-worker.mjs.map           256.9kb
+  dist/pino-file.mjs.map             229.0kb
+  dist/pino-pretty.mjs.map           203.9kb
+  dist/thread-stream-worker.mjs.map   12.0kb
+
+⚡ Done in 1229ms
+
+> @workspace/line-dashboard@0.0.0 build /app/artifacts/line-dashboard
+> vite build --config vite.config.ts
+
+vite v7.3.2 building client environment for production...
+src/components/ui/select.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+src/components/ui/dialog.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.
+✓ 1758 modules transformed.
+dist/public/index.html                   1.12 kB │ gzip:   0.58 kB
+dist/public/assets/index-dyWKfnqJ.css  143.32 kB │ gzip:  21.36 kB
+dist/public/assets/index-Du6XMHTc.js   362.51 kB │ gzip: 112.90 kB
+✓ built in 43.08s
+Use --update-env to update environment variables
+[PM2] Applying action restartProcessId on app [line-dashboard-api](ids: [ 0 ])
+[PM2] [line-dashboard-api](0) ✓
+┌────┬────────────────────┬──────────┬──────┬───────────┬──────────┬──────────┐
+│ id │ name               │ mode     │ ↺    │ status    │ cpu      │ memory   │
+├────┼────────────────────┼──────────┼──────┼───────────┼──────────┼──────────┤
+│ 4  │ auto-deploy        │ fork     │ 3    │ online    │ 0%       │ 3.3mb    │
+│ 3  │ backup-scanner     │ fork     │ 6    │ online    │ 0%       │ 29.8mb   │
+│ 2  │ line-checker       │ fork     │ 6    │ online    │ 2.3%     │ 34.6mb   │
+│ 0  │ line-dashboard-api │ fork     │ 57   │ online    │ 0%       │ 19.0mb   │
+└────┴────────────────────┴──────────┴──────┴───────────┴──────────┴──────────┘

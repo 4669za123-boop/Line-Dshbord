@@ -6,6 +6,7 @@ const router = Router();
 const dataDir = path.join(process.cwd(), "data");
 const filePath = path.join(dataDir, "discovered-lines.json");
 const suspendedFilePath = path.join(dataDir, "suspended-lines.json");
+const websitesFilePath = path.join(dataDir, "websites.json");
 
 // ไฟล์ backup pool
 const BACKUP_FILES = {
@@ -51,6 +52,27 @@ type BackupAccount = {
 // ──────────────────────────────────────────────────────────────────────────────
 // Helpers: discovered-lines
 // ──────────────────────────────────────────────────────────────────────────────
+
+// ──────────────────────────────────────────────────────────────────────────────
+// Helpers: websites (name-based siteId fallback)
+// ──────────────────────────────────────────────────────────────────────────────
+
+type WebsiteRecord = { id: string; name: string; url?: string };
+
+function readWebsites(): WebsiteRecord[] {
+  try {
+    if (!fs.existsSync(websitesFilePath)) return [];
+    return JSON.parse(fs.readFileSync(websitesFilePath, "utf-8"));
+  } catch {
+    return [];
+  }
+}
+
+/** ถ้า siteId ว่าง → ค้นหาจากชื่อเว็บ */
+function resolveSiteId(siteId: string, siteName: string, websites: WebsiteRecord[]): string {
+  if (siteId) return siteId;
+  return websites.find((w) => w.name === siteName)?.id ?? "";
+}
 
 function readDiscovered(): Record<string, DiscoveredLine> {
   try {
@@ -162,6 +184,7 @@ router.post("/line-status", (req, res) => {
     return;
   }
 
+  const websites  = readWebsites();
   const current   = readDiscovered();
   const suspended = readSuspended();
   const suspendedIds = new Set(suspended.map((s) => s.id));
@@ -170,16 +193,20 @@ router.post("/line-status", (req, res) => {
   for (const [lineId, entry] of Object.entries(statuses)) {
     const existing = current[lineId];
 
+    // resolve siteId: ถ้าว่าง (เว็บไม่มี id field) → ค้นจากชื่อ
+    const siteId   = resolveSiteId(entry.siteId ?? existing?.siteId ?? "", entry.site, websites);
+    const siteName = entry.site;
+    const accUrl   = entry.url ?? existing?.url ?? "";
+
     // ── ไลน์โดนระงับ ────────────────────────────────────────────────────────
     if (entry.status === "suspended") {
       if (existing?.role === "main" || existing?.role === "deposit") {
-        // เก็บไว้ใน suspended
         if (!suspendedIds.has(lineId)) {
           suspended.push({
             id:          lineId,
             name:        existing.name,
             site:        existing.site,
-            siteId:      existing.siteId,
+            siteId:      existing.siteId || siteId,
             url:         existing.url,
             role:        existing.role,
             suspendedAt: new Date().toISOString(),
@@ -188,28 +215,28 @@ router.post("/line-status", (req, res) => {
         }
         delete current[lineId];
       } else {
-        // ยังไม่ได้กำหนด role → ลบทิ้ง
         delete current[lineId];
       }
       continue;
     }
 
     // ── ไลน์ปกติ: ตรวจว่าเป็นการสับเปลี่ยนจาก backup pool ────────────────
-    const accUrl    = entry.url ?? existing?.url ?? "";
-    const siteId    = entry.siteId ?? existing?.siteId ?? "";
-    const siteName  = entry.site;
     const backupHit = accUrl ? findBackupByUrl(accUrl) : null;
 
-    if (backupHit && !existing) {
-      // LINE ใหม่ที่ URL ตรงกับ backup pool → สับเปลี่ยนอัตโนมัติ
+    // trigger auto-replace เมื่อ:
+    //  - URL ตรงกับ backup pool
+    //  - และ account นั้นยังไม่มี role (ใหม่ หรือ unassigned)
+    const isUnassigned = !existing || existing.role === null;
+
+    if (backupHit && isUnassigned) {
       const backupRole = backupHit.account.role;
 
-      // หา suspended LINE ที่ตรงกับ siteId + role
+      // หา suspended LINE ที่ตรงกับ siteId + role (เพื่อ clear ออกจาก suspended)
       const suspIdx = suspended.findIndex(
-        (s) => s.siteId === siteId && s.role === backupRole,
+        (s) => (s.siteId === siteId || s.site === siteName) && s.role === backupRole,
       );
 
-      // เพิ่มเข้า discovered ด้วย role จาก backup
+      // เพิ่มเข้า discovered ด้วย role จาก backup pool
       current[lineId] = {
         id:     lineId,
         name:   entry.name ?? lineId,
@@ -224,13 +251,11 @@ router.post("/line-status", (req, res) => {
       removeBackupById(backupHit.account.id);
 
       // ลบออกจาก suspended (ถ้ามี)
-      if (suspIdx !== -1) {
-        suspended.splice(suspIdx, 1);
-      }
+      if (suspIdx !== -1) suspended.splice(suspIdx, 1);
 
       replacements++;
       console.log(
-        `🔄 AUTO-REPLACE: ${entry.name ?? lineId} เข้าแทน suspended [${backupRole}] ที่ ${siteName}`,
+        `🔄 AUTO-REPLACE: ${entry.name ?? lineId} (${backupRole}) เข้ากลุ่ม ${siteName} — ดึงจาก backup pool`,
       );
     } else {
       // LINE ปกติ — อัปเดตหรือเพิ่มใหม่ (คง role เดิมไว้)

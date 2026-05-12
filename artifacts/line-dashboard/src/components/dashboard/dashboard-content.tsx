@@ -411,18 +411,6 @@ export function DashboardContent({
                           >
                             ฝากถอน
                           </button>
-                          <button
-                            type="button"
-                            onClick={() => setRole(acc.lineId, "skip")}
-                            className={cn(
-                              "px-2 py-1 text-[11px] font-semibold rounded-lg border transition-all",
-                              role === "skip"
-                                ? "bg-muted text-muted-foreground border-border"
-                                : "bg-transparent text-muted-foreground/50 border-transparent hover:text-muted-foreground hover:border-border",
-                            )}
-                          >
-                            ข้าม
-                          </button>
                         </div>
                       </div>
                     );

@@ -1,0 +1,45 @@
+thaieasyvps@thaieasyvps-HVM-domU:/app$ pm2 logs backup-scanner --lines 20 --nostream
+[TAILING] Tailing last 20 lines for [backup-scanner] process (change the value with --lines option)
+/home/thaieasyvps/.pm2/logs/backup-scanner-error.log last 20 lines:
+3|backup-s |     main()
+3|backup-s |   File "/app/artifacts/api-server/backup-scanner.py", line 360, in main
+3|backup-s |     run_scan()
+3|backup-s |   File "/app/artifacts/api-server/backup-scanner.py", line 319, in run_scan
+3|backup-s |     time.sleep(2)
+3|backup-s | KeyboardInterrupt
+3|backup-s | /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+3|backup-s |   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+3|backup-s | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+3|backup-s |   warnings.warn(
+3|backup-s | Traceback (most recent call last):
+3|backup-s |   File "/app/artifacts/api-server/backup-scanner.py", line 368, in <module>
+3|backup-s |     print(f"📦 BACKUP-SCANNER START (สแกนทุก {SCAN_INTERVAL} วินาที)")
+3|backup-s |   File "/app/artifacts/api-server/backup-scanner.py", line 364, in main
+3|backup-s |     print("\n✅ BACKUP-SCANNER รอบนี้เสร็จสมบูรณ์")
+3|backup-s | KeyboardInterrupt
+3|backup-s | /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+3|backup-s |   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+3|backup-s | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+3|backup-s |   warnings.warn(
+
+/home/thaieasyvps/.pm2/logs/backup-scanner-out.log last 20 lines:
+3|backup-s |    ✅ 💊Jun88 ฝาก - ถอน (@590tfshp)
+3|backup-s |    ✅ Jun88🧿ฝาก&ถอน (@660zcawx)
+3|backup-s |    ✅ 🍛PG688🍛ฝาก (@699dkpuu)
+3|backup-s |    ✅ 💰PG688 Deposit💰 (@947abhxp)
+3|backup-s |    ✅ 🔋PG688🔋FF (@328tqbbi)
+3|backup-s |    ✅ PG688💦FT💦 (@218fupfa)
+3|backup-s |    ✅ NM9♥️FF (@512ztffa)
+3|backup-s |    ✅ NM9⚡️ฝาก (@981akavk)
+3|backup-s |    ✅ NM9-FT💦 (@598xiglo)
+3|backup-s |    ✅ JL69🥐ฝาก (@491gngyn)
+3|backup-s |    ✅ 🥓JL69 ฝาก🥓 (@076ztqzf)
+3|backup-s |    ✅ 🍤Vvเจ็ด2🍤ft (@699nfvus)
+3|backup-s |    ✅ Vวี72-F⛈ (@098yfhpn)
+3|backup-s |    ✅ Vv72🌺ft (@902kycwy)
+3|backup-s | 
+3|backup-s | ✅ บันทึกไลน์สำรอง 76 บัญชี → (200)
+3|backup-s | 
+3|backup-s | ✅ BACKUP-SCANNER รอบนี้เสร็จสมบูรณ์
+3|backup-s | 
+3|backup-s | ⏳ รอ 120 วินาทีก่อนรอบถัดไป...

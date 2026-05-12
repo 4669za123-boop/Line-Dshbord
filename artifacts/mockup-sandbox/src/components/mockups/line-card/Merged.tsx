@@ -25,19 +25,11 @@ export function Merged() {
 
           {/* header */}
           <div className="px-5 pt-4 pb-3.5 flex items-center justify-between border-b border-white/5">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-blue-500/15 flex items-center justify-center shrink-0">
-                <span className="text-blue-400 text-xs font-bold">J</span>
-              </div>
-              <div>
-                <p className="text-[15px] font-bold text-white leading-none">{mockData.websiteName}</p>
-                <p className="text-[10px] text-white/25 mt-0.5 font-mono">{mockData.websiteUrl}</p>
-              </div>
-            </div>
-            <button className="shrink-0 flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-medium text-destructive/50 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200">
-                <Trash2 className="h-3 w-3" />
-                ลบ
-              </button>
+            <p className="text-[15px] font-bold text-white leading-none">{mockData.websiteName}</p>
+            <button className="shrink-0 flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-medium text-red-400/50 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200">
+              <Trash2 className="h-3 w-3" />
+              ลบ
+            </button>
           </div>
 
           {/* ── ไลน์หลัก (ฟ้า) ─────────────────────── */}
@@ -97,9 +89,9 @@ export function Merged() {
                     <p className="text-[13px] font-semibold text-white/70 leading-none truncate">{l.name}</p>
                     <p className="text-[9px] text-white/15 tracking-widest mt-1 font-mono">@{l.id}</p>
                   </div>
-                  <div className="flex items-center gap-1 shrink-0">
-                    <button className="px-2 py-1 text-[10px] font-bold rounded bg-blue-500/12 text-blue-400 hover:bg-blue-500/22 transition-colors border border-blue-500/20">หลัก</button>
-                    <button className="px-2 py-1 text-[10px] font-bold rounded bg-violet-500/12 text-violet-400 hover:bg-violet-500/22 transition-colors border border-violet-500/20">ฝากถอน</button>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <button className="px-2.5 py-1 text-[11px] font-semibold rounded-md bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 transition-colors border border-blue-500/20">หลัก</button>
+                    <button className="px-2.5 py-1 text-[11px] font-semibold rounded-md bg-[#2a1a08] text-orange-400 hover:bg-orange-500/20 transition-colors border border-orange-500/40">ฝากถอน</button>
                   </div>
                 </div>
               ))}

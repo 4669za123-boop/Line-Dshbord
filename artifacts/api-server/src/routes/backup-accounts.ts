@@ -115,12 +115,27 @@ function sortByWebsite(accounts: BackupAccount[]): BackupAccount[] {
   return [...accounts].sort((a, b) => idx(a.websiteId) - idx(b.websiteId));
 }
 
+/** backfill websiteName จาก websiteId สำหรับบัญชีเก่าที่ไม่มี websiteName */
+function enrichWebsiteNames(accounts: BackupAccount[], websites: WebsiteRecord[]): BackupAccount[] {
+  const map = new Map(websites.map((w) => [w.id, w.name]));
+  return accounts.map((acc) => {
+    if (acc.websiteId && !acc.websiteName) {
+      return { ...acc, websiteName: map.get(acc.websiteId) ?? null };
+    }
+    return acc;
+  });
+}
+
 // GET /api/backup-accounts → { main, deposit, pending } เรียงตาม website order
 router.get("/backup-accounts", (_req, res) => {
+  const websites = readWebsites();
+  const main    = enrichWebsiteNames(readSection("main"),    websites);
+  const deposit = enrichWebsiteNames(readSection("deposit"), websites);
+  const pending = enrichWebsiteNames(readSection("pending"), websites);
   res.json({
-    main:    sortByWebsite(readSection("main")),
-    deposit: sortByWebsite(readSection("deposit")),
-    pending: readSection("pending"),
+    main:    sortByWebsite(main),
+    deposit: sortByWebsite(deposit),
+    pending,
   });
 });
 

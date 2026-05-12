@@ -33,6 +33,9 @@ while true; do
     log "🔨 Build API server..."
     cd "$APP_DIR/artifacts/api-server" && pnpm run build 2>&1 | tail -5 | while read -r line; do log "  build: $line"; done
 
+    log "🔨 Build frontend dashboard..."
+    cd "$APP_DIR/artifacts/line-dashboard" && pnpm run build 2>&1 | tail -5 | while read -r line; do log "  frontend: $line"; done
+
     log "🔄 Restart PM2 processes..."
     pm2 restart line-dashboard-api 2>&1 | grep -E "✓|Error" | while read -r line; do log "  pm2: $line"; done
 

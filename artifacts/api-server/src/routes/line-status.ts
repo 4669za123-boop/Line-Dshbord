@@ -257,17 +257,18 @@ router.post("/line-status", (req, res) => {
       console.log(
         `🔄 AUTO-REPLACE: ${entry.name ?? lineId} (${backupRole}) เข้ากลุ่ม ${siteName} — ดึงจาก backup pool`,
       );
-    } else {
-      // LINE ปกติ — อัปเดตหรือเพิ่มใหม่ (คง role เดิมไว้)
+    } else if (existing) {
+      // LINE ที่มีอยู่แล้ว → อัปเดต status เท่านั้น คง role เดิมไว้
       current[lineId] = {
-        id:     lineId,
-        name:   entry.name ?? existing?.name ?? lineId,
+        ...existing,
+        name:   entry.name ?? existing.name,
         status: entry.status === "normal" ? "normal" : "inactive",
         site:   siteName,
-        siteId,
-        url:    accUrl,
-        role:   existing?.role ?? null,
+        siteId: siteId || existing.siteId,
+        url:    accUrl || existing.url,
       };
+      // ถ้าไม่มีใน discovered → ข้ามไป ไม่เพิ่มอัตโนมัติ
+      // (ต้องผ่าน scan dialog เท่านั้นถึงจะเพิ่มได้)
     }
   }
 

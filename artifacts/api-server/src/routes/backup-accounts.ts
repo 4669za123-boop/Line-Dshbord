@@ -25,6 +25,8 @@ export type BackupAccount = {
   role: "main" | "deposit";
   websiteId: string | null;
   websiteName: string | null;
+  suggestedWebsiteId: string | null;
+  suggestedWebsiteName: string | null;
   confirmed: boolean;
   scannedAt: string;
 };
@@ -68,13 +70,14 @@ function getWebsiteOrder(): string[] {
 
 /**
  * ตรวจชื่อ LINE → หาว่าตรงกับเว็บไหน
- * คืน { id, name } ถ้าเจอแน่นอน 1 เว็บ, null ถ้าไม่แน่ใจ
+ * คืน { match, suggestion }
+ *   match      = { id, name } ถ้าเจอแน่นอน 1 เว็บ, null ถ้าไม่แน่ใจ
+ *   suggestion = { id, name } เว็บที่น่าจะเป็น (เลือก match แรก หรือ match ที่ยาวที่สุด)
  */
 function autoMatchWebsite(
   lineName: string,
   websites: WebsiteRecord[],
-): { id: string; name: string } | null {
-  // normalize: lowercase เฉพาะ alphanumeric + ตัวเลข
+): { match: { id: string; name: string } | null; suggestion: { id: string; name: string } | null } {
   const normalize = (s: string) =>
     s.toLowerCase().replace(/[^a-z0-9ก-๙]/gi, "");
 
@@ -86,9 +89,20 @@ function autoMatchWebsite(
     return lineNorm.includes(wNorm);
   });
 
-  // ตรงแน่นอนแค่ 1 เว็บ → assign
-  if (matches.length === 1) return { id: matches[0].id, name: matches[0].name };
-  return null;
+  if (matches.length === 1) {
+    const m = { id: matches[0].id, name: matches[0].name };
+    return { match: m, suggestion: m };
+  }
+
+  if (matches.length > 1) {
+    // เลือก suggestion = เว็บที่ชื่อยาวที่สุด (เจาะจงที่สุด)
+    const best = matches.reduce((a, b) =>
+      normalize(b.name).length > normalize(a.name).length ? b : a,
+    );
+    return { match: null, suggestion: { id: best.id, name: best.name } };
+  }
+
+  return { match: null, suggestion: null };
 }
 
 function sortByWebsite(accounts: BackupAccount[]): BackupAccount[] {
@@ -124,18 +138,22 @@ router.post("/backup-accounts", (req, res) => {
 
   for (const acc of accounts) {
     // ถ้ายังไม่มี websiteId → ลองหาจากชื่อ LINE อัตโนมัติ
-    let resolvedAcc = { ...acc };
+    let resolvedAcc = { ...acc, suggestedWebsiteId: acc.suggestedWebsiteId ?? null, suggestedWebsiteName: acc.suggestedWebsiteName ?? null };
     if (!resolvedAcc.websiteId && resolvedAcc.lineName) {
-      const matched = autoMatchWebsite(resolvedAcc.lineName, websites);
-      if (matched) {
-        resolvedAcc.websiteId   = matched.id;
-        resolvedAcc.websiteName = matched.name;
-        resolvedAcc.confirmed   = true;
+      const { match, suggestion } = autoMatchWebsite(resolvedAcc.lineName, websites);
+      if (match) {
+        resolvedAcc.websiteId             = match.id;
+        resolvedAcc.websiteName           = match.name;
+        resolvedAcc.suggestedWebsiteId    = match.id;
+        resolvedAcc.suggestedWebsiteName  = match.name;
+        resolvedAcc.confirmed             = true;
         autoAssigned++;
       } else {
-        resolvedAcc.confirmed   = false;
-        resolvedAcc.websiteId   = null;
-        resolvedAcc.websiteName = null;
+        resolvedAcc.confirmed             = false;
+        resolvedAcc.websiteId             = null;
+        resolvedAcc.websiteName           = null;
+        resolvedAcc.suggestedWebsiteId    = suggestion?.id   ?? null;
+        resolvedAcc.suggestedWebsiteName  = suggestion?.name ?? null;
         pendingCount++;
       }
     }

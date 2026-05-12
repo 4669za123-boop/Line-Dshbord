@@ -48,6 +48,8 @@ export interface BackupAccount {
   role: "main" | "deposit";
   websiteId: string | null;
   websiteName: string | null;
+  suggestedWebsiteId: string | null;
+  suggestedWebsiteName: string | null;
   confirmed: boolean;
   scannedAt: string;
 }
@@ -146,7 +148,7 @@ function AccountCard({
       <div className="pr-10 space-y-2">
         <div className="flex items-center gap-2 flex-wrap">
           {account.websiteName && (
-            <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-muted/60 text-muted-foreground ring-1 ring-border">
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-semibold bg-primary/10 text-primary ring-1 ring-primary/25">
               {account.websiteName}
             </span>
           )}
@@ -242,7 +244,7 @@ export function BackupPoolPage({
 
   const openAssign = (acc: BackupAccount) => {
     setAssigningAccount(acc);
-    setAssignWebsiteId(acc.websiteId ?? websites[0]?.id ?? "");
+    setAssignWebsiteId(acc.websiteId ?? acc.suggestedWebsiteId ?? websites[0]?.id ?? "");
     setAssignOpen(true);
   };
 

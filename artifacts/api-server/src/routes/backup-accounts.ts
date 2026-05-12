@@ -49,15 +49,46 @@ function writeSection(section: Section, data: BackupAccount[]) {
   fs.writeFileSync(FILE[section], JSON.stringify(data, null, 2));
 }
 
-/** อ่านลำดับเว็บจาก websites.json เพื่อเรียงบัญชี */
-function getWebsiteOrder(): string[] {
+type WebsiteRecord = { id: string; name: string; url?: string };
+
+/** อ่านเว็บทั้งหมด */
+function readWebsites(): WebsiteRecord[] {
   try {
     if (!fs.existsSync(WEBSITES_FILE)) return [];
-    const sites = JSON.parse(fs.readFileSync(WEBSITES_FILE, "utf-8")) as { id: string }[];
-    return sites.map((s) => s.id);
+    return JSON.parse(fs.readFileSync(WEBSITES_FILE, "utf-8"));
   } catch {
     return [];
   }
+}
+
+/** อ่านลำดับเว็บจาก websites.json เพื่อเรียงบัญชี */
+function getWebsiteOrder(): string[] {
+  return readWebsites().map((s) => s.id);
+}
+
+/**
+ * ตรวจชื่อ LINE → หาว่าตรงกับเว็บไหน
+ * คืน { id, name } ถ้าเจอแน่นอน 1 เว็บ, null ถ้าไม่แน่ใจ
+ */
+function autoMatchWebsite(
+  lineName: string,
+  websites: WebsiteRecord[],
+): { id: string; name: string } | null {
+  // normalize: lowercase เฉพาะ alphanumeric + ตัวเลข
+  const normalize = (s: string) =>
+    s.toLowerCase().replace(/[^a-z0-9ก-๙]/gi, "");
+
+  const lineNorm = normalize(lineName);
+
+  const matches = websites.filter((w) => {
+    const wNorm = normalize(w.name);
+    if (!wNorm) return false;
+    return lineNorm.includes(wNorm);
+  });
+
+  // ตรงแน่นอนแค่ 1 เว็บ → assign
+  if (matches.length === 1) return { id: matches[0].id, name: matches[0].name };
+  return null;
 }
 
 function sortByWebsite(accounts: BackupAccount[]): BackupAccount[] {
@@ -87,29 +118,80 @@ router.post("/backup-accounts", (req, res) => {
     return;
   }
 
+  const websites = readWebsites();
+  let autoAssigned = 0;
+  let pendingCount = 0;
+
   for (const acc of accounts) {
-    const section: Section = acc.confirmed
-      ? (acc.role as "main" | "deposit")
+    // ถ้ายังไม่มี websiteId → ลองหาจากชื่อ LINE อัตโนมัติ
+    let resolvedAcc = { ...acc };
+    if (!resolvedAcc.websiteId && resolvedAcc.lineName) {
+      const matched = autoMatchWebsite(resolvedAcc.lineName, websites);
+      if (matched) {
+        resolvedAcc.websiteId   = matched.id;
+        resolvedAcc.websiteName = matched.name;
+        resolvedAcc.confirmed   = true;
+        autoAssigned++;
+      } else {
+        resolvedAcc.confirmed   = false;
+        resolvedAcc.websiteId   = null;
+        resolvedAcc.websiteName = null;
+        pendingCount++;
+      }
+    }
+
+    const section: Section = resolvedAcc.confirmed
+      ? (resolvedAcc.role as "main" | "deposit")
       : "pending";
 
-    const data = readSection(section);
-    const idx = data.findIndex((e) => e.lineAccountUrl === acc.lineAccountUrl);
-    if (idx !== -1) {
-      // อัปเดต — รักษา confirmed/websiteId ที่ user กำหนดไว้แล้ว
-      const existing = data[idx];
-      data[idx] = {
-        ...existing,
-        lineName: acc.lineName || existing.lineName,
-        lineAccountId: acc.lineAccountId || existing.lineAccountId,
-        scannedAt: new Date().toISOString(),
-      };
-    } else {
-      data.push({ ...acc, id: randomUUID(), scannedAt: new Date().toISOString() });
+    // ค้นหาใน section ที่คำนวณได้ และในทุก section (กรณี account ย้ายหมวด)
+    let found = false;
+    for (const s of ["main", "deposit", "pending"] as Section[]) {
+      const data = readSection(s);
+      const idx = data.findIndex((e) => e.lineAccountUrl === resolvedAcc.lineAccountUrl);
+      if (idx !== -1) {
+        const existing = data[idx];
+        // ถ้า user เคยกำหนด websiteId ไว้แล้ว → รักษาไว้ ไม่ override
+        const keepWebsite = existing.websiteId
+          ? { websiteId: existing.websiteId, websiteName: existing.websiteName, confirmed: existing.confirmed }
+          : { websiteId: resolvedAcc.websiteId, websiteName: resolvedAcc.websiteName, confirmed: resolvedAcc.confirmed };
+
+        const targetSection: Section = keepWebsite.confirmed
+          ? (resolvedAcc.role as "main" | "deposit")
+          : "pending";
+
+        const updated: BackupAccount = {
+          ...existing,
+          ...keepWebsite,
+          lineName:      resolvedAcc.lineName || existing.lineName,
+          lineAccountId: resolvedAcc.lineAccountId || existing.lineAccountId,
+          scannedAt:     new Date().toISOString(),
+        };
+
+        if (s === targetSection) {
+          data[idx] = updated;
+          writeSection(s, sortByWebsite(data));
+        } else {
+          // ย้าย section (เช่น pending → main เมื่อ auto-match เจอ)
+          data.splice(idx, 1);
+          writeSection(s, sortByWebsite(data));
+          const dest = readSection(targetSection);
+          dest.push(updated);
+          writeSection(targetSection, sortByWebsite(dest));
+        }
+        found = true;
+        break;
+      }
     }
-    writeSection(section, sortByWebsite(data));
+    if (!found) {
+      const data = readSection(section);
+      data.push({ ...resolvedAcc, id: randomUUID(), scannedAt: new Date().toISOString() });
+      writeSection(section, sortByWebsite(data));
+    }
   }
 
-  res.json({ ok: true, count: accounts.length });
+  console.log(`📋 backup-accounts: รับ ${accounts.length} บัญชี → auto-assign ${autoAssigned}, pending ${pendingCount}`);
+  res.json({ ok: true, count: accounts.length, autoAssigned, pending: pendingCount });
 });
 
 // PUT /api/backup-accounts/:id/confirm — ย้ายจาก pending → main/deposit

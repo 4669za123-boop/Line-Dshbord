@@ -205,20 +205,11 @@ def collect_all_accounts(driver, wait, group_url):
     wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
     time.sleep(2)
 
-    all_accounts   = set()
-    page_num       = 1
-    seen_urls      = set()  # ป้องกัน infinite loop ถ้า URL ไม่เปลี่ยน
-    consecutive_empty = 0
+    all_accounts      = set()
+    page_num          = 1
+    consecutive_same  = 0   # นับหน้าที่ไม่มี account ใหม่ติดต่อกัน
 
     while page_num <= MAX_PAGES:
-        cur_url = _get_current_url_snapshot(driver)
-
-        # ป้องกัน loop ซ้ำ: ถ้า URL เหมือนเดิมและเราเคยเยี่ยมแล้ว
-        if cur_url in seen_urls and page_num > 1:
-            print(f"   ⚠️  URL ซ้ำ → หมดหน้าแล้ว (หน้า {page_num - 1})")
-            break
-        seen_urls.add(cur_url)
-
         # เก็บ account บนหน้านี้
         pg_accounts = _collect_accounts_on_page(driver)
         new_count   = len(pg_accounts - all_accounts)
@@ -226,33 +217,31 @@ def collect_all_accounts(driver, wait, group_url):
         if page_num == 1:
             print(f"   📄 หน้า 1 — พบ {len(pg_accounts)} account")
         else:
-            print(f"   ➡️  หน้า {page_num} — +{new_count} ใหม่ (รวม {len(all_accounts) + len(pg_accounts)})")
+            print(f"   ➡️  หน้า {page_num} — +{new_count} ใหม่ (รวม {len(all_accounts) + new_count})")
 
-        if not pg_accounts:
-            consecutive_empty += 1
-            if consecutive_empty >= 2:
-                print(f"   ⚠️  ไม่มี account {consecutive_empty} หน้าติดกัน → หยุด")
+        if new_count == 0 and page_num > 1:
+            consecutive_same += 1
+            if consecutive_same >= 2:
+                print(f"   ⚠️  ไม่มี account ใหม่ {consecutive_same} หน้าติดกัน → หยุด")
                 break
         else:
-            consecutive_empty = 0
+            consecutive_same = 0
 
         all_accounts.update(pg_accounts)
 
         # พยายามคลิก next
-        before_click_url = _get_current_url_snapshot(driver)
         if not _click_next(driver):
             print(f"   ✅ ไม่มีหน้าถัดไป — สแกนครบ {page_num} หน้า")
             break
 
-        # ตรวจว่าหน้าเปลี่ยนจริง (URL หรือ content เปลี่ยน)
-        after_click_url = _get_current_url_snapshot(driver)
-        if after_click_url == before_click_url:
-            # URL ไม่เปลี่ยน อาจเป็น SPA → รอแล้วเช็ค account ใหม่
-            time.sleep(1.5)
-            test_accounts = _collect_accounts_on_page(driver)
-            if test_accounts == pg_accounts:
-                print(f"   ✅ หน้าไม่เปลี่ยนหลังคลิก next — สแกนครบแล้ว")
-                break
+        # รอ SPA render หน้าใหม่
+        time.sleep(2)
+
+        # ถ้า content ไม่เปลี่ยนหลังคลิก → หมดหน้าจริง
+        test_accounts = _collect_accounts_on_page(driver)
+        if test_accounts and test_accounts == pg_accounts:
+            print(f"   ✅ content ไม่เปลี่ยนหลังคลิก next — สแกนครบแล้ว")
+            break
 
         page_num += 1
 

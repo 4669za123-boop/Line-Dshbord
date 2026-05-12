@@ -49,3 +49,6 @@ Thumbs.db
 .local/
 __pycache__/
 logs/
+
+# VPS-only data files — ห้าม commit เด็ดขาด
+artifacts/api-server/data/

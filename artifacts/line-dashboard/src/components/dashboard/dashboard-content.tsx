@@ -219,7 +219,7 @@ export function DashboardContent({
     setScanDialogOpen(false);
   };
 
-  const allAssigned = scanAccounts.length > 0 && scanAccounts.every((a) => roleMap[a.lineId] !== undefined);
+  const allAssigned = scanAccounts.length > 0 && scanAccounts.every((a) => roleMap[a.lineId] === "main" || roleMap[a.lineId] === "deposit");
 
   return (
     <main className="lg:ml-64 min-h-screen">

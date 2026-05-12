@@ -1,0 +1,46 @@
+thaieasyvps@thaieasyvps-HVM-domU:/app/artifacts/line-dashboard$ pm2 logs line-checker --lines 20 --nostream
+
+[TAILING] Tailing last 20 lines for [line-checker] process (change the value with --lines option)
+/home/thaieasyvps/.pm2/logs/line-checker-error.log last 20 lines:
+2|line-che |     response = conn.urlopen(method, u.request_uri, **kw)
+2|line-che |   File "/usr/local/lib/python3.10/dist-packages/urllib3/connectionpool.py", line 788, in urlopen
+2|line-che |     response = self._make_request(
+2|line-che |   File "/usr/local/lib/python3.10/dist-packages/urllib3/connectionpool.py", line 534, in _make_request
+2|line-che |     response = conn.getresponse()
+2|line-che |   File "/usr/local/lib/python3.10/dist-packages/urllib3/connection.py", line 571, in getresponse
+2|line-che |     httplib_response = super().getresponse()
+2|line-che |   File "/usr/lib/python3.10/http/client.py", line 1395, in getresponse
+2|line-che |     response.begin()
+2|line-che |   File "/usr/lib/python3.10/http/client.py", line 323, in begin
+2|line-che |     version, status, reason = self._read_status()
+2|line-che |   File "/usr/lib/python3.10/http/client.py", line 284, in _read_status
+2|line-che |     line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+2|line-che |   File "/usr/lib/python3.10/socket.py", line 705, in readinto
+2|line-che |     return self._sock.recv_into(b)
+2|line-che | KeyboardInterrupt
+2|line-che | /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+2|line-che |   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+2|line-che | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+2|line-che |   warnings.warn(
+
+/home/thaieasyvps/.pm2/logs/line-checker-out.log last 20 lines:
+2|line-che | ⚠️  /home/thaieasyvps/chromedriver ไม่ได้: Message: session not created: Chrome instance exited. Examine ChromeDriver verbose log to determine the cause.; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#sessionnotcreatedexception
+2|line-che | Stacktrace:
+2|line-che | #0 0x577cb262b86a <unknown>
+2|line-che | #1 0x577cb20268a9 <unknown>
+2|line-che | #2 0x577cb2064e5b <unknown>
+2|line-che | #3 0x577cb205fb29 <unknown>
+2|line-che | #4 0x577cb20af316 <unknown>
+2|line-che | #5 0x577cb20ae9fc <unknown>
+2|line-che | #6 0x577cb206e4cf <unknown>
+2|line-che | #7 0x577cb206f291 <unknown>
+2|line-che | #8 0x577cb25f172b <unknown>
+2|line-che | #9 0x577cb25f463d <unknown>
+2|line-che | #10 0x577cb25de688 <unknown>
+2|line-che | #11 0x577cb25f51d0 <unknown>
+2|line-che | #12 0x577cb25c5130 <unknown>
+2|line-che | #13 0x577cb2618778 <unknown>
+2|line-che | #14 0x577cb2618915 <unknown>
+2|line-che | #15 0x577cb262a2ce <unknown>
+2|line-che | #16 0x72b19b494ac3 <unknown>
+2|line-che | 

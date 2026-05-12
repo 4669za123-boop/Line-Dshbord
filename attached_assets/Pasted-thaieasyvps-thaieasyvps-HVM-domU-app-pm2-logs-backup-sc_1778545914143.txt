@@ -1,0 +1,61 @@
+thaieasyvps@thaieasyvps-HVM-domU:/app$ pm2 logs backup-scanner --lines 40 --nostream
+[TAILING] Tailing last 40 lines for [backup-scanner] process (change the value with --lines option)
+/home/thaieasyvps/.pm2/logs/backup-scanner-error.log last 40 lines:
+3|backup-s | /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+3|backup-s |   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+3|backup-s | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+3|backup-s |   warnings.warn(
+3|backup-s | Traceback (most recent call last):
+3|backup-s |   File "/app/artifacts/api-server/backup-scanner.py", line 363, in <module>
+3|backup-s |     main()
+3|backup-s |   File "/app/artifacts/api-server/backup-scanner.py", line 359, in main
+3|backup-s |     time.sleep(SCAN_INTERVAL)
+3|backup-s | KeyboardInterrupt
+3|backup-s | /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+3|backup-s |   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+3|backup-s | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+3|backup-s |   warnings.warn(
+
+/home/thaieasyvps/.pm2/logs/backup-scanner-out.log last 40 lines:
+3|backup-s | #0 0x58c8abfcf8aa <unknown>
+3|backup-s | #1 0x58c8ab9ca8a9 <unknown>
+3|backup-s | #2 0x58c8aba08e5b <unknown>
+3|backup-s | #3 0x58c8aba03b29 <unknown>
+3|backup-s | #4 0x58c8aba53316 <unknown>
+3|backup-s | #5 0x58c8aba529fc <unknown>
+3|backup-s | #6 0x58c8aba124cf <unknown>
+3|backup-s | #7 0x58c8aba13291 <unknown>
+3|backup-s | #8 0x58c8abf9576b <unknown>
+3|backup-s | #9 0x58c8abf9867d <unknown>
+3|backup-s | #10 0x58c8abf826c8 <unknown>
+3|backup-s | #11 0x58c8abf99210 <unknown>
+3|backup-s | #12 0x58c8abf69170 <unknown>
+3|backup-s | #13 0x58c8abfbc7b8 <unknown>
+3|backup-s | #14 0x58c8abfbc955 <unknown>
+3|backup-s | #15 0x58c8abfce30e <unknown>
+3|backup-s | #16 0x782e94e94ac3 <unknown>
+3|backup-s |  — ลอง default
+3|backup-s | ❌ run_scan error: Message: session not created: Chrome instance exited. Examine ChromeDriver verbose log to determine the cause.; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#sessionnotcreatedexception
+3|backup-s | Stacktrace:
+3|backup-s | #0 0x62e28e4b48aa <unknown>
+3|backup-s | #1 0x62e28deaf8a9 <unknown>
+3|backup-s | #2 0x62e28deede5b <unknown>
+3|backup-s | #3 0x62e28dee8b29 <unknown>
+3|backup-s | #4 0x62e28df38316 <unknown>
+3|backup-s | #5 0x62e28df379fc <unknown>
+3|backup-s | #6 0x62e28def74cf <unknown>
+3|backup-s | #7 0x62e28def8291 <unknown>
+3|backup-s | #8 0x62e28e47a76b <unknown>
+3|backup-s | #9 0x62e28e47d67d <unknown>
+3|backup-s | #10 0x62e28e4676c8 <unknown>
+3|backup-s | #11 0x62e28e47e210 <unknown>
+3|backup-s | #12 0x62e28e44e170 <unknown>
+3|backup-s | #13 0x62e28e4a17b8 <unknown>
+3|backup-s | #14 0x62e28e4a1955 <unknown>
+3|backup-s | #15 0x62e28e4b330e <unknown>
+3|backup-s | #16 0x7f9357a94ac3 <unknown>
+3|backup-s | 
+3|backup-s | 
+3|backup-s | ⏳ รอ 120 วินาทีก่อนรอบถัดไป...
+
+thaieasyvps@thaieasyvps-HVM-domU:/app$ 

@@ -127,9 +127,27 @@ def connect():
 
 # ─── Pagination ───────────────────────────────────────────────────────────────
 
+_BAD_NAMES = {"line official account manager", "line", ""}
+
+
+def _extract_name_from_row(link_el):
+    """ดึงชื่อ account จาก row รอบๆ link บนหน้า group list"""
+    for depth in range(1, 7):
+        xpath = "/".join([".."] * depth)
+        try:
+            ancestor = link_el.find_element(By.XPATH, xpath)
+            for line in ancestor.text.strip().split("\n"):
+                t = line.strip()
+                if t and len(t) < 80 and t.lower() not in _BAD_NAMES and "LINE Official" not in t:
+                    return t
+        except Exception:
+            break
+    return ""
+
+
 def _collect_accounts_on_page(driver):
-    """Scroll + เก็บ account URL บนหน้าปัจจุบัน"""
-    accounts = set()
+    """Scroll + เก็บ account URL → ชื่อ จากหน้าปัจจุบัน"""
+    accounts = {}   # url → name
     last_h   = 0
     for _ in range(10):
         driver.execute_script("window.scrollBy(0, 600);")
@@ -137,8 +155,11 @@ def _collect_accounts_on_page(driver):
         links = driver.find_elements(By.XPATH, "//a[contains(@href,'/account/')]")
         for l in links:
             href = l.get_attribute("href")
-            if href:
-                accounts.add(href.split("?")[0])
+            if not href:
+                continue
+            url = href.split("?")[0]
+            if url not in accounts:
+                accounts[url] = _extract_name_from_row(l)
         new_h = driver.execute_script("return document.body.scrollHeight")
         if new_h == last_h:
             break
@@ -205,14 +226,14 @@ def collect_all_accounts(driver, wait, group_url):
     wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
     time.sleep(2)
 
-    all_accounts      = set()
+    all_accounts      = {}   # url → name
     page_num          = 1
-    consecutive_same  = 0   # นับหน้าที่ไม่มี account ใหม่ติดต่อกัน
+    consecutive_same  = 0
 
     while page_num <= MAX_PAGES:
-        # เก็บ account บนหน้านี้
-        pg_accounts = _collect_accounts_on_page(driver)
-        new_count   = len(pg_accounts - all_accounts)
+        pg_accounts = _collect_accounts_on_page(driver)   # dict url→name
+        new_urls    = set(pg_accounts) - set(all_accounts)
+        new_count   = len(new_urls)
 
         if page_num == 1:
             print(f"   📄 หน้า 1 — พบ {len(pg_accounts)} account")
@@ -229,24 +250,21 @@ def collect_all_accounts(driver, wait, group_url):
 
         all_accounts.update(pg_accounts)
 
-        # พยายามคลิก next
         if not _click_next(driver):
             print(f"   ✅ ไม่มีหน้าถัดไป — สแกนครบ {page_num} หน้า")
             break
 
-        # รอ SPA render หน้าใหม่
         time.sleep(2)
 
-        # ถ้า content ไม่เปลี่ยนหลังคลิก → หมดหน้าจริง
         test_accounts = _collect_accounts_on_page(driver)
-        if test_accounts and test_accounts == pg_accounts:
+        if test_accounts and set(test_accounts) == set(pg_accounts):
             print(f"   ✅ content ไม่เปลี่ยนหลังคลิก next — สแกนครบแล้ว")
             break
 
         page_num += 1
 
     print(f"   📦 รวมทั้งหมด {len(all_accounts)} account จาก {page_num} หน้า")
-    return list(all_accounts)
+    return all_accounts   # dict url → name
 
 
 # ─── Account detail ───────────────────────────────────────────────────────────
@@ -307,34 +325,27 @@ def run_scan():
             print(f"\n📂 [{role_label}] {group_url}")
 
             try:
-                acc_urls = collect_all_accounts(driver, wait, group_url)
+                acc_dict = collect_all_accounts(driver, wait, group_url)  # url→name
 
-                for acc_url in acc_urls:
+                for acc_url, acc_name in acc_dict.items():
                     line_id = extract_id_from_url(acc_url)
                     if not line_id:
                         continue
-                    try:
-                        driver.get(acc_url)
-                        wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-                        time.sleep(2)
+                    line_name = acc_name if acc_name else line_id
+                    print(f"   ✅ {line_name} (@{line_id})")
 
-                        line_name = get_account_name(driver, line_id)
-                        print(f"   ✅ {line_name} (@{line_id})")
-
-                        found.append({
-                            "groupId":        group_id,
-                            "groupUrl":       group_url,
-                            "lineName":       line_name,
-                            "lineAccountId":  line_id,
-                            "lineAccountUrl": acc_url,
-                            "role":           group_role,
-                            "websiteId":      None,
-                            "websiteName":    None,
-                            "confirmed":      False,
-                            "scannedAt":      time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-                        })
-                    except Exception as e:
-                        print(f"   ❌ account error ({line_id}):", e)
+                    found.append({
+                        "groupId":        group_id,
+                        "groupUrl":       group_url,
+                        "lineName":       line_name,
+                        "lineAccountId":  line_id,
+                        "lineAccountUrl": acc_url,
+                        "role":           group_role,
+                        "websiteId":      None,
+                        "websiteName":    None,
+                        "confirmed":      True,
+                        "scannedAt":      time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                    })
 
             except Exception as e:
                 print(f"❌ group error:", e)

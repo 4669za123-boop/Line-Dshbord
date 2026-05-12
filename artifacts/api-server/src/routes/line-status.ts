@@ -225,8 +225,9 @@ router.post("/line-status", (req, res) => {
 
     // trigger auto-replace เมื่อ:
     //  - URL ตรงกับ backup pool
-    //  - และ account นั้นยังไม่มี role (ใหม่ หรือ unassigned)
-    const isUnassigned = !existing || existing.role === null;
+    //  - และ account นั้นมีอยู่ใน discovered แต่ยังไม่มี role (unassigned เท่านั้น)
+    //  - ถ้าไม่มีใน discovered (ถูกลบไปแล้ว) → ไม่เพิ่มกลับ
+    const isUnassigned = !!existing && existing.role === null;
 
     if (backupHit && isUnassigned) {
       const backupRole = backupHit.account.role;

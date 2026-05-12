@@ -281,14 +281,12 @@ def run_check():
 
 
 def main():
-    print(f"🔍 CHECKER START (ตรวจทุก {CHECK_INTERVAL} วินาที)")
+    print("🔍 CHECKER START (ทำงานต่อเนื่อง ไม่มี delay)")
     while True:
         try:
             run_check()
         except Exception as e:
             print(f"❌ run_check error: {e}")
-        print(f"\n⏳ รอ {CHECK_INTERVAL} วินาทีก่อนรอบถัดไป...")
-        time.sleep(CHECK_INTERVAL)
 
 
 if __name__ == "__main__":

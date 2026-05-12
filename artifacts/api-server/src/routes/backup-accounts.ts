@@ -131,28 +131,40 @@ function enrichWebsiteNames(accounts: BackupAccount[], websites: WebsiteRecord[]
 router.get("/backup-accounts", (_req, res) => {
   const websites = readWebsites();
 
-  // migrate pending ที่มี suggestedWebsiteId → main/deposit
+  // migrate pending → ลอง auto-match ชื่อ LINE ก่อน แล้วย้ายออกถ้ารู้แล้ว
   const rawPending = readSection("pending");
   const stillPending: BackupAccount[] = [];
+  let migrated = 0;
   for (const acc of rawPending) {
-    if (acc.suggestedWebsiteId && acc.suggestedWebsiteName && acc.role) {
+    // หา websiteId จาก suggestedWebsiteId หรือลอง match ใหม่จากชื่อ LINE
+    let websiteId   = acc.suggestedWebsiteId   ?? null;
+    let websiteName = acc.suggestedWebsiteName ?? null;
+    if ((!websiteId || !websiteName) && acc.lineName) {
+      const { match, suggestion } = autoMatchWebsite(acc.lineName, websites);
+      const best = match ?? suggestion;
+      if (best) { websiteId = best.id; websiteName = best.name; }
+    }
+    if (websiteId && websiteName && acc.role) {
       const section = acc.role as "main" | "deposit";
       const confirmed: BackupAccount = {
         ...acc,
-        websiteId:   acc.suggestedWebsiteId,
-        websiteName: acc.suggestedWebsiteName,
-        confirmed:   true,
+        websiteId,
+        websiteName,
+        suggestedWebsiteId:   websiteId,
+        suggestedWebsiteName: websiteName,
+        confirmed: true,
       };
       const existing = readSection(section);
       const idx = existing.findIndex((e) => e.lineAccountUrl === confirmed.lineAccountUrl);
       if (idx === -1) existing.push(confirmed);
-      else existing[idx] = confirmed;
+      else existing[idx] = { ...existing[idx], ...confirmed };
       writeSection(section, existing);
+      migrated++;
     } else {
       stillPending.push(acc);
     }
   }
-  if (stillPending.length !== rawPending.length) writeSection("pending", stillPending);
+  if (migrated > 0) writeSection("pending", stillPending);
 
   const main    = enrichWebsiteNames(readSection("main"),    websites);
   const deposit = enrichWebsiteNames(readSection("deposit"), websites);

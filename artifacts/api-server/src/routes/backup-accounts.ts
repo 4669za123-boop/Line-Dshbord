@@ -78,8 +78,36 @@ function autoMatchWebsite(
   lineName: string,
   websites: WebsiteRecord[],
 ): { match: { id: string; name: string } | null; suggestion: { id: string; name: string } | null } {
-  const normalize = (s: string) =>
-    s.toLowerCase().replace(/[^a-z0-9ก-๙]/gi, "");
+  const normalize = (s: string): string => {
+    let t = s.toLowerCase();
+
+    // 1. คำอ่านตัวเลขภาษาไทย (ยาวก่อน)
+    const numWords: [string, string][] = [
+      ["ศูนย์", "0"], ["หนึ่ง", "1"], ["สอง", "2"], ["สาม", "3"],
+      ["สี่", "4"],   ["ห้า", "5"],   ["หก", "6"],  ["เจ็ด", "7"],
+      ["แปด", "8"],  ["เก้า", "9"],
+    ];
+    for (const [word, digit] of numWords) t = t.replaceAll(word, digit);
+
+    // 2. เสียงพยัญชนะภาษาไทย → ตัวอักษรละติน (ยาวก่อน)
+    const letterMap: [string, string][] = [
+      ["ทีเอช", "th"], ["ดับเบิ้ลยู", "w"], ["ดับเบิลยู", "w"], ["ดับเบิล", "w"],
+      ["เอ็กซ์", "x"], ["เอ็ม", "m"], ["เอ็น", "n"], ["อาร์", "r"],
+      ["แซด", "z"],   ["แอล", "l"],  ["วี", "v"],   ["วิ", "v"],
+      ["เค", "k"],    ["เอฟ", "f"],  ["บี", "b"],   ["ซี", "c"],
+      ["ดี", "d"],    ["จี", "g"],   ["เอช", "h"],  ["เจ", "j"],
+      ["พี", "p"],    ["ยู", "u"],   ["วาย", "y"],  ["เอส", "s"],
+      ["เอ", "a"],   ["โอ", "o"],   ["ไอ", "i"],
+    ];
+    for (const [thai, latin] of letterMap) t = t.replaceAll(thai, latin);
+
+    // 3. ตัวเลขไทย ๐-๙
+    const thaiDigits = "๐๑๒๓๔๕๖๗๘๙";
+    t = t.replace(/[๐-๙]/g, (c) => String(thaiDigits.indexOf(c)));
+
+    // 4. ลบทุกอย่างที่ไม่ใช่ a-z 0-9
+    return t.replace(/[^a-z0-9]/g, "");
+  };
 
   const lineNorm = normalize(lineName);
 

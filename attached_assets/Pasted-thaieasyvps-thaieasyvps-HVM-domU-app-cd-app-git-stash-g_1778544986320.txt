@@ -1,0 +1,185 @@
+thaieasyvps@thaieasyvps-HVM-domU:/app$ cd /app && git stash && git pull && git stash pop
+Saved working directory and index state WIP on main: 54cff16 Improve spacing and readability of account information
+Updating 54cff16..5916414
+Fast-forward
+ .replit                                                                   |   4 +
+ artifacts/api-server/data/suspended-lines.json                            |   2 +-
+ artifacts/api-server/data/websites.json                                   |   2 +-
+ artifacts/line-dashboard/src/components/dashboard/line-card.tsx           | 199 ++++------
+ artifacts/mockup-sandbox/.replit-artifact/artifact.toml                   |  22 +
+ artifacts/mockup-sandbox/components.json                                  |  21 +
+ artifacts/mockup-sandbox/index.html                                       |  31 ++
+ artifacts/mockup-sandbox/mockupPreviewPlugin.ts                           | 199 ++++++++++
+ artifacts/mockup-sandbox/package.json                                     |  75 ++++
+ artifacts/mockup-sandbox/public/favicon.svg                               |   3 +
+ artifacts/mockup-sandbox/src/.generated/mockup-components.ts              |   8 +
+ artifacts/mockup-sandbox/src/App.tsx                                      | 146 +++++++
+ artifacts/mockup-sandbox/src/components/mockups/line-card/AccentBar.tsx   | 120 ++++++
+ artifacts/mockup-sandbox/src/components/mockups/line-card/Clean.tsx       | 101 +++++
+ .../mockup-sandbox/src/components/mockups/line-card/CompactBadge.tsx      | 116 ++++++
+ artifacts/mockup-sandbox/src/components/mockups/line-card/Merged.tsx      | 122 ++++++
+ artifacts/mockup-sandbox/src/components/ui/accordion.tsx                  |  55 +++
+ artifacts/mockup-sandbox/src/components/ui/alert-dialog.tsx               | 139 +++++++
+ artifacts/mockup-sandbox/src/components/ui/alert.tsx                      |  59 +++
+ artifacts/mockup-sandbox/src/components/ui/aspect-ratio.tsx               |   5 +
+ artifacts/mockup-sandbox/src/components/ui/avatar.tsx                     |  50 +++
+ artifacts/mockup-sandbox/src/components/ui/badge.tsx                      |  43 ++
+ artifacts/mockup-sandbox/src/components/ui/breadcrumb.tsx                 | 115 ++++++
+ artifacts/mockup-sandbox/src/components/ui/button-group.tsx               |  83 ++++
+ artifacts/mockup-sandbox/src/components/ui/button.tsx                     |  65 +++
+ artifacts/mockup-sandbox/src/components/ui/calendar.tsx                   | 213 ++++++++++
+ artifacts/mockup-sandbox/src/components/ui/card.tsx                       |  76 ++++
+ artifacts/mockup-sandbox/src/components/ui/carousel.tsx                   | 260 ++++++++++++
+ artifacts/mockup-sandbox/src/components/ui/chart.tsx                      | 367 +++++++++++++++++
+ artifacts/mockup-sandbox/src/components/ui/checkbox.tsx                   |  28 ++
+ artifacts/mockup-sandbox/src/components/ui/collapsible.tsx                |  11 +
+ artifacts/mockup-sandbox/src/components/ui/command.tsx                    | 153 +++++++
+ artifacts/mockup-sandbox/src/components/ui/context-menu.tsx               | 198 +++++++++
+ artifacts/mockup-sandbox/src/components/ui/dialog.tsx                     | 120 ++++++
+ artifacts/mockup-sandbox/src/components/ui/drawer.tsx                     | 116 ++++++
+ artifacts/mockup-sandbox/src/components/ui/dropdown-menu.tsx              | 201 ++++++++++
+ artifacts/mockup-sandbox/src/components/ui/empty.tsx                      | 104 +++++
+ artifacts/mockup-sandbox/src/components/ui/field.tsx                      | 244 ++++++++++++
+ artifacts/mockup-sandbox/src/components/ui/form.tsx                       | 176 ++++++++
+ artifacts/mockup-sandbox/src/components/ui/hover-card.tsx                 |  27 ++
+ artifacts/mockup-sandbox/src/components/ui/input-group.tsx                | 168 ++++++++
+ artifacts/mockup-sandbox/src/components/ui/input-otp.tsx                  |  69 ++++
+ artifacts/mockup-sandbox/src/components/ui/input.tsx                      |  22 +
+ artifacts/mockup-sandbox/src/components/ui/item.tsx                       | 193 +++++++++
+ artifacts/mockup-sandbox/src/components/ui/kbd.tsx                        |  28 ++
+ artifacts/mockup-sandbox/src/components/ui/label.tsx                      |  26 ++
+ artifacts/mockup-sandbox/src/components/ui/menubar.tsx                    | 254 ++++++++++++
+ artifacts/mockup-sandbox/src/components/ui/navigation-menu.tsx            | 128 ++++++
+ artifacts/mockup-sandbox/src/components/ui/pagination.tsx                 | 117 ++++++
+ artifacts/mockup-sandbox/src/components/ui/popover.tsx                    |  31 ++
+ artifacts/mockup-sandbox/src/components/ui/progress.tsx                   |  28 ++
+ artifacts/mockup-sandbox/src/components/ui/radio-group.tsx                |  42 ++
+ artifacts/mockup-sandbox/src/components/ui/resizable.tsx                  |  45 +++
+ artifacts/mockup-sandbox/src/components/ui/scroll-area.tsx                |  46 +++
+ artifacts/mockup-sandbox/src/components/ui/select.tsx                     | 159 ++++++++
+ artifacts/mockup-sandbox/src/components/ui/separator.tsx                  |  29 ++
+ artifacts/mockup-sandbox/src/components/ui/sheet.tsx                      | 140 +++++++
+ artifacts/mockup-sandbox/src/components/ui/sidebar.tsx                    | 727 ++++++++++++++++++++++++++++++++++
+ artifacts/mockup-sandbox/src/components/ui/skeleton.tsx                   |  15 +
+ artifacts/mockup-sandbox/src/components/ui/slider.tsx                     |  26 ++
+ artifacts/mockup-sandbox/src/components/ui/sonner.tsx                     |  31 ++
+ artifacts/mockup-sandbox/src/components/ui/spinner.tsx                    |  16 +
+ artifacts/mockup-sandbox/src/components/ui/switch.tsx                     |  27 ++
+ artifacts/mockup-sandbox/src/components/ui/table.tsx                      | 120 ++++++
+ artifacts/mockup-sandbox/src/components/ui/tabs.tsx                       |  53 +++
+ artifacts/mockup-sandbox/src/components/ui/textarea.tsx                   |  22 +
+ artifacts/mockup-sandbox/src/components/ui/toast.tsx                      | 127 ++++++
+ artifacts/mockup-sandbox/src/components/ui/toaster.tsx                    |  33 ++
+ artifacts/mockup-sandbox/src/components/ui/toggle-group.tsx               |  61 +++
+ artifacts/mockup-sandbox/src/components/ui/toggle.tsx                     |  43 ++
+ artifacts/mockup-sandbox/src/components/ui/tooltip.tsx                    |  32 ++
+ artifacts/mockup-sandbox/src/hooks/use-mobile.tsx                         |  19 +
+ artifacts/mockup-sandbox/src/hooks/use-toast.ts                           | 189 +++++++++
+ artifacts/mockup-sandbox/src/index.css                                    | 158 ++++++++
+ artifacts/mockup-sandbox/src/lib/utils.ts                                 |   6 +
+ artifacts/mockup-sandbox/src/main.tsx                                     |   5 +
+ artifacts/mockup-sandbox/tsconfig.json                                    |  20 +
+ artifacts/mockup-sandbox/vite.config.ts                                   |  72 ++++
+ attached_assets/image_1778543353060.png                                   | Bin 0 -> 16553 bytes
+ attached_assets/image_1778544322319.png                                   | Bin 0 -> 42857 bytes
+ attached_assets/image_1778544443861.png                                   | Bin 0 -> 1425 bytes
+ attached_assets/image_1778544750441.png                                   | Bin 0 -> 9263 bytes
+ pnpm-lock.yaml                                                            | 209 ++++++++++
+ 83 files changed, 7502 insertions(+), 113 deletions(-)
+ create mode 100644 artifacts/mockup-sandbox/.replit-artifact/artifact.toml
+ create mode 100644 artifacts/mockup-sandbox/components.json
+ create mode 100644 artifacts/mockup-sandbox/index.html
+ create mode 100644 artifacts/mockup-sandbox/mockupPreviewPlugin.ts
+ create mode 100644 artifacts/mockup-sandbox/package.json
+ create mode 100644 artifacts/mockup-sandbox/public/favicon.svg
+ create mode 100644 artifacts/mockup-sandbox/src/.generated/mockup-components.ts
+ create mode 100644 artifacts/mockup-sandbox/src/App.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/mockups/line-card/AccentBar.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/mockups/line-card/Clean.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/mockups/line-card/CompactBadge.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/mockups/line-card/Merged.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/accordion.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/alert-dialog.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/alert.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/aspect-ratio.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/avatar.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/badge.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/breadcrumb.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/button-group.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/button.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/calendar.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/card.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/carousel.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/chart.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/checkbox.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/collapsible.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/command.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/context-menu.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/dialog.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/drawer.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/dropdown-menu.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/empty.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/field.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/form.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/hover-card.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/input-group.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/input-otp.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/input.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/item.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/kbd.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/label.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/menubar.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/navigation-menu.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/pagination.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/popover.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/progress.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/radio-group.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/resizable.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/scroll-area.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/select.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/separator.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/sheet.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/sidebar.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/skeleton.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/slider.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/sonner.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/spinner.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/switch.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/table.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/tabs.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/textarea.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/toast.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/toaster.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/toggle-group.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/toggle.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/components/ui/tooltip.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/hooks/use-mobile.tsx
+ create mode 100644 artifacts/mockup-sandbox/src/hooks/use-toast.ts
+ create mode 100644 artifacts/mockup-sandbox/src/index.css
+ create mode 100644 artifacts/mockup-sandbox/src/lib/utils.ts
+ create mode 100644 artifacts/mockup-sandbox/src/main.tsx
+ create mode 100644 artifacts/mockup-sandbox/tsconfig.json
+ create mode 100644 artifacts/mockup-sandbox/vite.config.ts
+ create mode 100644 attached_assets/image_1778543353060.png
+ create mode 100644 attached_assets/image_1778544322319.png
+ create mode 100644 attached_assets/image_1778544443861.png
+ create mode 100644 attached_assets/image_1778544750441.png
+Auto-merging artifacts/api-server/data/websites.json
+CONFLICT (content): Merge conflict in artifacts/api-server/data/websites.json
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   artifacts/api-server/data/discovered-lines.json
+        modified:   logs/line-dashboard-error.log
+        modified:   logs/line-dashboard-out.log
+
+Unmerged paths:
+  (use "git restore --staged <file>..." to unstage)
+  (use "git add <file>..." to mark resolution)
+        both modified:   artifacts/api-server/data/websites.json
+
+The stash entry is kept in case you need it again.
+thaieasyvps@thaieasyvps-HVM-domU:/app$ cd /app && git stash && git pull && git stash pop && cd artifacts/line-dashboard && pnpm run build && pm2 restart al
+artifacts/api-server/data/websites.json: needs merge

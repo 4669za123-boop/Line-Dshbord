@@ -420,12 +420,11 @@ export function DashboardContent({
 
               {/* footer buttons */}
               <div className="flex gap-2 justify-end pt-1">
-                {scanStatus !== "scanning" && (
+                {scanStatus === "error" && (
                   <Button
                     type="button"
                     variant="outline"
                     className="rounded-xl"
-                    disabled={savingRoles}
                     onClick={() => setScanDialogOpen(false)}
                   >
                     ปิด

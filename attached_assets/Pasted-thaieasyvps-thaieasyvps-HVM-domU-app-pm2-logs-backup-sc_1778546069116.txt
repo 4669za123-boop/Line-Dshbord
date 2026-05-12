@@ -1,0 +1,57 @@
+thaieasyvps@thaieasyvps-HVM-domU:/app$ pm2 logs backup-scanner --lines 30 --nostream
+[TAILING] Tailing last 30 lines for [backup-scanner] process (change the value with --lines option)
+/home/thaieasyvps/.pm2/logs/backup-scanner-error.log last 30 lines:
+3|backup-s | /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+3|backup-s |   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+3|backup-s | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+3|backup-s |   warnings.warn(
+3|backup-s | Traceback (most recent call last):
+3|backup-s |   File "/app/artifacts/api-server/backup-scanner.py", line 363, in <module>
+3|backup-s |     main()
+3|backup-s |   File "/app/artifacts/api-server/backup-scanner.py", line 359, in main
+3|backup-s |     time.sleep(SCAN_INTERVAL)
+3|backup-s | KeyboardInterrupt
+3|backup-s | /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+3|backup-s |   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+3|backup-s | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+3|backup-s |   warnings.warn(
+3|backup-s | Traceback (most recent call last):
+3|backup-s |   File "/app/artifacts/api-server/backup-scanner.py", line 363, in <module>
+3|backup-s |     
+3|backup-s |   File "/app/artifacts/api-server/backup-scanner.py", line 359, in main
+3|backup-s |     except Exception as e:
+3|backup-s | KeyboardInterrupt
+3|backup-s | /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+3|backup-s |   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+
+/home/thaieasyvps/.pm2/logs/backup-scanner-out.log last 30 lines:
+3|backup-s | 
+3|backup-s | 
+3|backup-s | ⏳ รอ 120 วินาทีก่อนรอบถัดไป...
+3|backup-s | 📦 BACKUP-SCANNER START (สแกนทุก 120 วินาที)
+3|backup-s | 
+3|backup-s | =======================================================
+3|backup-s | 📦 BACKUP-SCANNER: เริ่มสแกนกลุ่มสำรอง
+3|backup-s | =======================================================
+3|backup-s | ✅ BACKUP GROUPS: 2 รายการ
+3|backup-s | ✅ ใช้ Chrome profile: /home/thaieasyvps/.line-chrome-profile-backup
+3|backup-s | ✅ ใช้ Chrome: /usr/bin/google-chrome
+3|backup-s | ✅ ใช้ chromedriver: /tmp/chromedriver-linux64/chromedriver
+3|backup-s | 
+3|backup-s | 📂 [ไลน์หลัก] https://manager.line.biz/groups/284342/setting
+3|backup-s |    📄 หน้า 1 — พบ 10 account
+3|backup-s |    ⚠️  URL ซ้ำ → หมดหน้าแล้ว (หน้า 1)
+3|backup-s |    📦 รวมทั้งหมด 10 account จาก 2 หน้า
+3|backup-s |    ✅ LINE Official Account Manager (@301tcddr)
+3|backup-s |    ✅ LINE Official Account Manager (@318cdpxf)
+3|backup-s |    ✅ LINE Official Account Manager (@778vbcqy)
+3|backup-s |    ✅ LINE Official Account Manager (@501xqucr)
+3|backup-s |    ✅ LINE Official Account Manager (@768bbnix)
+3|backup-s |    ✅ LINE Official Account Manager (@603giiwv)
+3|backup-s |    ✅ LINE Official Account Manager (@745ntxpl)
+3|backup-s |    ✅ LINE Official Account Manager (@113fusuz)
+3|backup-s |    ✅ LINE Official Account Manager (@738syvvo)
+3|backup-s |    ✅ LINE Official Account Manager (@602mfefw)
+3|backup-s | 
+3|backup-s | 📂 [ไลน์ฝากถอน] https://manager.line.biz/groups/294265/setting
+3|backup-s |    📄 หน้า 1 — พบ 10 account

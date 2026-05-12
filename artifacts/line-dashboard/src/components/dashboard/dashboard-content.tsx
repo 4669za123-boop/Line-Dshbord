@@ -171,7 +171,7 @@ export function DashboardContent({
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/15 text-primary ring-1 ring-primary/25">
                 <Globe className="h-4 w-4" />
               </span>
-              เพิ่มกลุ่ม
+              เพิ่มกลุ่มLine
             </span>
           </button>
         </div>

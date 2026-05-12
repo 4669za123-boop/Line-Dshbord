@@ -53,7 +53,24 @@ while true; do
       log "  ✅ restore data สำเร็จ"
     fi
 
-    # ── 5. ตั้ง skip-worktree ป้องกัน deploy ครั้งถัดไป ────────────────────────
+    # ── 5. ใช้ blacklist กวาด discovered-lines.json หลัง restore ────────────────
+    python3 - <<'PYEOF' 2>/dev/null || true
+import json, os
+data_dir = "/app/artifacts/api-server/data"
+bl_file  = os.path.join(data_dir, "deleted-lines.json")
+dl_file  = os.path.join(data_dir, "discovered-lines.json")
+if os.path.exists(bl_file) and os.path.exists(dl_file):
+    blacklist  = set(json.load(open(bl_file)))
+    discovered = json.load(open(dl_file))
+    filtered   = {k: v for k, v in discovered.items() if k not in blacklist}
+    removed    = len(discovered) - len(filtered)
+    if removed > 0:
+        json.dump(filtered, open(dl_file, "w"), ensure_ascii=False, indent=2)
+        print(f"blacklist-clean: ลบ {removed} account(s) ออกจาก discovered-lines")
+PYEOF
+    log "  🧹 blacklist clean เสร็จ"
+
+    # ── 6. ตั้ง skip-worktree ป้องกัน deploy ครั้งถัดไป ────────────────────────
     git ls-files artifacts/api-server/data/ | xargs -r git update-index --skip-worktree
     log "  🔒 skip-worktree ตั้งค่าแล้ว"
 

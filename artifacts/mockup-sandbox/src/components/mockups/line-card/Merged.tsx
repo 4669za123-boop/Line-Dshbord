@@ -20,9 +20,6 @@ export function Merged() {
       <div className="w-[380px]">
         <div className="rounded-xl bg-[#141417] border border-white/7 overflow-hidden shadow-2xl">
 
-          {/* top accent stripe — gradient ฟ้า→ม่วง */}
-          <div className="h-[3px] bg-gradient-to-r from-blue-500 via-indigo-400 to-violet-500" />
-
           {/* header */}
           <div className="px-5 pt-4 pb-3.5 flex items-center justify-between border-b border-white/5">
             <p className="text-[15px] font-bold text-white leading-none">{mockData.websiteName}</p>

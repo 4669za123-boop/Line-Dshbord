@@ -127,11 +127,36 @@ function enrichWebsiteNames(accounts: BackupAccount[], websites: WebsiteRecord[]
 }
 
 // GET /api/backup-accounts → { main, deposit, pending } เรียงตาม website order
+// side-effect: บัญชีใน pending ที่มี suggestedWebsiteId → ย้ายไป main/deposit อัตโนมัติ
 router.get("/backup-accounts", (_req, res) => {
   const websites = readWebsites();
+
+  // migrate pending ที่มี suggestedWebsiteId → main/deposit
+  const rawPending = readSection("pending");
+  const stillPending: BackupAccount[] = [];
+  for (const acc of rawPending) {
+    if (acc.suggestedWebsiteId && acc.suggestedWebsiteName && acc.role) {
+      const section = acc.role as "main" | "deposit";
+      const confirmed: BackupAccount = {
+        ...acc,
+        websiteId:   acc.suggestedWebsiteId,
+        websiteName: acc.suggestedWebsiteName,
+        confirmed:   true,
+      };
+      const existing = readSection(section);
+      const idx = existing.findIndex((e) => e.lineAccountUrl === confirmed.lineAccountUrl);
+      if (idx === -1) existing.push(confirmed);
+      else existing[idx] = confirmed;
+      writeSection(section, existing);
+    } else {
+      stillPending.push(acc);
+    }
+  }
+  if (stillPending.length !== rawPending.length) writeSection("pending", stillPending);
+
   const main    = enrichWebsiteNames(readSection("main"),    websites);
   const deposit = enrichWebsiteNames(readSection("deposit"), websites);
-  const pending = enrichWebsiteNames(readSection("pending"), websites);
+  const pending = enrichWebsiteNames(stillPending,           websites);
   res.json({
     main:    sortByWebsite(main),
     deposit: sortByWebsite(deposit),
@@ -156,19 +181,22 @@ router.post("/backup-accounts", (req, res) => {
     let resolvedAcc = { ...acc, suggestedWebsiteId: acc.suggestedWebsiteId ?? null, suggestedWebsiteName: acc.suggestedWebsiteName ?? null };
     if (!resolvedAcc.websiteId && resolvedAcc.lineName) {
       const { match, suggestion } = autoMatchWebsite(resolvedAcc.lineName, websites);
-      if (match) {
-        resolvedAcc.websiteId             = match.id;
-        resolvedAcc.websiteName           = match.name;
-        resolvedAcc.suggestedWebsiteId    = match.id;
-        resolvedAcc.suggestedWebsiteName  = match.name;
+      const best = match ?? suggestion;
+      if (best) {
+        // match หรือ suggestion → auto-confirm ทั้งคู่
+        resolvedAcc.websiteId             = best.id;
+        resolvedAcc.websiteName           = best.name;
+        resolvedAcc.suggestedWebsiteId    = best.id;
+        resolvedAcc.suggestedWebsiteName  = best.name;
         resolvedAcc.confirmed             = true;
         autoAssigned++;
       } else {
+        // ไม่รู้เลย → pending
         resolvedAcc.confirmed             = false;
         resolvedAcc.websiteId             = null;
         resolvedAcc.websiteName           = null;
-        resolvedAcc.suggestedWebsiteId    = suggestion?.id   ?? null;
-        resolvedAcc.suggestedWebsiteName  = suggestion?.name ?? null;
+        resolvedAcc.suggestedWebsiteId    = null;
+        resolvedAcc.suggestedWebsiteName  = null;
         pendingCount++;
       }
     }

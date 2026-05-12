@@ -498,108 +498,57 @@ export function BackupPoolPage({
                   ทุกบัญชีได้รับการกำหนดเว็บแล้ว
                 </p>
               </div>
-            ) : (() => {
-              const suggested = backupAccountsPending.filter((a) => a.suggestedWebsiteId);
-              const unknown   = backupAccountsPending.filter((a) => !a.suggestedWebsiteId);
-              const renderCard = (acc: BackupAccount) => (
-                <div
-                  key={acc.id}
-                  className={cn(
-                    "relative rounded-2xl p-4 transition-all duration-300 group",
-                    acc.suggestedWebsiteId
-                      ? "bg-emerald-500/5 border border-emerald-500/20 hover:border-emerald-500/40"
-                      : "bg-amber-500/5 border border-amber-500/20 hover:border-amber-500/40",
-                  )}
-                >
-                  <div className="absolute top-3 right-3 flex items-center gap-1.5">
-                    {acc.suggestedWebsiteId && acc.suggestedWebsiteName ? (
+            ) : (
+              <div className="space-y-2">
+                {backupAccountsPending.map((acc) => (
+                  <div
+                    key={acc.id}
+                    className="relative bg-amber-500/5 border border-amber-500/20 rounded-2xl p-4 transition-all duration-300 hover:border-amber-500/40 group"
+                  >
+                    <div className="absolute top-3 right-3 flex items-center gap-1.5">
                       <Button
                         size="sm"
-                        onClick={() =>
-                          onConfirmBackupAccount(
-                            acc.id,
-                            acc.suggestedWebsiteId!,
-                            acc.suggestedWebsiteName!,
-                          )
-                        }
-                        className="rounded-lg bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500/25 border border-emerald-500/20 gap-1.5 h-8 text-xs px-3"
+                        onClick={() => openAssign(acc)}
+                        className="rounded-lg bg-amber-500/15 text-amber-400 hover:bg-amber-500/25 border border-amber-500/20 gap-1.5 h-8 text-xs px-3"
                         variant="ghost"
                       >
-                        ยืนยัน
+                        กำหนดเว็บ
                         <ArrowRight className="h-3 w-3" />
                       </Button>
-                    ) : null}
-                    <Button
-                      size="sm"
-                      onClick={() => openAssign(acc)}
-                      className="rounded-lg bg-amber-500/15 text-amber-400 hover:bg-amber-500/25 border border-amber-500/20 gap-1.5 h-8 text-xs px-3"
-                      variant="ghost"
-                    >
-                      {acc.suggestedWebsiteId ? "เปลี่ยน" : "กำหนดเว็บ"}
-                      <ArrowRight className="h-3 w-3" />
-                    </Button>
-                    <button
-                      type="button"
-                      className="h-8 w-8 flex items-center justify-center rounded-lg text-destructive/50 hover:text-red-500 hover:bg-zinc-800 transition-all duration-200"
-                      onClick={() => onRemoveBackupAccount(acc.id)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </div>
-                  <div className="pr-52 space-y-2">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <RoleBadge role={acc.role} />
-                      {acc.suggestedWebsiteName ? (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-semibold bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-500/25">
-                          <span className="opacity-60">แนะนำ →</span>
-                          {acc.suggestedWebsiteName}
-                        </span>
-                      ) : (
+                      <button
+                        type="button"
+                        className="h-8 w-8 flex items-center justify-center rounded-lg text-destructive/50 hover:text-red-500 hover:bg-zinc-800 transition-all duration-200"
+                        onClick={() => onRemoveBackupAccount(acc.id)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
+                    <div className="pr-40 space-y-2">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <RoleBadge role={acc.role} />
                         <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold bg-amber-500/10 text-amber-400 ring-1 ring-amber-500/25">
                           ยังไม่กำหนดเว็บ
                         </span>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-1.5 min-w-0">
-                      <a
-                        href={acc.lineAccountUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm font-semibold text-foreground truncate hover:text-primary transition-colors"
-                      >
-                        {acc.lineName}
-                      </a>
-                      <ExternalLink className="h-3 w-3 text-muted-foreground shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </div>
-                    <p className="text-xs font-mono text-muted-foreground">
-                      @{acc.lineAccountId}
-                    </p>
-                  </div>
-                </div>
-              );
-              return (
-                <div className="space-y-4">
-                  {suggested.length > 0 && (
-                    <div className="space-y-2">
-                      <p className="text-xs font-medium text-emerald-400/70 px-1">
-                        ระบบแนะนำแล้ว ({suggested.length})
+                      </div>
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        <a
+                          href={acc.lineAccountUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm font-semibold text-foreground truncate hover:text-primary transition-colors"
+                        >
+                          {acc.lineName}
+                        </a>
+                        <ExternalLink className="h-3 w-3 text-muted-foreground shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </div>
+                      <p className="text-xs font-mono text-muted-foreground">
+                        @{acc.lineAccountId}
                       </p>
-                      {suggested.map(renderCard)}
                     </div>
-                  )}
-                  {unknown.length > 0 && (
-                    <div className="space-y-2">
-                      {suggested.length > 0 && (
-                        <p className="text-xs font-medium text-amber-400/70 px-1">
-                          ยังไม่ทราบเว็บ ({unknown.length})
-                        </p>
-                      )}
-                      {unknown.map(renderCard)}
-                    </div>
-                  )}
-                </div>
-              );
-            })()
+                  </div>
+                ))}
+              </div>
+            )
           ) : accountsForTab.length === 0 ? (
             <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border py-12 text-center">
               <Archive className="h-9 w-9 text-muted-foreground/40 mb-3" />

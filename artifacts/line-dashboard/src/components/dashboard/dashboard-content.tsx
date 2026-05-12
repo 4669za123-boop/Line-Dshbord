@@ -180,7 +180,7 @@ export function DashboardContent({
 
     // เรียก scan
     try {
-      const res = await fetch(`/api/websites/${site.id}/scan`);
+      const res = await fetch(`/api/websites/${site.id}/scan`, { method: "POST" });
       const data = await res.json() as { ok: boolean; accounts?: ScanAccount[]; error?: string };
       if (data.ok && Array.isArray(data.accounts)) {
         setScanAccounts(data.accounts);

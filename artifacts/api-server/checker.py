@@ -233,13 +233,16 @@ def run_check():
 
     try:
         res = requests.post(LINE_STATUS_URL, json={"statuses": statuses}, timeout=10)
-        data = res.json()
-        msg = f"active={data.get('active',0)}, suspended={data.get('suspended',0)}"
-        if data.get("replacements", 0) > 0:
-            msg += f", 🔄 auto-replaced={data['replacements']}"
-        print(f"\n✅ อัปเดต {len(statuses)} บัญชี ({res.status_code}) — {msg}")
+        try:
+            data = res.json()
+            msg = f"active={data.get('active',0)}, suspended={data.get('suspended',0)}"
+            if data.get("replacements", 0) > 0:
+                msg += f", 🔄 auto-replaced={data['replacements']}"
+            print(f"\n✅ อัปเดต {len(statuses)} บัญชี ({res.status_code}) — {msg}")
+        except Exception:
+            print(f"❌ POST /api/line-status → HTTP {res.status_code}, body: {res.text[:300]!r}")
     except Exception as e:
-        print("❌ POST /api/line-status ล้มเหลว:", e)
+        print("❌ POST /api/line-status ล้มเหลว (connection):", e)
 
     print("\n✅ CHECKER รอบนี้เสร็จสมบูรณ์")
 

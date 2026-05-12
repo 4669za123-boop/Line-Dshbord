@@ -1,0 +1,111 @@
+thaieasyvps@thaieasyvps-HVM-domU:/app$ pm2 logs line-checker --lines 50
+
+[TAILING] Tailing last 50 lines for [line-checker] process (change the value with --lines option)
+/home/thaieasyvps/.pm2/logs/line-checker-error.log last 50 lines:
+2|line-che | /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+2|line-che |   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+2|line-che | Traceback (most recent call last):
+2|line-che |   File "/app/artifacts/api-server/checker.py", line 259, in <module>
+2|line-che |     main()
+2|line-che |   File "/app/artifacts/api-server/checker.py", line 255, in main
+2|line-che |     time.sleep(CHECK_INTERVAL)
+2|line-che | KeyboardInterrupt
+2|line-che | /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+2|line-che |   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+2|line-che | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+2|line-che |   warnings.warn(
+2|line-che | Traceback (most recent call last):
+2|line-che |   File "/app/artifacts/api-server/checker.py", line 259, in <module>
+2|line-che |     main()
+2|line-che |   File "/app/artifacts/api-server/checker.py", line 255, in main
+2|line-che |     time.sleep(CHECK_INTERVAL)
+2|line-che | KeyboardInterrupt
+2|line-che | /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+2|line-che |   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+2|line-che | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+2|line-che |   warnings.warn(
+2|line-che | Traceback (most recent call last):
+2|line-che |   File "/app/artifacts/api-server/checker.py", line 259, in <module>
+2|line-che |     main()
+2|line-che |   File "/app/artifacts/api-server/checker.py", line 255, in main
+2|line-che |     time.sleep(CHECK_INTERVAL)
+2|line-che | KeyboardInterrupt
+2|line-che | /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+2|line-che |   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+2|line-che | Traceback (most recent call last):
+2|line-che |   File "/app/artifacts/api-server/checker.py", line 259, in <module>
+2|line-che |     main()
+2|line-che |   File "/app/artifacts/api-server/checker.py", line 251, in main
+2|line-che |     run_check()
+2|line-che |   File "/app/artifacts/api-server/checker.py", line 193, in run_check
+2|line-che |     accounts = get_accounts(driver)
+2|line-che |   File "/app/artifacts/api-server/checker.py", line 112, in get_accounts
+2|line-che |     time.sleep(1)
+2|line-che | KeyboardInterrupt
+2|line-che | /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+2|line-che |   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+2|line-che | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+2|line-che |   warnings.warn(
+
+/home/thaieasyvps/.pm2/logs/line-checker-out.log last 50 lines:
+2|line-che | #7 0x5d26261e0291 <unknown>
+2|line-che | #8 0x5d262676272b <unknown>
+2|line-che | #9 0x5d262676563d <unknown>
+2|line-che | #10 0x5d262674f688 <unknown>
+2|line-che | #11 0x5d26267661d0 <unknown>
+2|line-che | #12 0x5d2626736130 <unknown>
+2|line-che | #13 0x5d2626789778 <unknown>
+2|line-che | #14 0x5d2626789915 <unknown>
+2|line-che | #15 0x5d262679b2ce <unknown>
+2|line-che | #16 0x7e0680694ac3 <unknown>
+2|line-che | 
+2|line-che | 
+2|line-che | 🌐 เข้ากลุ่ม: F168 → https://manager.line.biz/groups/274574/setting
+2|line-che | ❌ group error (F168): Message: invalid session id; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#invalidsessionidexception
+2|line-che | Stacktrace:
+2|line-che | #0 0x5d262679c86a <unknown>
+2|line-che | #1 0x5d2626197660 <unknown>
+2|line-che | #2 0x5d26261de71e <unknown>
+2|line-che | #3 0x5d2626211906 <unknown>
+2|line-che | #4 0x5d262620bcb0 <unknown>
+2|line-che | #5 0x5d262620b46c <unknown>
+2|line-che | #6 0x5d262615cfb5 <unknown>
+2|line-che | #7 0x5d262676272b <unknown>
+2|line-che | #8 0x5d262676563d <unknown>
+2|line-che | #9 0x5d262674f688 <unknown>
+2|line-che | #10 0x5d26267661d0 <unknown>
+2|line-che | #11 0x5d2626736130 <unknown>
+2|line-che | #12 0x5d262615a846 <unknown>
+2|line-che | #13 0x7e0680629d90 <unknown>
+2|line-che | 
+2|line-che | ❌ POST /api/line-status ล้มเหลว: Expecting value: line 1 column 1 (char 0)
+2|line-che | 
+2|line-che | ✅ CHECKER รอบนี้เสร็จสมบูรณ์
+2|line-che | 
+2|line-che | ⏳ รอ 60 วินาทีก่อนรอบถัดไป...
+2|line-che | 
+2|line-che | =======================================================
+2|line-che | 🔍 CHECKER: เริ่มรอบตรวจสถานะกลุ่มหลัก
+2|line-che | =======================================================
+2|line-che | ✅ WEBSITES: 3 รายการ
+2|line-che | ✅ ใช้ Chrome profile: /home/thaieasyvps/.line-chrome-profile-v2
+2|line-che | ✅ ใช้ Chrome: /usr/bin/google-chrome
+2|line-che | ✅ ใช้ chromedriver: /tmp/chromedriver-linux64/chromedriver
+2|line-che | 
+2|line-che | 🌐 เข้ากลุ่ม: Jun88 → https://manager.line.biz/groups/284033/setting
+2|line-che |    พบ 2 account links
+2|line-che |    ✅ Jun88 F💤 (777zyhzk) → ออนไลน์
+2|line-che |    ✅ JUN88 ⚡️J Main (598evuml) → ออนไลน์
+2|line-che | 
+2|line-che | 🌐 เข้ากลุ่ม: MK8 → https://manager.line.biz/groups/274572/setting
+
+2|line-checker  |    พบ 2 account links
+2|line-checker  |    ✅ MK8 ADMIN💯 (662xbdet) → ออนไลน์
+2|line-checker  |    ✅ 🧸MK8🧸Deposit (408wnqlw) → ออนไลน์
+2|line-checker  | 🌐 เข้ากลุ่ม: F168 → https://manager.line.biz/groups/274574/setting
+2|line-checker  |    พบ 2 account links
+2|line-checker  |    ✅ 🐾F168ฝาก🐾 (795elsrx) → ออนไลน์
+2|line-checker  |    ✅ F🏆168 (235npgcy) → ออนไลน์
+2|line-checker  | ❌ POST /api/line-status ล้มเหลว: Expecting value: line 1 column 1 (char 0)
+2|line-checker  | ✅ CHECKER รอบนี้เสร็จสมบูรณ์
+2|line-checker  | ⏳ รอ 60 วินาทีก่อนรอบถัดไป...

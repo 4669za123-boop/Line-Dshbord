@@ -1,0 +1,40 @@
+thaieasyvps@thaieasyvps-HVM-domU:/app$ cd /app/artifacts/api-server && pm2 start backup-scanner.py --name backup-scanner --interpreter python3 && pm2 save
+[PM2] Starting /app/artifacts/api-server/backup-scanner.py in fork_mode (1 instance)
+[PM2] Done.
+┌────┬────────────────────┬──────────┬──────┬───────────┬──────────┬──────────┐
+│ id │ name               │ mode     │ ↺    │ status    │ cpu      │ memory   │
+├────┼────────────────────┼──────────┼──────┼───────────┼──────────┼──────────┤
+│ 3  │ backup-scanner     │ fork     │ 0    │ online    │ 0%       │ 6.9mb    │
+│ 2  │ line-checker       │ fork     │ 3    │ online    │ 0%       │ 28.9mb   │
+│ 0  │ line-dashboard-api │ fork     │ 3    │ online    │ 0%       │ 87.6mb   │
+└────┴────────────────────┴──────────┴──────┴───────────┴──────────┴──────────┘
+[PM2] Saving current process list...
+[PM2] Successfully saved in /home/thaieasyvps/.pm2/dump.pm2
+thaieasyvps@thaieasyvps-HVM-domU:/app/artifacts/api-server$ cd /app && git pull && pm2 restart line-checker && pm2 start artifacts/api-server/backup-scanner.py --name backup-scanner --interpreter python3 && pm2 save
+remote: Enumerating objects: 16, done.
+remote: Counting objects: 100% (16/16), done.
+remote: Compressing objects: 100% (7/7), done.
+remote: Total 11 (delta 7), reused 8 (delta 4), pack-reused 0 (from 0)
+Unpacking objects: 100% (11/11), 4.08 KiB | 198.00 KiB/s, done.
+From https://github.com/4669za123-boop/Line-Dshbord
+   3dd6924..0823c1d  main       -> origin/main
+Updating 3dd6924..0823c1d
+Fast-forward
+ artifacts/api-server/checker.py                                           |  15 +++--
+ ...easyvps-thaieasyvps-HVM-domU-app-cd-app-git-stash-gi_1778545386573.txt |  39 ++++++++++++
+ ...ieasyvps-thaieasyvps-HVM-domU-app-pm2-logs-line-chec_1778545606300.txt | 111 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 159 insertions(+), 6 deletions(-)
+ create mode 100644 attached_assets/Pasted-haieasyvps-thaieasyvps-HVM-domU-app-cd-app-git-stash-gi_1778545386573.txt
+ create mode 100644 attached_assets/Pasted-thaieasyvps-thaieasyvps-HVM-domU-app-pm2-logs-line-chec_1778545606300.txt
+Use --update-env to update environment variables
+[PM2] Applying action restartProcessId on app [line-checker](ids: [ 2 ])
+[PM2] [line-checker](2) ✓
+┌────┬────────────────────┬──────────┬──────┬───────────┬──────────┬──────────┐
+│ id │ name               │ mode     │ ↺    │ status    │ cpu      │ memory   │
+├────┼────────────────────┼──────────┼──────┼───────────┼──────────┼──────────┤
+│ 3  │ backup-scanner     │ fork     │ 0    │ online    │ 0%       │ 33.0mb   │
+│ 2  │ line-checker       │ fork     │ 4    │ online    │ 0%       │ 6.4mb    │
+│ 0  │ line-dashboard-api │ fork     │ 3    │ online    │ 0%       │ 88.3mb   │
+└────┴────────────────────┴──────────┴──────┴───────────┴──────────┴──────────┘
+[PM2][ERROR] Script already launched, add -f option to force re-execution
+thaieasyvps@thaieasyvps-HVM-domU:/app$ 

@@ -1,0 +1,45 @@
+thaieasyvps@thaieasyvps-HVM-domU:/app$ 12/05/2026 08:12:21 Got connection from client 127.0.0.1
+12/05/2026 08:12:21   0 other clients
+12/05/2026 08:12:21 Normal socket connection
+12/05/2026 08:12:21 Disabled X server key autorepeat.
+12/05/2026 08:12:21   to force back on run: 'xset r on' (3 times)
+12/05/2026 08:12:21 incr accepted_client=3 for 127.0.0.1:35856  sock=11
+12/05/2026 08:12:21 Client Protocol Version 3.8
+12/05/2026 08:12:21 Protocol version sent 3.8, using 3.8
+12/05/2026 08:12:21 rfbProcessClientSecurityType: executing handler for type 1
+12/05/2026 08:12:21 rfbProcessClientSecurityType: returning securityResult for client rfb version >= 3.8
+12/05/2026 08:12:21 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0x00000018)
+12/05/2026 08:12:21 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0x00000016)
+12/05/2026 08:12:21 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0x00000015)
+12/05/2026 08:12:21 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0x0000000F)
+12/05/2026 08:12:21 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0xFFFFFEC6)
+12/05/2026 08:12:21 Enabling full-color cursor updates for client 127.0.0.1
+12/05/2026 08:12:21 Enabling NewFBSize protocol extension for client 127.0.0.1
+12/05/2026 08:12:21 Using ZRLE encoding for client 127.0.0.1
+12/05/2026 08:12:22 Pixel format for client 127.0.0.1:
+12/05/2026 08:12:22   8 bpp, depth 6
+12/05/2026 08:12:22   true colour: max r 3 g 3 b 3, shift r 4 g 2 b 0
+12/05/2026 08:12:22 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0x00000018)
+12/05/2026 08:12:22 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0x00000016)
+12/05/2026 08:12:22 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0x00000015)
+12/05/2026 08:12:22 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0x0000000F)
+12/05/2026 08:12:22 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0xFFFFFEC6)
+12/05/2026 08:12:22 Enabling full-color cursor updates for client 127.0.0.1
+12/05/2026 08:12:22 Enabling NewFBSize protocol extension for client 127.0.0.1
+12/05/2026 08:12:22 Switching from ZRLE to raw Encoding for client 127.0.0.1
+12/05/2026 08:12:23 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0x00000018)
+12/05/2026 08:12:23 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0x00000016)
+12/05/2026 08:12:23 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0x00000015)
+12/05/2026 08:12:23 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0x0000000F)
+12/05/2026 08:12:23 rfbProcessClientNormalMessage: ignoring unsupported encoding type Enc(0xFFFFFEC6)
+12/05/2026 08:12:23 Enabling full-color cursor updates for client 127.0.0.1
+12/05/2026 08:12:23 Enabling NewFBSize protocol extension for client 127.0.0.1
+12/05/2026 08:12:23 Switching from raw to ZRLE Encoding for client 127.0.0.1
+12/05/2026 08:12:23 Pixel format for client 127.0.0.1:
+12/05/2026 08:12:23   32 bpp, depth 24, little endian
+12/05/2026 08:12:23   true colour: max r 255 g 255 b 255, shift r 16 g 8 b 0
+12/05/2026 08:12:23 no translation needed
+12/05/2026 08:12:25 client_set_net: 127.0.0.1  0.0003
+12/05/2026 08:12:25 active keyboard: turning X autorepeat off.
+12/05/2026 08:12:25 created   xdamage object: 0x200043
+12/05/2026 08:17:25 idle keyboard:   turning X autorepeat back on.

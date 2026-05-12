@@ -1,0 +1,39 @@
+thaieasyvps@thaieasyvps-HVM-domU:~$ pm2 logs auto-deploy --lines 30 --nostream
+
+[TAILING] Tailing last 30 lines for [auto-deploy] process (change the value with --lines option)
+/home/thaieasyvps/.pm2/logs/auto-deploy-error.log last 30 lines:
+/home/thaieasyvps/.pm2/logs/auto-deploy-out.log last 30 lines:
+4|auto-dep | [2026-05-13 00:01:29]   build: ⚡ Done in 1706ms
+4|auto-dep | [2026-05-13 00:01:29] 🔨 Build frontend dashboard...
+4|auto-dep | [2026-05-13 00:02:04]   frontend: computing gzip size...
+4|auto-dep | [2026-05-13 00:02:04]   frontend: dist/public/index.html                   1.12 kB │ gzip:   0.58 kB
+4|auto-dep | [2026-05-13 00:02:04]   frontend: dist/public/assets/index-BeRKXhmX.css  140.95 kB │ gzip:  21.11 kB
+4|auto-dep | [2026-05-13 00:02:04]   frontend: dist/public/assets/index-DaqlhNRz.js   354.07 kB │ gzip: 111.11 kB
+4|auto-dep | [2026-05-13 00:02:04]   frontend: ✓ built in 29.42s
+4|auto-dep | [2026-05-13 00:02:04] 🔄 Restart PM2 processes...
+4|auto-dep | [2026-05-13 00:02:05]   pm2: [PM2] [line-dashboard-api](0) ✓
+4|auto-dep | [2026-05-13 00:02:05] ✅ Deploy เสร็จ (commit: 07d3d632)
+4|auto-dep | [2026-05-13 00:03:06] 📦 พบ commit ใหม่: 07d3d632111c407881e98331fdb7e7b4b830173d — เริ่ม deploy...
+4|auto-dep | [2026-05-13 00:03:07]   💾 backup data → /tmp/api-data-backup-580740
+4|auto-dep | [2026-05-13 00:03:07]   git: error: Entry 'artifacts/api-server/data/backup-accounts-deposit.json' not uptodate. Cannot merge.
+4|auto-dep | [2026-05-13 00:03:07]   git: fatal: Could not reset index file to revision 'origin/main'.
+4|auto-dep | [2026-05-13 00:03:08]   ✅ restore data สำเร็จ
+4|auto-dep | [2026-05-13 00:03:08] 🔨 Build API server...
+4|auto-dep | [2026-05-13 00:03:13]   build: dist/pino-file.mjs.map             229.0kb
+4|auto-dep | [2026-05-13 00:03:14]   build: dist/pino-pretty.mjs.map           203.9kb
+4|auto-dep | [2026-05-13 00:03:14]   build: dist/thread-stream-worker.mjs.map   12.0kb
+4|auto-dep | [2026-05-13 00:03:14]   build: 
+4|auto-dep | [2026-05-13 00:03:14]   build: ⚡ Done in 2279ms
+4|auto-dep | [2026-05-13 00:03:14] 🔨 Build frontend dashboard...
+4|auto-dep | [2026-05-13 00:03:52]   frontend: computing gzip size...
+4|auto-dep | [2026-05-13 00:03:52]   frontend: dist/public/index.html                   1.12 kB │ gzip:   0.58 kB
+4|auto-dep | [2026-05-13 00:03:52]   frontend: dist/public/assets/index-BeRKXhmX.css  140.95 kB │ gzip:  21.11 kB
+4|auto-dep | [2026-05-13 00:03:52]   frontend: dist/public/assets/index-DaqlhNRz.js   354.07 kB │ gzip: 111.11 kB
+4|auto-dep | [2026-05-13 00:03:52]   frontend: ✓ built in 32.14s
+4|auto-dep | [2026-05-13 00:03:52] 🔄 Restart PM2 processes...
+4|auto-dep | [2026-05-13 00:03:54]   pm2: [PM2] [line-dashboard-api](0) ✓
+4|auto-dep | [2026-05-13 00:03:54] ✅ Deploy เสร็จ (commit: 07d3d632)
+
+thaieasyvps@thaieasyvps-HVM-domU:~$ cd /app && git rev-parse HEAD
+
+0d23e21d1914237249728a127226f01a9b581515

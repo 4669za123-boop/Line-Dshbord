@@ -43,16 +43,31 @@ router.get("/lines", (_req, res) => {
   const websites = readWebsites();
   const websiteMap = new Map(websites.map((w) => [w.id, w.name]));
 
-  const lines = Object.values(discovered).map((line) => ({
-    id: line.id,
-    name: line.name,
-    lineId: line.id,
-    websiteId: line.siteId,
-    websiteName: websiteMap.get(line.siteId) ?? line.site,
-    url: line.url,
-    role: line.role,
-    status: line.status === "normal" ? "normal" : "inactive",
-  }));
+  const websiteByName = new Map(websites.map((w) => [w.name.toLowerCase(), w]));
+
+  const lines = Object.values(discovered).map((line) => {
+    let resolvedId   = line.siteId;
+    let resolvedName = websiteMap.get(line.siteId) ?? line.site;
+
+    if (!resolvedId && line.site) {
+      const matched = websiteByName.get(line.site.toLowerCase());
+      if (matched) {
+        resolvedId   = matched.id;
+        resolvedName = matched.name;
+      }
+    }
+
+    return {
+      id:          line.id,
+      name:        line.name,
+      lineId:      line.id,
+      websiteId:   resolvedId,
+      websiteName: resolvedName,
+      url:         line.url,
+      role:        line.role,
+      status:      line.status === "normal" ? "normal" : "inactive",
+    };
+  });
 
   res.json(lines);
 });

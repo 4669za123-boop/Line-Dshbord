@@ -305,7 +305,7 @@ export function DashboardContent({
         </Dialog>
 
         {/* ── Scan results dialog ──────────────────────────────────────── */}
-        <Dialog open={scanDialogOpen} onOpenChange={(o) => { if (!savingRoles) setScanDialogOpen(o); }}>
+        <Dialog open={scanDialogOpen} onOpenChange={(o) => { if (!savingRoles && scanStatus !== "scanning") setScanDialogOpen(o); }}>
           <DialogContent className="overflow-hidden border-border bg-background p-0 sm:max-w-lg">
             {/* header */}
             <div className="relative overflow-hidden bg-gradient-to-br from-primary/20 via-background to-background px-6 pb-3 pt-8">
@@ -420,15 +420,17 @@ export function DashboardContent({
 
               {/* footer buttons */}
               <div className="flex gap-2 justify-end pt-1">
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="rounded-xl"
-                  disabled={savingRoles}
-                  onClick={() => setScanDialogOpen(false)}
-                >
-                  {scanStatus === "scanning" ? "ข้ามก่อน" : "ปิด"}
-                </Button>
+                {scanStatus !== "scanning" && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="rounded-xl"
+                    disabled={savingRoles}
+                    onClick={() => setScanDialogOpen(false)}
+                  >
+                    ปิด
+                  </Button>
+                )}
                 {scanStatus === "done" && scanAccounts.length > 0 && (
                   <Button
                     type="button"

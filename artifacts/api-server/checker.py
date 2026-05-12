@@ -15,7 +15,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 WEBSITES_FILE  = "data/websites.json"
-API_BASE       = os.environ.get("API_BASE", "http://localhost:3000/api")
+API_BASE       = os.environ.get("API_BASE", "http://localhost:8080/api")
 LINE_STATUS_URL = f"{API_BASE}/line-status"
 CHROME_PROFILE_DIR = os.environ.get("CHROME_PROFILE_DIR", "/home/thaieasyvps/.line-chrome-profile-v2")
 CHECK_INTERVAL = int(os.environ.get("CHECK_INTERVAL", "60"))

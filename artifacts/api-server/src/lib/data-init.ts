@@ -16,6 +16,7 @@ const DEFAULTS: Record<string, unknown> = {
   "backup-accounts-deposit.json":  [],
   "backup-accounts-pending.json":  [],
   "schedules.json":                ["09:00", "14:00", "20:00"],
+  "deleted-lines.json":            [],
 };
 
 function ensureFile(filename: string, defaultValue: unknown) {

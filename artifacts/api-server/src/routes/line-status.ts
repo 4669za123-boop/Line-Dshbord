@@ -4,9 +4,10 @@ import path from "path";
 
 const router = Router();
 const dataDir = path.join(process.cwd(), "data");
-const filePath = path.join(dataDir, "discovered-lines.json");
+const filePath          = path.join(dataDir, "discovered-lines.json");
 const suspendedFilePath = path.join(dataDir, "suspended-lines.json");
-const websitesFilePath = path.join(dataDir, "websites.json");
+const websitesFilePath  = path.join(dataDir, "websites.json");
+const blacklistFilePath = path.join(dataDir, "deleted-lines.json");
 
 // ไฟล์ backup pool
 const BACKUP_FILES = {
@@ -72,6 +73,14 @@ function readWebsites(): WebsiteRecord[] {
 function resolveSiteId(siteId: string, siteName: string, websites: WebsiteRecord[]): string {
   if (siteId) return siteId;
   return websites.find((w) => w.name === siteName)?.id ?? "";
+}
+
+function readBlacklist(): Set<string> {
+  try {
+    if (!fs.existsSync(blacklistFilePath)) return new Set();
+    const arr = JSON.parse(fs.readFileSync(blacklistFilePath, "utf-8"));
+    return new Set(Array.isArray(arr) ? arr : []);
+  } catch { return new Set(); }
 }
 
 function readDiscovered(): Record<string, DiscoveredLine> {
@@ -184,13 +193,17 @@ router.post("/line-status", (req, res) => {
     return;
   }
 
-  const websites  = readWebsites();
-  const current   = readDiscovered();
-  const suspended = readSuspended();
+  const websites   = readWebsites();
+  const current    = readDiscovered();
+  const suspended  = readSuspended();
+  const blacklist  = readBlacklist();
   const suspendedIds = new Set(suspended.map((s) => s.id));
   let replacements = 0;
 
   for (const [lineId, entry] of Object.entries(statuses)) {
+    // ถ้าอยู่ใน blacklist (user ลบไปแล้ว) → ข้ามเลย ไม่เพิ่มกลับ
+    if (blacklist.has(lineId)) continue;
+
     const existing = current[lineId];
 
     // resolve siteId: ถ้าว่าง (เว็บไม่มี id field) → ค้นจากชื่อ

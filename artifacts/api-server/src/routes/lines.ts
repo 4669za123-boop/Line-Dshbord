@@ -5,7 +5,8 @@ import path from "path";
 const router = Router();
 const dataDir = path.join(process.cwd(), "data");
 const discoveredFilePath = path.join(dataDir, "discovered-lines.json");
-const websitesFilePath = path.join(dataDir, "websites.json");
+const websitesFilePath   = path.join(dataDir, "websites.json");
+const blacklistFilePath  = path.join(dataDir, "deleted-lines.json");
 
 type StoredLine = {
   id: string;
@@ -40,6 +41,21 @@ function readWebsites(): Website[] {
 function writeDiscovered(data: Record<string, StoredLine>) {
   if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
   fs.writeFileSync(discoveredFilePath, JSON.stringify(data, null, 2));
+}
+
+function readBlacklist(): Set<string> {
+  try {
+    if (!fs.existsSync(blacklistFilePath)) return new Set();
+    const arr = JSON.parse(fs.readFileSync(blacklistFilePath, "utf-8"));
+    return new Set(Array.isArray(arr) ? arr : []);
+  } catch { return new Set(); }
+}
+
+function addToBlacklist(id: string) {
+  const list = readBlacklist();
+  list.add(id);
+  if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
+  fs.writeFileSync(blacklistFilePath, JSON.stringify([...list], null, 2));
 }
 
 // GET /api/lines — คืนรายการ LINE ทั้งหมด (map field ให้ตรงกับ frontend)
@@ -77,16 +93,13 @@ router.get("/lines", (_req, res) => {
   res.json(lines);
 });
 
-// DELETE /api/discovered-lines/:id — ลบ LINE account ออกจาก discovered-lines.json
+// DELETE /api/discovered-lines/:id — ลบ LINE account + บันทึกลง blacklist ถาวร
 router.delete("/discovered-lines/:id", (req, res) => {
   const { id } = req.params;
   const discovered = readDiscovered();
-  if (!discovered[id]) {
-    res.json({ ok: false, error: "not found" });
-    return;
-  }
   delete discovered[id];
   writeDiscovered(discovered);
+  addToBlacklist(id);
   res.json({ ok: true });
 });
 

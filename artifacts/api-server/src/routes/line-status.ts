@@ -73,7 +73,8 @@ function writeDiscovered(data: Record<string, DiscoveredLine>) {
 function readSuspended(): SuspendedLine[] {
   try {
     if (!fs.existsSync(suspendedFilePath)) return [];
-    return JSON.parse(fs.readFileSync(suspendedFilePath, "utf-8"));
+    const data = JSON.parse(fs.readFileSync(suspendedFilePath, "utf-8"));
+    return Array.isArray(data) ? data : [];
   } catch {
     return [];
   }

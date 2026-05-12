@@ -148,7 +148,7 @@ router.put("/websites/reorder", (req, res) => {
 router.post("/websites/:id/scan", (req, res) => {
   const website = readWebsites().find((w) => w.id === req.params.id);
   if (!website) {
-    res.status(404).json({ ok: false, error: "website not found" });
+    res.json({ ok: false, error: "website not found" });
     return;
   }
 
@@ -166,7 +166,7 @@ router.post("/websites/:id/scan", (req, res) => {
     if (responded) return;
     responded = true;
     try { proc.kill(); } catch { /* ignore */ }
-    res.status(408).json({ ok: false, error: "scan timeout (120s)" });
+    res.json({ ok: false, error: "scan timeout (120s)" });
   }, 120_000);
 
   proc.on("close", () => {
@@ -179,7 +179,7 @@ router.post("/websites/:id/scan", (req, res) => {
       if (!last) throw new Error("no JSON output");
       res.json(JSON.parse(last));
     } catch {
-      res.status(500).json({ ok: false, error: "scan failed — ไม่ได้รับผลลัพธ์จาก scanner" });
+      res.json({ ok: false, error: "scan failed — ไม่ได้รับผลลัพธ์จาก scanner" });
     }
   });
 
@@ -187,7 +187,7 @@ router.post("/websites/:id/scan", (req, res) => {
     clearTimeout(timer);
     if (responded) return;
     responded = true;
-    res.status(500).json({ ok: false, error: err.message });
+    res.json({ ok: false, error: err.message });
   });
 });
 

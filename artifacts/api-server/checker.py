@@ -178,46 +178,63 @@ def run_check():
     wait     = WebDriverWait(driver, 20)
     statuses = {}
 
-    try:
-        for website in websites:
-            site_id   = website.get("id", "")
-            site_name = website["name"]
-            group_url = website["url"]
-            print(f"\n🌐 เข้ากลุ่ม: {site_name} → {group_url}")
+    def _restart_driver():
+        nonlocal driver, wait
+        try:
+            driver.quit()
+        except Exception:
+            pass
+        print("🔄 Restart Chrome...")
+        driver = connect()
+        wait   = WebDriverWait(driver, 20)
 
-            try:
-                driver.get(group_url)
-                wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-                time.sleep(2)
+    def _is_session_dead(e):
+        msg = str(e).lower()
+        return "invalid session id" in msg or "session not created" in msg or "no such session" in msg
 
-                accounts = get_accounts(driver)
-                print(f"   พบ {len(accounts)} account links")
+    for website in websites:
+        site_id   = website.get("id", "")
+        site_name = website["name"]
+        group_url = website["url"]
+        print(f"\n🌐 เข้ากลุ่ม: {site_name} → {group_url}")
 
-                for acc_url in accounts:
-                    line_id = extract_id_from_url(acc_url)
-                    if not line_id:
-                        continue
-                    try:
-                        driver.get(acc_url)
-                        wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-                        time.sleep(2)
+        try:
+            driver.get(group_url)
+            wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
+            time.sleep(2)
 
-                        line_name = get_account_name(driver, line_id)
-                        if check_banned(driver):
-                            status = "suspended"
-                            print(f"   🚨 {line_name} ({line_id}) → โดนระงับ")
-                        else:
-                            status = "normal"
-                            print(f"   ✅ {line_name} ({line_id}) → ออนไลน์")
+            accounts = get_accounts(driver)
+            print(f"   พบ {len(accounts)} account links")
 
-                        statuses[line_id] = {
-                            "name":   line_name,
-                            "status": status,
-                            "site":   site_name,
-                            "siteId": site_id,
-                            "url":    acc_url,
-                        }
-                    except Exception as e:
+            for acc_url in accounts:
+                line_id = extract_id_from_url(acc_url)
+                if not line_id:
+                    continue
+                try:
+                    driver.get(acc_url)
+                    wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
+                    time.sleep(2)
+
+                    line_name = get_account_name(driver, line_id)
+                    if check_banned(driver):
+                        status = "suspended"
+                        print(f"   🚨 {line_name} ({line_id}) → โดนระงับ")
+                    else:
+                        status = "normal"
+                        print(f"   ✅ {line_name} ({line_id}) → ออนไลน์")
+
+                    statuses[line_id] = {
+                        "name":   line_name,
+                        "status": status,
+                        "site":   site_name,
+                        "siteId": site_id,
+                        "url":    acc_url,
+                    }
+                except Exception as e:
+                    if _is_session_dead(e):
+                        print(f"   ⚠️  Chrome crash ตอนตรวจ {line_id} — restart")
+                        _restart_driver()
+                    else:
                         print(f"   ❌ {line_id} error:", e)
                         statuses[line_id] = {
                             "name":   line_id,
@@ -226,10 +243,16 @@ def run_check():
                             "siteId": site_id,
                             "url":    acc_url,
                         }
-            except Exception as e:
-                print(f"❌ group error ({site_name}):", e)
-    finally:
+        except Exception as e:
+            print(f"❌ group error ({site_name}):", e)
+            if _is_session_dead(e):
+                print("   🔄 Chrome crash ตอนเข้ากลุ่ม — restart แล้วสแกนต่อ")
+                _restart_driver()
+
+    try:
         driver.quit()
+    except Exception:
+        pass
 
     try:
         res = requests.post(LINE_STATUS_URL, json={"statuses": statuses}, timeout=10)

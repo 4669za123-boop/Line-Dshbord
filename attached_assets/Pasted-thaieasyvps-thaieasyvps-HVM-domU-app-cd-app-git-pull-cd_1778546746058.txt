@@ -1,0 +1,43 @@
+thaieasyvps@thaieasyvps-HVM-domU:/app$ cd /app && git pull && cd artifacts/api-server && pnpm run build && pm2 restart line-dashboard-api
+remote: Enumerating objects: 20, done.
+remote: Counting objects: 100% (20/20), done.
+remote: Compressing objects: 100% (4/4), done.
+remote: Total 13 (delta 9), reused 13 (delta 9), pack-reused 0 (from 0)
+Unpacking objects: 100% (13/13), 3.96 KiB | 77.00 KiB/s, done.
+From https://github.com/4669za123-boop/Line-Dshbord
+   4c7128c..c9a63a2  main       -> origin/main
+Updating 4c7128c..c9a63a2
+Fast-forward
+ artifacts/api-server/src/routes/line-status.ts                            |  3 +-
+ ...ieasyvps-thaieasyvps-HVM-domU-app-cd-app-git-pull-pm_1778546588204.txt | 59 +++++++++++++++++++++++++++++++++++
+ ...ieasyvps-thaieasyvps-HVM-domU-app-pm2-logs-line-chec_1778546686824.txt | 37 ++++++++++++++++++++++
+ 3 files changed, 98 insertions(+), 1 deletion(-)
+ create mode 100644 attached_assets/Pasted-thaieasyvps-thaieasyvps-HVM-domU-app-cd-app-git-pull-pm_1778546588204.txt
+ create mode 100644 attached_assets/Pasted-thaieasyvps-thaieasyvps-HVM-domU-app-pm2-logs-line-chec_1778546686824.txt
+
+> @workspace/api-server@0.0.0 build /app/artifacts/api-server
+> node ./build.mjs
+
+
+  dist/index.mjs                       1.4mb ⚠️
+  dist/pino-worker.mjs               153.4kb
+  dist/pino-file.mjs                 142.0kb
+  dist/pino-pretty.mjs               114.6kb
+  dist/thread-stream-worker.mjs        7.3kb
+  dist/index.mjs.map                   2.2mb
+  dist/pino-worker.mjs.map           256.9kb
+  dist/pino-file.mjs.map             229.0kb
+  dist/pino-pretty.mjs.map           203.9kb
+  dist/thread-stream-worker.mjs.map   12.0kb
+
+⚡ Done in 2844ms
+Use --update-env to update environment variables
+[PM2] Applying action restartProcessId on app [line-dashboard-api](ids: [ 0 ])
+[PM2] [line-dashboard-api](0) ✓
+┌────┬────────────────────┬──────────┬──────┬───────────┬──────────┬──────────┐
+│ id │ name               │ mode     │ ↺    │ status    │ cpu      │ memory   │
+├────┼────────────────────┼──────────┼──────┼───────────┼──────────┼──────────┤
+│ 3  │ backup-scanner     │ fork     │ 5    │ online    │ 0%       │ 28.8mb   │
+│ 2  │ line-checker       │ fork     │ 5    │ online    │ 0%       │ 28.8mb   │
+│ 0  │ line-dashboard-api │ fork     │ 4    │ online    │ 0%       │ 22.6mb   │
+└────┴────────────────────┴──────────┴──────┴───────────┴──────────┴──────────┘

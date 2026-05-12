@@ -57,6 +57,17 @@ function writeDiscovered(data: Record<string, DiscoveredLine>) {
   fs.writeFileSync(discoveredFilePath, JSON.stringify(data, null, 2));
 }
 
+const blacklistFilePath = path.join(dataDir, "deleted-lines.json");
+
+function removeFromBlacklist(ids: string[]) {
+  try {
+    if (!fs.existsSync(blacklistFilePath)) return;
+    const arr: string[] = JSON.parse(fs.readFileSync(blacklistFilePath, "utf-8"));
+    const updated = arr.filter((id) => !ids.includes(id));
+    fs.writeFileSync(blacklistFilePath, JSON.stringify(updated, null, 2));
+  } catch { /* ignore */ }
+}
+
 function removeDiscoveredBySite(siteId: string) {
   try {
     const data = readDiscovered();
@@ -213,7 +224,7 @@ router.post("/websites/:id/save-scan", (req, res) => {
   }
 
   const discovered = readDiscovered();
-  let saved = 0;
+  const savedIds: string[] = [];
   for (const acc of accounts) {
     if (!acc.lineId || !acc.role) continue;
     discovered[acc.lineId] = {
@@ -225,10 +236,12 @@ router.post("/websites/:id/save-scan", (req, res) => {
       url:    acc.url,
       role:   acc.role,
     };
-    saved++;
+    savedIds.push(acc.lineId);
   }
   writeDiscovered(discovered);
-  res.json({ ok: true, saved });
+  // ลบออกจาก blacklist เพราะ user เพิ่มกลับโดยตั้งใจผ่าน scan dialog
+  removeFromBlacklist(savedIds);
+  res.json({ ok: true, saved: savedIds.length });
 });
 
 export default router;

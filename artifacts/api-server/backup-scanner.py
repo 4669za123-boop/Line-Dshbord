@@ -149,10 +149,18 @@ def _collect_accounts_on_page(driver):
     """Scroll + เก็บ account URL → ชื่อ จากหน้าปัจจุบัน"""
     accounts = {}   # url → name
     last_h   = 0
+    # ตัด nav/aside/header ออก เพื่อไม่ดูด sidebar/navigation accounts
+    _ACCOUNT_XPATH = (
+        "//a[contains(@href,'/account/')"
+        " and not(ancestor::nav)"
+        " and not(ancestor::aside)"
+        " and not(ancestor::header)"
+        "]"
+    )
     for _ in range(10):
         driver.execute_script("window.scrollBy(0, 600);")
         time.sleep(0.7)
-        links = driver.find_elements(By.XPATH, "//a[contains(@href,'/account/')]")
+        links = driver.find_elements(By.XPATH, _ACCOUNT_XPATH)
         for l in links:
             href = l.get_attribute("href")
             if not href:

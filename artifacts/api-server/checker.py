@@ -107,10 +107,18 @@ def connect():
 
 def get_accounts(driver):
     accounts = set()
+    # ใช้ XPath ที่ตัด nav/aside/header ออก เพื่อไม่ดูด sidebar/navigation accounts
+    XPATH = (
+        "//a[contains(@href,'/account/')"
+        " and not(ancestor::nav)"
+        " and not(ancestor::aside)"
+        " and not(ancestor::header)"
+        "]"
+    )
     for _ in range(6):
         driver.execute_script("window.scrollBy(0, 800);")
         time.sleep(1)
-        links = driver.find_elements(By.XPATH, "//a[contains(@href,'/account/')]")
+        links = driver.find_elements(By.XPATH, XPATH)
         for l in links:
             href = l.get_attribute("href")
             if href:

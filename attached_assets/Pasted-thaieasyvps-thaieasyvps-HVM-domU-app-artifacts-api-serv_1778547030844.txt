@@ -1,0 +1,67 @@
+thaieasyvps@thaieasyvps-HVM-domU:/app/artifacts/api-server$ pm2 logs backup-scanner --lines 30 --nostream
+[TAILING] Tailing last 30 lines for [backup-scanner] process (change the value with --lines option)
+/home/thaieasyvps/.pm2/logs/backup-scanner-error.log last 30 lines:
+3|backup-s |     httplib_response = super().getresponse()
+3|backup-s |   File "/usr/lib/python3.10/http/client.py", line 1395, in getresponse
+3|backup-s |     response.begin()
+3|backup-s |   File "/usr/lib/python3.10/http/client.py", line 323, in begin
+3|backup-s |     version, status, reason = self._read_status()
+3|backup-s |   File "/usr/lib/python3.10/http/client.py", line 284, in _read_status
+3|backup-s |     line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+3|backup-s |   File "/usr/lib/python3.10/socket.py", line 705, in readinto
+3|backup-s |     return self._sock.recv_into(b)
+3|backup-s | KeyboardInterrupt
+3|backup-s | /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+3|backup-s |   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+3|backup-s | /usr/local/lib/python3.10/dist-packages/urllib3/poolmanager.py:329: FutureWarning: The 'strict' parameter is no longer needed on Python 3+. This will raise an error in urllib3 v3.0.
+3|backup-s |   warnings.warn(
+3|backup-s | Traceback (most recent call last):
+3|backup-s |   File "/app/artifacts/api-server/backup-scanner.py", line 379, in <module>
+3|backup-s |   File "/app/artifacts/api-server/backup-scanner.py", line 375, in main
+3|backup-s | KeyboardInterrupt
+3|backup-s | /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+3|backup-s |   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+3|backup-s | Traceback (most recent call last):
+3|backup-s |   File "/app/artifacts/api-server/backup-scanner.py", line 368, in <module>
+3|backup-s |     main()
+3|backup-s |   File "/app/artifacts/api-server/backup-scanner.py", line 360, in main
+3|backup-s |     run_scan()
+3|backup-s |   File "/app/artifacts/api-server/backup-scanner.py", line 319, in run_scan
+3|backup-s |     time.sleep(2)
+3|backup-s | KeyboardInterrupt
+3|backup-s | /usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.7.0) or chardet (4.0.0) doesn't match a supported version!
+3|backup-s |   warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+
+/home/thaieasyvps/.pm2/logs/backup-scanner-out.log last 30 lines:
+3|backup-s |    ✅ ไม่มีหน้าถัดไป — สแกนครบ 4 หน้า
+3|backup-s |    📦 รวมทั้งหมด 32 account จาก 4 หน้า
+3|backup-s |    ✅ LINE Official Account Manager (@328tqbbi)
+3|backup-s |    ✅ LINE Official Account Manager (@076ztqzf)
+3|backup-s |    ✅ LINE Official Account Manager (@981akavk)
+3|backup-s |    ✅ LINE Official Account Manager (@658iscmo)
+3|backup-s |    ✅ LINE Official Account Manager (@679odwkl)
+3|backup-s |    ✅ LINE Official Account Manager (@857vqsxf)
+3|backup-s |    ✅ LINE Official Account Manager (@512ztffa)
+3|backup-s |    ✅ LINE Official Account Manager (@947abhxp)
+3|backup-s |    ✅ LINE Official Account Manager (@598xiglo)
+3|backup-s |    ✅ LINE Official Account Manager (@101wplwq)
+3|backup-s |    ✅ LINE Official Account Manager (@225flbuh)
+3|backup-s |    ✅ LINE Official Account Manager (@618aonem)
+3|backup-s |    ✅ LINE Official Account Manager (@098yfhpn)
+3|backup-s |    ✅ LINE Official Account Manager (@112ojpas)
+3|backup-s |    ✅ LINE Official Account Manager (@699nfvus)
+3|backup-s |    ✅ LINE Official Account Manager (@660zcawx)
+3|backup-s |    ✅ LINE Official Account Manager (@699dkpuu)
+3|backup-s |    ✅ LINE Official Account Manager (@855dvahn)
+3|backup-s |    ✅ LINE Official Account Manager (@708tzldl)
+3|backup-s |    ✅ LINE Official Account Manager (@074nwisa)
+3|backup-s |    ✅ LINE Official Account Manager (@797jvgyk)
+3|backup-s |    ✅ LINE Official Account Manager (@553lemvy)
+3|backup-s |    ✅ LINE Official Account Manager (@018ztoht)
+3|backup-s |    ✅ LINE Official Account Manager (@491gngyn)
+3|backup-s |    ✅ LINE Official Account Manager (@512xesnh)
+3|backup-s |    ✅ LINE Official Account Manager (@529jruom)
+3|backup-s |    ✅ LINE Official Account Manager (@218fupfa)
+3|backup-s |    ✅ LINE Official Account Manager (@902kycwy)
+
+thaieasyvps@thaieasyvps-HVM-domU:/app/artifacts/api-server$ 

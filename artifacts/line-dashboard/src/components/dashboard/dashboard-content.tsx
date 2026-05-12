@@ -306,7 +306,7 @@ export function DashboardContent({
 
         {/* ── Scan results dialog ──────────────────────────────────────── */}
         <Dialog open={scanDialogOpen} onOpenChange={(o) => { if (!savingRoles && scanStatus !== "scanning") setScanDialogOpen(o); }}>
-          <DialogContent className="overflow-hidden border-border bg-background p-0 sm:max-w-lg">
+          <DialogContent className="overflow-hidden border-border bg-background p-0 sm:max-w-lg [&>button:last-child]:hidden">
             {/* header */}
             <div className="relative overflow-hidden bg-gradient-to-br from-primary/20 via-background to-background px-6 pb-3 pt-8">
               <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-primary/15 blur-3xl" />

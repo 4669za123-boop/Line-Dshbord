@@ -30,47 +30,44 @@ while true; do
 
     git fetch origin main --quiet 2>/dev/null
 
-    # ── 1. backup data files ก่อนทำอะไร ──────────────────────────────────────
     DATA_SRC="$APP_DIR/artifacts/api-server/data"
     DATA_BACKUP=$(mktemp -d)
+
+    # ── 1. backup เฉพาะไฟล์ที่ต้องการเก็บ (ไม่รวม LINE accounts) ─────────────
+    KEEP_FILES=(
+      "websites.json"
+      "backup-groups.json"
+      "backup-accounts-main.json"
+      "backup-accounts-deposit.json"
+      "backup-accounts-pending.json"
+      "schedules.json"
+      "deleted-lines.json"
+    )
     if [ -d "$DATA_SRC" ]; then
-      cp -r "$DATA_SRC/." "$DATA_BACKUP/" 2>/dev/null || true
-      log "  💾 backup data → $DATA_BACKUP"
+      for f in "${KEEP_FILES[@]}"; do
+        [ -f "$DATA_SRC/$f" ] && cp "$DATA_SRC/$f" "$DATA_BACKUP/$f" 2>/dev/null || true
+      done
+      log "  💾 backup เฉพาะไฟล์ config/backup pool → $DATA_BACKUP"
     fi
 
-    # ── 2. clear data files จาก index เพื่อให้ reset ผ่าน ────────────────────
-    #    skip-worktree อย่างเดียวไม่พอ ถ้า index ยัง dirty อยู่
+    # ── 2. clear index ────────────────────────────────────────────────────────
     git update-index --no-skip-worktree -- $(git ls-files artifacts/api-server/data/) 2>/dev/null || true
     git checkout -- artifacts/api-server/data/ 2>/dev/null || true
 
     # ── 3. reset ──────────────────────────────────────────────────────────────
     git reset --hard origin/main 2>&1 | while read -r line; do log "  git: $line"; done
 
-    # ── 4. restore data files ─────────────────────────────────────────────────
-    if [ -d "$DATA_BACKUP" ] && [ "$(ls -A "$DATA_BACKUP" 2>/dev/null)" ]; then
-      mkdir -p "$DATA_SRC"
-      cp -r "$DATA_BACKUP/." "$DATA_SRC/" 2>/dev/null || true
-      log "  ✅ restore data สำเร็จ"
-    fi
+    # ── 4. restore เฉพาะไฟล์ที่ backup ไว้ ───────────────────────────────────
+    mkdir -p "$DATA_SRC"
+    for f in "${KEEP_FILES[@]}"; do
+      [ -f "$DATA_BACKUP/$f" ] && cp "$DATA_BACKUP/$f" "$DATA_SRC/$f" 2>/dev/null || true
+    done
+    # discovered-lines.json และ suspended-lines.json รีเซ็ตเป็นค่าว่างเสมอ
+    echo '{}' > "$DATA_SRC/discovered-lines.json"
+    echo '[]' > "$DATA_SRC/suspended-lines.json"
+    log "  ✅ restore config สำเร็จ — LINE accounts รีเซ็ตเป็นว่าง"
 
-    # ── 5. ใช้ blacklist กวาด discovered-lines.json หลัง restore ────────────────
-    python3 - <<'PYEOF' 2>/dev/null || true
-import json, os
-data_dir = "/app/artifacts/api-server/data"
-bl_file  = os.path.join(data_dir, "deleted-lines.json")
-dl_file  = os.path.join(data_dir, "discovered-lines.json")
-if os.path.exists(bl_file) and os.path.exists(dl_file):
-    blacklist  = set(json.load(open(bl_file)))
-    discovered = json.load(open(dl_file))
-    filtered   = {k: v for k, v in discovered.items() if k not in blacklist}
-    removed    = len(discovered) - len(filtered)
-    if removed > 0:
-        json.dump(filtered, open(dl_file, "w"), ensure_ascii=False, indent=2)
-        print(f"blacklist-clean: ลบ {removed} account(s) ออกจาก discovered-lines")
-PYEOF
-    log "  🧹 blacklist clean เสร็จ"
-
-    # ── 6. ตั้ง skip-worktree ป้องกัน deploy ครั้งถัดไป ────────────────────────
+    # ── 5. ตั้ง skip-worktree ป้องกัน deploy ครั้งถัดไป ────────────────────────
     git ls-files artifacts/api-server/data/ | xargs -r git update-index --skip-worktree
     log "  🔒 skip-worktree ตั้งค่าแล้ว"
 

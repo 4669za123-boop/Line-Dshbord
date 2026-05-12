@@ -1,0 +1,133 @@
+import { Trash2 } from "lucide-react"
+
+export function Merged() {
+  const mockData = {
+    websiteName: "JUN88",
+    websiteUrl: "https://jun88.com",
+    mainLines: [
+      { id: "jun88main", name: "JUN88 ⚡️J Main", status: "normal" },
+    ],
+    depositLines: [
+      { id: "jun88dep", name: "Jun88 F💤", status: "inactive" },
+    ],
+    unassignedLines: [
+      { id: "jun88new", name: "JUN88 New OA", status: "normal" },
+    ],
+  }
+
+  return (
+    <div className="min-h-screen bg-[#0d0d0f] flex items-start justify-center p-8">
+      <div className="w-[380px]">
+        <div className="rounded-xl bg-[#141417] border border-white/7 overflow-hidden shadow-2xl">
+
+          {/* top accent stripe — gradient ฟ้า→ม่วง */}
+          <div className="h-[3px] bg-gradient-to-r from-blue-500 via-indigo-400 to-violet-500" />
+
+          {/* header */}
+          <div className="px-5 pt-4 pb-3.5 flex items-center justify-between border-b border-white/5">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-blue-500/15 flex items-center justify-center shrink-0">
+                <span className="text-blue-400 text-xs font-bold">J</span>
+              </div>
+              <div>
+                <p className="text-[15px] font-bold text-white leading-none">{mockData.websiteName}</p>
+                <p className="text-[10px] text-white/25 mt-0.5 font-mono">{mockData.websiteUrl}</p>
+              </div>
+            </div>
+            <button className="shrink-0 flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-medium text-destructive/50 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200">
+                <Trash2 className="h-3 w-3" />
+                ลบ
+              </button>
+          </div>
+
+          {/* ── ไลน์หลัก (ฟ้า) ─────────────────────── */}
+          <div className="px-5 pt-4 pb-3">
+            <div className="flex items-center gap-2 mb-2.5">
+              <div className="w-[3px] h-3.5 rounded-full bg-blue-500" />
+              <p className="text-[9px] font-bold text-blue-400/80 uppercase tracking-[0.2em]">ไลน์หลัก</p>
+              <span className="ml-auto text-[9px] text-white/20">{mockData.mainLines.length} รายการ</span>
+            </div>
+            <div className="space-y-1.5 pl-5 border-l border-blue-500/20">
+              {mockData.mainLines.map((l) => (
+                <div key={l.id} className="flex items-center justify-between bg-blue-500/5 rounded-lg px-3 py-2.5">
+                  <div className="min-w-0">
+                    <p className="text-[13px] font-semibold text-white leading-none truncate">{l.name}</p>
+                    <p className="text-[9px] text-white/20 tracking-widest mt-1 font-mono">@{l.id}</p>
+                  </div>
+                  <StatusBadge status={l.status} color="blue" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mx-5 border-t border-white/5" />
+
+          {/* ── ฝากถอน (ม่วง) ──────────────────────── */}
+          <div className="px-5 pt-4 pb-3">
+            <div className="flex items-center gap-2 mb-2.5">
+              <div className="w-[3px] h-3.5 rounded-full bg-violet-500" />
+              <p className="text-[9px] font-bold text-violet-400/80 uppercase tracking-[0.2em]">ฝากถอน</p>
+              <span className="ml-auto text-[9px] text-white/20">{mockData.depositLines.length} รายการ</span>
+            </div>
+            <div className="space-y-1.5 pl-5 border-l border-violet-500/20">
+              {mockData.depositLines.map((l) => (
+                <div key={l.id} className="flex items-center justify-between bg-violet-500/5 rounded-lg px-3 py-2.5">
+                  <div className="min-w-0">
+                    <p className="text-[13px] font-semibold text-white leading-none truncate">{l.name}</p>
+                    <p className="text-[9px] text-white/20 tracking-widest mt-1 font-mono">@{l.id}</p>
+                  </div>
+                  <StatusBadge status={l.status} color="violet" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mx-5 border-t border-white/5" />
+
+          {/* ── รอกำหนดหน้าที่ (ส้ม) ────────────────── */}
+          <div className="px-5 pt-4 pb-4">
+            <div className="flex items-center gap-2 mb-2.5">
+              <div className="w-[3px] h-3.5 rounded-full bg-orange-500" />
+              <p className="text-[9px] font-bold text-orange-400/80 uppercase tracking-[0.2em]">รอกำหนดหน้าที่</p>
+            </div>
+            <div className="space-y-1.5 pl-5 border-l border-orange-500/20">
+              {mockData.unassignedLines.map((l) => (
+                <div key={l.id} className="flex items-center justify-between bg-orange-500/4 border border-dashed border-orange-500/15 rounded-lg px-3 py-2.5">
+                  <div className="min-w-0">
+                    <p className="text-[13px] font-semibold text-white/70 leading-none truncate">{l.name}</p>
+                    <p className="text-[9px] text-white/15 tracking-widest mt-1 font-mono">@{l.id}</p>
+                  </div>
+                  <div className="flex items-center gap-1 shrink-0">
+                    <button className="px-2 py-1 text-[10px] font-bold rounded bg-blue-500/12 text-blue-400 hover:bg-blue-500/22 transition-colors border border-blue-500/20">หลัก</button>
+                    <button className="px-2 py-1 text-[10px] font-bold rounded bg-violet-500/12 text-violet-400 hover:bg-violet-500/22 transition-colors border border-violet-500/20">ฝากถอน</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function StatusBadge({ status, color }: { status: string; color: "blue" | "violet" }) {
+  const colors = {
+    blue: {
+      on:  "bg-blue-500/12 text-blue-400 border-blue-500/25",
+      off: "bg-white/4 text-white/25 border-white/8",
+    },
+    violet: {
+      on:  "bg-violet-500/12 text-violet-400 border-violet-500/25",
+      off: "bg-white/4 text-white/25 border-white/8",
+    },
+  }
+  const cls = status === "normal" ? colors[color].on : colors[color].off
+  return (
+    <span className={`shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold border ${cls}`}>
+      <span className={`w-1.5 h-1.5 rounded-full bg-current ${status === "normal" ? "animate-pulse" : "opacity-40"}`} />
+      {status === "normal" ? "ออนไลน์" : "ออฟไลน์"}
+    </span>
+  )
+}
